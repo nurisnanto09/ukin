@@ -203,3 +203,244 @@ body {
     display: none !important;
   }
 }
+
+/* ========================================================================= */
+/* ================= RESPONSIVE SMARTPHONE & HP (@media) =================== */
+/* ========================================================================= */
+
+@media screen and (max-width: 768px) {
+  /* 1. Global Layout & Container di Layar HP */
+  html, body {
+    overflow-x: hidden !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    padding: 6px !important;
+  }
+
+  .max-w-7xl, .max-w-6xl, .max-w-5xl, .max-w-4xl {
+    border-radius: 1.25rem !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* 2. Header & Navigasi di HP */
+  header {
+    padding: 10px 12px !important;
+  }
+  
+  header .flex-wrap {
+    gap: 8px !important;
+  }
+
+  /* 3. Hero Banner di Layar HP */
+  .hero-gradient {
+    padding: 20px 14px !important;
+    border-radius: 1.25rem !important;
+    text-align: center !important;
+  }
+
+  .hero-gradient h2 {
+    font-size: 1.35rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .hero-gradient p {
+    font-size: 0.82rem !important;
+    line-height: 1.4 !important;
+  }
+
+  #heroStartBtn,
+  .hero-gradient a {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* 4. Top KPI Overview Cards (2 Kolom Rapi di HP) */
+  #sectionStatistikAtas .grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  #sectionStatistikAtas .rounded-2xl {
+    padding: 12px 10px !important;
+    border-radius: 1rem !important;
+    gap: 8px !important;
+  }
+
+  #sectionStatistikAtas .w-11,
+  #sectionStatistikAtas .w-12 {
+    width: 2.25rem !important;
+    height: 2.25rem !important;
+  }
+
+  #sectionStatistikAtas .text-2xl,
+  #sectionStatistikAtas .text-3xl {
+    font-size: 1.25rem !important;
+    line-height: 1 !important;
+  }
+
+  /* 5. 5 Modul Pembelajaran Cards (Stacking Vertikal & Tombol Touch-Friendly) */
+  #sectionIsiTopik .bg-white.rounded-2xl {
+    padding: 14px 12px !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+
+  #sectionIsiTopik .bg-white.rounded-2xl > div:first-child {
+    width: 100% !important;
+  }
+
+  #sectionIsiTopik .bg-white.rounded-2xl > div:last-child {
+    width: 100% !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+
+  #sectionIsiTopik a[data-track-material],
+  #sectionIsiTopik button[id^="cardStart"] {
+    flex: 1 1 auto !important;
+    text-align: center !important;
+    justify-content: center !important;
+    padding: 10px 14px !important;
+    font-size: 0.8rem !important;
+    min-height: 42px !important;
+  }
+
+  /* 6. Quiz Runner (Pretest & Posttest) di HP */
+  #viewQuizRunner {
+    padding: 10px 6px !important;
+  }
+
+  #quizStageRunner .lms-card,
+  #quizStageIdentity .lms-card {
+    padding: 14px 12px !important;
+    border-radius: 1rem !important;
+  }
+
+  /* Pilihan Soal A-E di HP: Tombol Sentuh Besar dan Lega */
+  .quiz-option-item,
+  [data-option-index] {
+    padding: 12px 14px !important;
+    min-height: 48px !important;
+    font-size: 0.85rem !important;
+    border-radius: 0.85rem !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    touch-action: manipulation !important;
+  }
+
+  .quiz-option-letter {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 0.8rem !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Floating Timer Kuis di HP */
+  #quizFloatingTimer {
+    bottom: 12px !important;
+    right: 12px !important;
+    padding: 6px 12px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* 7. Simulasi Pseudocode di HP (simulasi_pseudocode.html) */
+  #studentGroupSelect,
+  #studentGroupMembersInput {
+    width: 100% !important;
+    min-width: 0 !important;
+    font-size: 14px !important;
+  }
+
+  .code-row {
+    padding: 6px 6px !important;
+    gap: 6px !important;
+  }
+
+  .code-row input {
+    font-size: 13.5px !important;
+    padding: 6px 4px !important;
+    min-height: 38px !important;
+  }
+
+  #btn-run-instant,
+  #btn-reset-exec,
+  #btn-run-step {
+    min-height: 46px !important;
+    font-size: 0.875rem !important;
+    padding: 12px 8px !important;
+  }
+
+  /* 8. Laman Guru (admin.html) di HP */
+  .teacher-tab-btn {
+    padding: 8px 12px !important;
+    font-size: 0.725rem !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Grid 9 Kartu Draw Kelompok di Layar HP */
+  #drawGroupCardsGrid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  #btnRollDrawGroups {
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 12px !important;
+    font-size: 0.875rem !important;
+  }
+
+  /* Tabel Responsif Horizontal di HP */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* ================= EXTRA SMALL SCREENS (HP KECIL: < 480px) ================= */
+@media screen and (max-width: 480px) {
+  body {
+    padding: 4px !important;
+  }
+
+  h1, .text-3xl {
+    font-size: 1.35rem !important;
+  }
+
+  h2, .text-2xl {
+    font-size: 1.2rem !important;
+  }
+
+  h3, .text-xl {
+    font-size: 1.05rem !important;
+  }
+
+  /* KPI cards di layar HP kecil */
+  #sectionStatistikAtas .grid {
+    gap: 6px !important;
+  }
+
+  #sectionStatistikAtas .rounded-2xl {
+    padding: 10px 8px !important;
+  }
+
+  #sectionStatistikAtas .text-2xl {
+    font-size: 1.15rem !important;
+  }
+
+  /* Input form mobile friendly */
+  input, select, textarea {
+    font-size: 14px !important;
+  }
+
+  .lms-field input, .lms-field select {
+    font-size: 0.85rem !important;
+  }
+}
