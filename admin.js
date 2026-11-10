@@ -803,7 +803,7 @@
                     (isKey ? 'bg-emerald-600 text-white' : 'bg-slate-100 text-slate-600') + '">' +
                     letters[oIdx] +
                   '</span>' +
-                  '<span class="leading-relaxed flex-1">' + opt + (isKey ? ' <span class="text-emerald-700 font-black ml-1">✓ (Kunci)</span>' : '') + '</span>' +
+                  '<span class="leading-relaxed flex-1">' + formatOptionText(opt) + (isKey ? ' <span class="text-emerald-700 font-black ml-1">✓ (Kunci)</span>' : '') + '</span>' +
                 '</div>';
               }).join('');
 
@@ -812,9 +812,9 @@
                   '<span class="font-extrabold text-slate-900 text-xs">#' + (i + 1) + ' • ' + (q.topic || 'Soal') + '</span>' +
                   '<span class="px-2 py-0.5 rounded-md text-[10px] font-black ' + badgeColor + '">' + q.bloomLevel + '</span>' +
                 '</div>' +
-                '<p class="text-slate-800 font-medium whitespace-pre-line leading-relaxed">' + q.question + '</p>' +
+                '<div class="text-slate-800 font-medium leading-relaxed">' + formatQuestionStemHtml(q, true) + '</div>' +
                 '<div class="space-y-1 pt-1">' + optsHtml + '</div>' +
-                (q.explanation ? '<div class="text-[10.5px] p-2 bg-blue-50/60 rounded-lg text-blue-900 border border-blue-200/80 leading-relaxed"><b>💡 Pembahasan:</b> ' + q.explanation + '</div>' : '') +
+                (q.explanation ? '<div class="text-[10.5px] p-2 bg-blue-50/60 rounded-lg text-blue-900 border border-blue-200/80 leading-relaxed"><b>💡 Pembahasan:</b> ' + formatOptionText(q.explanation) + '</div>' : '') +
               '</div>';
             }).join('') +
           '</div>' +
@@ -1123,6 +1123,45 @@
       });
     }
 
+    // Tombol Tarik Rekap Nilai dari Sheets
+    const fetchGasRecordsBtn = document.getElementById('fetchGasRecordsBtn');
+    if (fetchGasRecordsBtn) {
+      fetchGasRecordsBtn.addEventListener('click', function () {
+        const url = gasUrlInput ? gasUrlInput.value.trim() : (typeof DEFAULT_GAS_URL !== 'undefined' ? DEFAULT_GAS_URL : '');
+        if (!url) {
+          showToast('Masukkan URL Web App Google Apps Script terlebih dahulu.', 'warning');
+          return;
+        }
+        showToast('Menghubungi endpoint Google Apps Script untuk menarik rekap nilai...', 'info');
+        fetch(url + (url.indexOf('?') === -1 ? '?action=getRecords' : '&action=getRecords'))
+          .then(function (res) { return res.json(); })
+          .then(function (payload) {
+            const list = Array.isArray(payload) ? payload : (payload.data || []);
+            teacherRecords = list;
+            saveRecords();
+            renderAllAdminViews();
+            document.getElementById('gasStatusText').innerHTML = '✅ <b>Rekap Nilai Diperbarui:</b> ' + list.length + ' data masuk (' + new Date().toLocaleTimeString('id-ID') + ')';
+            showToast('Berhasil menarik ' + list.length + ' rekap nilai dari Google Sheets!', 'success');
+          })
+          .catch(function () {
+            showToast('Gagal menarik rekap nilai dari Google Sheets.', 'danger');
+          });
+      });
+    }
+
+    // Tombol Kosongkan Rekap Nilai Lokal
+    const clearLocalRecordsBtn = document.getElementById('clearLocalRecordsBtn');
+    if (clearLocalRecordsBtn) {
+      clearLocalRecordsBtn.addEventListener('click', function () {
+        if (confirm('Yakin ingin mengosongkan seluruh rekap nilai pada browser ini? (Catatan: Baris di Google Spreadsheet tidak ikut terhapus).')) {
+          teacherRecords = [];
+          saveRecords();
+          renderAllAdminViews();
+          showToast('Rekap nilai lokal guru telah dikosongkan (0 data).', 'info');
+        }
+      });
+    }
+
     const copyGasCodeBtn = document.getElementById('copyGasCodeBtn');
     if (copyGasCodeBtn) {
       copyGasCodeBtn.addEventListener('click', function () {
@@ -1217,7 +1256,19 @@
           });
         });
         saveRoster();
-        showToast('💾 Susunan Kelompok 1 - 9 berhasil disimpan dan tersinkron ke Simulator & GAS!', 'success');
+        // Otomatis push perubahan ke Google Sheets
+        const curGasUrl = (typeof gasUrlInput !== 'undefined' && gasUrlInput) ? gasUrlInput.value.trim() : (typeof DEFAULT_GAS_URL !== 'undefined' ? DEFAULT_GAS_URL : '');
+        if (curGasUrl) {
+          fetch(curGasUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'saveRoster',
+              roster: roster
+            })
+          }).catch(function() {});
+        }
+        showToast('💾 Susunan Kelompok 1 - 9 berhasil disimpan dan tersinkron ke Spreadsheet!', 'success');
       });
     }
 

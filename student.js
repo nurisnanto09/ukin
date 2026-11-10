@@ -14,6 +14,32 @@
   if (!session.kelas || session.kelas === 'X - Informatika') {
     session.kelas = 'Informatika - X E7';
   }
+
+  // Sinkronisasi & pemulihan otomatis blok kode soal pada sesi aktif
+  function enrichQuestionsWithCode(questionsList, phase) {
+    if (!Array.isArray(questionsList)) return questionsList;
+    const bank = (questionBank && questionBank[phase]) || DEFAULT_QUESTION_BANK[phase] || [];
+    return questionsList.map(function (q, idx) {
+      if (q.codeSnippet && q.promptIntro) return q;
+      const found = bank.find(function (b) { return b.id === q.id; }) || bank[idx];
+      if (found) {
+        return Object.assign({}, q, {
+          promptIntro: found.promptIntro || q.promptIntro || '',
+          codeSnippet: found.codeSnippet || q.codeSnippet || null,
+          codeFilename: found.codeFilename || q.codeFilename || '',
+          promptOutro: found.promptOutro || q.promptOutro || ''
+        });
+      }
+      return q;
+    });
+  }
+
+  if (session.pretestQuestions) {
+    session.pretestQuestions = enrichQuestionsWithCode(session.pretestQuestions, 'pretest');
+  }
+  if (session.posttestQuestions) {
+    session.posttestQuestions = enrichQuestionsWithCode(session.posttestQuestions, 'posttest');
+  }
   let currentView = 'dashboard'; // 'dashboard' | 'quiz' | 'transition' | 'checkout' | 'result'
   let timerInterval = null;
   const PRETEST_QUESTION_TIME = 30; // 30 detik per butir soal
@@ -705,13 +731,13 @@
       }
     }
 
-    // Teks Pertanyaan (Stem)
+    // Teks Pertanyaan (Stem) dengan Visual Code Terminal Editor
     const questionStem = document.getElementById('quizQuestionStem');
     if (questionStem) {
-      questionStem.textContent = q.question;
+      questionStem.innerHTML = formatQuestionStemHtml(q);
     }
 
-    // Pilihan Jawaban A, B, C, D
+    // Pilihan Jawaban A, B, C, D, E dengan Sintaks Monospace
     const optsContainer = document.getElementById('quizOptionsContainer');
     if (optsContainer) {
       optsContainer.innerHTML = '';
@@ -729,7 +755,7 @@
           (isSelected ? 'border-blue-600 bg-blue-600 text-white shadow-xs' : 'border-slate-300 bg-slate-50 text-slate-700') + '">' +
           (letters[optIdx] || (optIdx + 1)) +
           '</span>' +
-          '<span class="text-sm sm:text-base leading-snug font-medium">' + optText + '</span>';
+          '<span class="text-sm sm:text-base leading-snug font-medium">' + formatOptionText(optText) + '</span>';
 
         btn.addEventListener('click', function () {
           answersMap[currentIndex] = optIdx;
@@ -950,7 +976,7 @@
                 (isOptCorrect ? 'border-emerald-600 bg-emerald-600 text-white' : (isOptChosen ? 'border-rose-500 bg-rose-500 text-white' : 'border-slate-300 bg-slate-50 text-slate-700')) + '">' +
                 letters[optIdx] +
               '</span>' +
-              '<span class="leading-snug break-words">' + optText + '</span>' +
+              '<span class="leading-snug break-words">' + formatOptionText(optText) + '</span>' +
             '</div>' +
             (optBadges ? '<div class="shrink-0 flex items-center gap-1.5">' + optBadges + '</div>' : '') +
           '</div>';
@@ -965,14 +991,14 @@
           '</div>' +
           statusBadge +
         '</div>' +
-        '<div class="text-sm sm:text-base font-bold text-slate-900 leading-relaxed">' + q.question + '</div>' +
+        '<div class="text-sm sm:text-base text-slate-900 leading-relaxed">' + formatQuestionStemHtml(q) + '</div>' +
         '<div class="space-y-2">' + optionsHtml + '</div>' +
         '<div class="p-4 rounded-2xl bg-gradient-to-r from-blue-50/90 to-indigo-50/90 border border-blue-200 text-xs sm:text-sm space-y-1.5 shadow-2xs">' +
           '<div class="flex items-center gap-2 font-black text-blue-900">' +
             '<span class="text-base text-blue-600">💡</span>' +
             '<span>Pembahasan Jawaban yang Benar:</span>' +
           '</div>' +
-          '<p class="leading-relaxed text-slate-700 pl-6 font-medium">' + (q.explanation || 'Pembahasan belum tersedia.') + '</p>' +
+          '<p class="leading-relaxed text-slate-700 pl-6 font-medium">' + formatOptionText(q.explanation || 'Pembahasan belum tersedia.') + '</p>' +
         '</div>';
 
       container.appendChild(card);
