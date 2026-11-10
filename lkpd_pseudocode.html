@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKPD Pseudocode - Patbhe Green (Berpikir Komputasional)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8fafc;
+            background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .dotted-input {
+            background-color: transparent;
+            border: none;
+            border-bottom: 1.5px solid #94a3b8;
+            width: 100%;
+            padding: 2px 0;
+            color: #1e293b;
+            font-weight: 600;
+            font-family: inherit;
+            line-height: 1.4;
+            box-sizing: border-box;
+            transition: border-color 0.15s ease;
+        }
+        .dotted-input:focus {
+            outline: none;
+            border-bottom-color: #2563eb;
+            border-bottom-width: 2px;
+        }
+        textarea.dotted-input {
+            resize: none;
+            overflow-y: hidden;
+            min-height: 22px;
+            display: block;
+        }
+        #container-algoritma textarea.dotted-input {
+            border-bottom: 1.5px solid #475569;
+            color: #6ee7b7;
+        }
+        #container-algoritma textarea.dotted-input:focus {
+            border-bottom-color: #10b981;
+            border-bottom-width: 2px;
+        }
+        textarea.refleksi-textarea {
+            resize: none;
+            overflow-y: hidden;
+            min-height: 48px;
+            display: block;
+            box-sizing: border-box;
+            line-height: 1.4;
+        }
+
+        .print-mirror {
+            display: none !important;
+        }
+        .print-footer {
+            display: none !important;
+        }
+
+        /* ================= PRINT STYLES FOR EXACT 4-PAGE PDF ================= */
+        @page {
+            size: A4 portrait;
+            margin: 7mm 9mm 7mm 9mm;
+        }
+
+        @media print {
+            html, body {
+                background-color: #ffffff !important;
+                background-image: none !important;
+                color: #0f172a !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                font-size: 9.5px !important;
+                line-height: 1.25 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+
+            .max-w-5xl {
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            /* Halaman Lembar Kerja (Tepat 4 Halaman) */
+            .lkm-page {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 100% !important;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+                break-after: page !important;
+                page-break-after: always !important;
+            }
+            .lkm-page:not(:first-child) {
+                break-before: page !important;
+                page-break-before: always !important;
+                margin-top: 0 !important;
+            }
+            .lkm-page:last-child {
+                break-after: auto !important;
+                page-break-after: auto !important;
+            }
+
+            .main-content-wrapper {
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .main-content-wrapper > :not([hidden]) ~ :not([hidden]) {
+                margin-top: 4px !important;
+            }
+
+            /* Prevent accidental breaking inside logical units */
+            .print-avoid-break,
+            .activity-section,
+            table, tr, tbody, thead {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+            h1, h2, h3, h4, h5, h6 {
+                break-after: avoid !important;
+                page-break-after: avoid !important;
+            }
+
+            /* Preserve multi-column layouts */
+            .tp-grid, .petunjuk-grid, .md\:grid-cols-2 {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 6px !important;
+            }
+            .md\:grid-cols-3 {
+                display: grid !important;
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 5px !important;
+            }
+            .grid-12-col, .lg\:grid-cols-12 {
+                display: grid !important;
+                grid-template-columns: 5fr 7fr !important;
+                gap: 8px !important;
+            }
+            .lg\:col-span-5, .lg\:col-span-7 {
+                grid-column: span 1 !important;
+            }
+
+            /* ================= PAGE 1 COMPACT STYLES ================= */
+            #cover-header {
+                padding: 6px 10px !important;
+                border-radius: 6px !important;
+                margin-bottom: 4px !important;
+            }
+            #cover-header h1 {
+                font-size: 15px !important;
+                line-height: 1.2 !important;
+            }
+            #cover-header p {
+                font-size: 9px !important;
+            }
+            #identitas-kelompok {
+                padding: 4px 8px !important;
+                margin-bottom: 4px !important;
+                border-radius: 6px !important;
+            }
+            #identitas-kelompok table th, #identitas-kelompok table td {
+                padding-top: 1px !important;
+                padding-bottom: 1px !important;
+                font-size: 9px !important;
+            }
+            #tujuan-pembelajaran {
+                padding: 4px 8px !important;
+                margin-bottom: 4px !important;
+                border-radius: 6px !important;
+            }
+            #tujuan-pembelajaran h3 {
+                font-size: 11px !important;
+            }
+            #tujuan-pembelajaran .tp-card {
+                padding: 3px 6px !important;
+            }
+            #tujuan-pembelajaran .tp-card p {
+                font-size: 8.5px !important;
+                line-height: 1.2 !important;
+            }
+            #petunjuk-k3 {
+                margin-bottom: 4px !important;
+            }
+            #petunjuk-k3 > div {
+                padding: 3px 6px !important;
+                border-radius: 6px !important;
+            }
+            #petunjuk-k3 h3 {
+                font-size: 10.5px !important;
+                margin-bottom: 2px !important;
+            }
+            #petunjuk-k3 ul li {
+                font-size: 8.5px !important;
+                line-height: 1.15 !important;
+            }
+            #aktivitas-1 {
+                border-radius: 6px !important;
+            }
+            #aktivitas-1 .activity-header-bar {
+                padding: 3px 8px !important;
+                font-size: 11px !important;
+            }
+            #aktivitas-1 .activity-body {
+                padding: 4px 8px !important;
+            }
+            #aktivitas-1 table th, #aktivitas-1 table td {
+                padding: 1.5px 4px !important;
+                font-size: 8.5px !important;
+            }
+            #aktivitas-1 .var-note {
+                padding: 2px 5px !important;
+                font-size: 8px !important;
+                margin-top: 2px !important;
+            }
+
+            /* ================= PAGE 2 COMPACT STYLES ================= */
+            #aktivitas-2 {
+                border-radius: 6px !important;
+            }
+            #aktivitas-2 .activity-header-bar {
+                padding: 4px 8px !important;
+                font-size: 11.5px !important;
+            }
+            #aktivitas-2 .activity-body {
+                padding: 5px 8px !important;
+            }
+            #aktivitas-2 .konteks-box {
+                padding: 4px 8px !important;
+                margin-bottom: 5px !important;
+                font-size: 9px !important;
+            }
+            #aktivitas-2 .code-console {
+                padding: 5px 7px !important;
+                font-size: 8.5px !important;
+                line-height: 1.25 !important;
+            }
+            #aktivitas-2 .trace-table th, #aktivitas-2 .trace-table td {
+                padding: 2px 4px !important;
+                font-size: 8.5px !important;
+            }
+            #aktivitas-2 .pertanyaan-c4-box {
+                padding-top: 4px !important;
+                margin-top: 4px !important;
+            }
+            #aktivitas-2 .pertanyaan-c4-box label {
+                font-size: 8.5px !important;
+                line-height: 1.2 !important;
+            }
+
+            /* ================= PAGE 3 COMPACT STYLES ================= */
+            #aktivitas-3-part1 {
+                border-radius: 6px !important;
+            }
+            #aktivitas-3-part1 .activity-header-bar {
+                padding: 4px 8px !important;
+                font-size: 11.5px !important;
+            }
+            #aktivitas-3-part1 .activity-body {
+                padding: 5px 8px !important;
+            }
+            #aktivitas-3-part1 .problem-box {
+                padding: 4px 8px !important;
+                font-size: 8.5px !important;
+            }
+            #aktivitas-3-part1 .tahap-box {
+                padding: 4px 8px !important;
+                margin-top: 4px !important;
+            }
+
+            /* ================= PAGE 4 COMPACT STYLES ================= */
+            #aktivitas-3-part2 {
+                border-radius: 6px !important;
+            }
+            #aktivitas-3-part2 .activity-header-bar {
+                padding: 4px 8px !important;
+                font-size: 11.5px !important;
+            }
+            #aktivitas-3-part2 .activity-body {
+                padding: 5px 8px !important;
+            }
+            #aktivitas-3-part2 .tahap-box {
+                padding: 4px 8px !important;
+                margin-top: 4px !important;
+            }
+            #aktivitas-4 {
+                border-radius: 6px !important;
+                margin-top: 5px !important;
+            }
+            #aktivitas-4 .activity-header-bar {
+                padding: 4px 8px !important;
+                font-size: 11.5px !important;
+            }
+            #aktivitas-4 .activity-body {
+                padding: 5px 8px !important;
+            }
+            #aktivitas-4 .refleksi-box {
+                padding: 4px 8px !important;
+                font-size: 8.5px !important;
+            }
+
+            /* Form Inputs and Print Mirrors */
+            input.dotted-input, textarea.dotted-input, textarea.refleksi-textarea {
+                display: none !important;
+            }
+            .print-mirror {
+                display: block !important;
+                border-bottom: 1.5px solid #1e293b !important;
+                min-width: 50px;
+                min-height: 14px;
+                white-space: pre-wrap !important;
+                word-break: break-word !important;
+                font-family: inherit;
+                font-size: inherit;
+                color: #000;
+                width: 100%;
+                padding: 1px 0 !important;
+                line-height: 1.25 !important;
+            }
+            .refleksi-textarea + .print-mirror {
+                display: block !important;
+                border: 1.5px solid #0d9488 !important;
+                padding: 3px 5px !important;
+                border-radius: 6px !important;
+                width: 100%;
+                min-height: 30px !important;
+                font-size: 8.5px !important;
+                background-color: #f0fdfa !important;
+            }
+            select.role-select {
+                border: 1px solid #000 !important;
+                background-color: transparent !important;
+                font-size: 8.5px !important;
+                padding: 1px 2px !important;
+            }
+
+            /* Header & Footer on each Printed Page */
+            .print-footer {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: center;
+                border-top: 1px solid #cbd5e1;
+                margin-top: 5px;
+                padding-top: 2px;
+                font-size: 8px;
+                color: #64748b;
+                font-weight: 700;
+            }
+        }
+        .print-mirror,
+        .print-footer {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 text-gray-800">
+
+    <!-- Top Navigation Bar (No-Print) - Pure Navigation, PDF button is placed at the bottom -->
+    <div class="no-print max-w-5xl mx-auto mb-4 bg-white/95 backdrop-blur-md rounded-2xl p-3 border-2 border-purple-200 shadow-md flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+            <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-black transition border border-purple-200">
+                <span>&larr;</span>
+                <span>Portal Siswa</span>
+            </a>
+            <span class="text-xs font-bold text-slate-400">|</span>
+            <span class="text-xs font-extrabold text-purple-950 flex items-center gap-1.5">
+                <span>📖</span>
+                <span>LKPD Berpikir Komputasional &amp; Pseudocode</span>
+            </span>
+        </div>
+        <div class="flex items-center gap-2">
+            
+            <a href="admin.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition border border-slate-200">
+                <span>🔒</span>
+                <span>Laman Guru</span>
+            </a>
+            <div id="save-status-top" class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200 flex items-center gap-1">
+                <span>💾</span>
+                <span>Auto-Save Aktif</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto space-y-6">
+
+        <!-- ========================================================================= -->
+        <!-- ============================== HALAMAN 1 ============================== -->
+        <!-- ========================================================================= -->
+        <div id="lkm-page-1" class="lkm-page bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-purple-200">
+            
+            <!-- Header Section (Cover Warna) -->
+            <div id="cover-header" class="cover-header bg-gradient-to-r from-emerald-100 via-teal-50 to-purple-100 p-5 md:p-6 border-b-4 border-emerald-200">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
+                    <div>
+                        <div class="inline-flex items-center gap-1.5 bg-emerald-600 text-white px-3 py-0.5 rounded-full text-xs font-extrabold mb-1.5 shadow-sm">
+                            <span>🌱</span>
+                            <span>LKPD INFORMATIKA FASE E / KELAS X • LEMBAR KERJA SISWA</span>
+                        </div>
+                        <h1 class="text-xl sm:text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
+                            Berpikir Komputasional &amp; Notasi Pseudocode
+                        </h1>
+                        <p class="text-xs sm:text-sm font-bold text-emerald-800 mt-0.5 flex items-center gap-2">
+                            <span>♻️</span>
+                            <span>Studi Kasus Kontekstual: Sistem Pengelolaan Sampah Sekolah "Patbhe Green"</span>
+                        </p>
+                    </div>
+                    <div class="shrink-0 bg-white/85 backdrop-blur-xs p-2.5 rounded-xl border border-emerald-200 shadow-xs text-right hidden sm:block">
+                        <span class="text-[10px] font-bold text-slate-500 block uppercase tracking-wider">Capaian Target</span>
+                        <span class="text-xs font-black text-emerald-700 block">C4 (Analisis &amp; Tracing)</span>
+                        <span class="text-xs font-black text-purple-700 block">&amp; C6 (Merancang Solusi)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content-wrapper p-4 sm:p-5 md:p-6 space-y-4">
+
+                <!-- Identitas Kelompok & Pembagian Peran -->
+                <div id="identitas-kelompok" class="print-avoid-break bg-white p-4 rounded-xl border-2 border-purple-200 shadow-[3px_3px_0px_#e9d5ff] w-full">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2.5">
+                        <div class="flex items-center">
+                            <span class="w-28 font-bold text-purple-900 text-xs uppercase tracking-wide">Kelas</span>
+                            <span class="mr-2 font-bold text-purple-900">:</span>
+                            <input type="text" class="dotted-input text-xs" data-save="kelas" placeholder="Contoh: X - 1">
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-32 font-bold text-purple-900 text-xs uppercase tracking-wide">Nama Kelompok</span>
+                            <span class="mr-2 font-bold text-purple-900">:</span>
+                            <input type="text" class="dotted-input text-xs font-bold text-purple-900" data-save="nama_kelompok" list="list-kelompok-opsi" placeholder="Pilih / Tulis: Kelompok 1 - 9">
+                            <datalist id="list-kelompok-opsi">
+                                <option value="Kelompok 1">Kelompok 1</option>
+                                <option value="Kelompok 2">Kelompok 2</option>
+                                <option value="Kelompok 3">Kelompok 3</option>
+                                <option value="Kelompok 4">Kelompok 4</option>
+                                <option value="Kelompok 5">Kelompok 5</option>
+                                <option value="Kelompok 6">Kelompok 6</option>
+                                <option value="Kelompok 7">Kelompok 7</option>
+                                <option value="Kelompok 8">Kelompok 8</option>
+                                <option value="Kelompok 9">Kelompok 9</option>
+                            </datalist>
+                        </div>
+                    </div>
+
+                    <div class="border-t-2 border-purple-100 pt-2">
+                        <div class="overflow-x-auto">
+                            <table class="w-full border-collapse">
+                                <thead>
+                                    <tr class="text-[11px] font-black text-purple-950 uppercase tracking-wider border-b-2 border-purple-100 bg-purple-50/50">
+                                        <th class="py-1.5 text-center w-10">No</th>
+                                        <th class="py-1.5 text-left px-2 min-w-[180px]">Nama Anggota Kelompok</th>
+                                        <th class="py-1.5 text-center w-24 px-2 text-purple-800">No. Absen</th>
+                                        <th class="py-1.5 text-left w-56 px-2 text-purple-600">Peran dalam Kelompok</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-purple-50 text-xs">
+                                    <tr class="hover:bg-purple-50/30">
+                                        <td class="py-1.5 text-center font-bold text-purple-700 align-middle">1.</td>
+                                        <td class="py-1.5 px-2 align-middle">
+                                            <input type="text" class="dotted-input text-xs font-semibold" data-save="anggota_1_nama" placeholder="">
+                                        </td>
+                                        <td class="py-1.5 px-2 text-center align-middle">
+                                            <input type="text" class="dotted-input text-xs text-center font-mono" data-save="anggota_1_absen" placeholder="">
+                                        </td>
+                                        <td class="py-1.5 px-2 align-middle">
+                                            <select class="role-select text-xs font-bold bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-lg px-2 py-1 focus:outline-none focus:border-purple-500 w-full cursor-pointer" data-save="anggota_1_peran">
+                                                <option value="" disabled selected>Pilih Peran...</option>
+                                                <option value="Menulis (Notulis)">✍️ Menulis (Notulis)</option>
+                                                <option value="Menjalankan Simulasi">💻 Menjalankan Simulasi</option>
+                                                <option value="Mencari Materi">🔍 Mencari Materi</option>
+                                                <option value="Menyimpulkan">💡 Menyimpulkan</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-purple-50/30">
+                                        <td class="py-1.5 text-center font-bold text-purple-700 align-middle">2.</td>
+                                        <td class="py-1.5 px-2 align-middle">
+                                            <input type="text" class="dotted-input text-xs font-semibold" data-save="anggota_2_nama" placeholder="">
+                                        </td>
+                                        <td class="py-1.5 px-2 text-center align-middle">
+                                            <input type="text" class="dotted-input text-xs text-center font-mono" data-save="anggota_2_absen" placeholder="">
+                                        </td>
+                                        <td class="py-1.5 px-2 align-middle">
+                                            <select class="role-select text-xs font-bold bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-lg px-2 py-1 focus:outline-none focus:border-purple-500 w-full cursor-pointer" data-save="anggota_2_peran">
+                                                <option value="" disabled selected>Pilih Peran...</option>
+                                                <option value="Menulis (Notulis)">✍️ Menulis (Notulis)</option>
+                                                <option value="Menjalankan Simulasi">💻 Menjalankan Simulasi</option>
+                                                <option value="Mencari Materi">🔍 Mencari Materi</option>
+                                                <option value="Menyimpulkan">💡 Menyimpulkan</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-purple-50/30">
+                                        <td class="py-1.5 text-center font-bold text-purple-700 align-middle">3.</td>
+                                        <td class="py-1.5 px-2 align-middle">
+                                            <input type="text" class="dotted-input text-xs font-semibold" data-save="anggota_3_nama" placeholder="">
+                                        </td>
+                                        <td class="py-1.5 px-2 text-center align-middle">
+                                            <input type="text" class="dotted-input text-xs text-center font-mono" data-save="anggota_3_absen" placeholder="">
+                                        </td>
+                                        <td class="py-1.5 px-2 align-middle">
+                                            <select class="role-select text-xs font-bold bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-lg px-2 py-1 focus:outline-none focus:border-purple-500 w-full cursor-pointer" data-save="anggota_3_peran">
+                                                <option value="" disabled selected>Pilih Peran...</option>
+                                                <option value="Menulis (Notulis)">✍️ Menulis (Notulis)</option>
+                                                <option value="Menjalankan Simulasi">💻 Menjalankan Simulasi</option>
+                                                <option value="Mencari Materi">🔍 Mencari Materi</option>
+                                                <option value="Menyimpulkan">💡 Menyimpulkan</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-purple-50/30">
+                                        <td class="py-1.5 text-center font-bold text-purple-700 align-middle">4.</td>
+                                        <td class="py-1.5 px-2 align-middle">
+                                            <input type="text" class="dotted-input text-xs font-semibold" data-save="anggota_4_nama" placeholder="">
+                                        </td>
+                                        <td class="py-1.5 px-2 text-center align-middle">
+                                            <input type="text" class="dotted-input text-xs text-center font-mono" data-save="anggota_4_absen" placeholder="">
+                                        </td>
+                                        <td class="py-1.5 px-2 align-middle">
+                                            <select class="role-select text-xs font-bold bg-purple-50 hover:bg-purple-100 border border-purple-200 text-purple-900 rounded-lg px-2 py-1 focus:outline-none focus:border-purple-500 w-full cursor-pointer" data-save="anggota_4_peran">
+                                                <option value="" disabled selected>Pilih Peran...</option>
+                                                <option value="Menulis (Notulis)">✍️ Menulis (Notulis)</option>
+                                                <option value="Menjalankan Simulasi">💻 Menjalankan Simulasi</option>
+                                                <option value="Mencari Materi">🔍 Mencari Materi</option>
+                                                <option value="Menyimpulkan">💡 Menyimpulkan</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tujuan Pembelajaran (TP) -->
+                <div id="tujuan-pembelajaran" class="print-avoid-break bg-indigo-50/80 rounded-xl p-3.5 border-2 border-indigo-200 shadow-[3px_3px_0px_#c7d2fe]">
+                    <div class="flex items-center justify-between flex-wrap gap-2 mb-2 border-b border-indigo-100 pb-1.5">
+                        <h3 class="font-black text-indigo-950 text-sm sm:text-base flex items-center gap-1.5">
+                            <span class="text-xl">🎯</span>
+                            <span>Tujuan Pembelajaran (TP)</span>
+                        </h3>
+                        <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 border border-indigo-200 uppercase tracking-wider">
+                            Fase E • Berpikir Komputasional
+                        </span>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-indigo-900 font-semibold mb-2">
+                        Melalui pengerjaan LKPD, diskusi kolaboratif kelompok, dan simulasi sistem <em>"Patbhe Green"</em>, murid diharapkan mampu:
+                    </p>
+                    <div class="tp-grid grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="tp-card bg-white p-2.5 rounded-lg border-2 border-blue-200 shadow-2xs space-y-1">
+                            <div class="flex items-center justify-between gap-1 border-b border-blue-100 pb-1">
+                                <div class="flex items-center gap-1.5 text-blue-800 font-extrabold text-[11px] uppercase tracking-wide">
+                                    <span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">1</span>
+                                    <span>Menganalisis Alur Sekuensial (C4)</span>
+                                </div>
+                                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                                    Input • Proses • Output
+                                </span>
+                            </div>
+                            <p class="text-[10.5px] sm:text-[11px] text-slate-700 font-medium leading-snug">
+                                Melalui kegiatan pengamatan kode semu dan diskusi kelompok <b>(C)</b>, murid <b>(A)</b> mampu menganalisis alur logika instruksi sekuensial pada program sederhana <b>(B)</b> meliputi komponen input, proses, dan output dengan benar <b>(D)</b>.
+                            </p>
+                        </div>
+
+                        <div class="tp-card bg-white p-2.5 rounded-lg border-2 border-emerald-200 shadow-2xs space-y-1">
+                            <div class="flex items-center justify-between gap-1 border-b border-emerald-100 pb-1">
+                                <div class="flex items-center gap-1.5 text-emerald-800 font-extrabold text-[11px] uppercase tracking-wide">
+                                    <span class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] font-black shrink-0">2</span>
+                                    <span>Merancang Solusi Percabangan (C6)</span>
+                                </div>
+                                <span class="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    Judul • Deklarasi • Algoritma
+                                </span>
+                            </div>
+                            <p class="text-[10.5px] sm:text-[11px] text-slate-700 font-medium leading-snug">
+                                Melalui diskusi pemecahan masalah secara berkelompok <b>(C)</b>, murid <b>(A)</b> mampu merancang solusi program sederhana dalam format pseudocode percabangan <b>(B)</b> yang memuat lengkap bagian judul, deklarasi, dan algoritma secara runtut <b>(D)</b>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Petunjuk Belajar & Panduan K3 -->
+                <div id="petunjuk-k3" class="petunjuk-grid grid grid-cols-1 md:grid-cols-2 gap-3.5 print-avoid-break">
+                    <div class="bg-yellow-50 rounded-xl p-3 border-2 border-yellow-300 shadow-[3px_3px_0px_#fde047]">
+                        <h3 class="font-extrabold text-yellow-800 text-xs sm:text-sm flex items-center gap-1.5 mb-1.5">
+                            <span class="text-base">📌</span> Petunjuk Belajar
+                        </h3>
+                        <ul class="space-y-1 text-[11px] text-yellow-950 font-semibold ml-1 leading-snug">
+                            <li class="flex items-start gap-1.5"><span>•</span> Berdoalah sebelum memulai pembelajaran.</li>
+                            <li class="flex items-start gap-1.5"><span>•</span> Diskusikan setiap permasalahan bersama rekan satu kelompokmu.</li>
+                            <li class="flex items-start gap-1.5"><span>•</span> Ketik jawabanmu langsung pada garis atau kotak yang tersedia (kolom otomatis memanjang ke bawah).</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-green-50 rounded-xl p-3 border-2 border-green-300 shadow-[3px_3px_0px_#86efac]">
+                        <h3 class="font-extrabold text-green-800 text-xs sm:text-sm flex items-center gap-1.5 mb-1.5">
+                            <span class="text-base">🌿</span> Panduan K3 (Kesehatan &amp; Keselamatan Kerja)
+                        </h3>
+                        <ul class="space-y-1 text-[10.5px] text-green-950 font-semibold ml-1 leading-tight">
+                            <li class="flex items-start gap-1.5"><span>•</span> Duduk dengan posisi tegak dan nyaman selama menggunakan perangkat digital.</li>
+                            <li class="flex items-start gap-1.5"><span>•</span> Atur jarak pandang mata dengan monitor idealnya 30–50 cm.</li>
+                            <li class="flex items-start gap-1.5"><span>•</span> Istirahatkan mata sejenak jika merasa lelah.</li>
+                            <li class="flex items-start gap-1.5"><span>•</span> Gunakan perangkat digital dengan tertib dan bertanggung jawab.</li>
+                            <li class="flex items-start gap-1.5"><span>•</span> Jaga kerapian kabel dan keamanan perangkat elektronik selama pembelajaran.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Aktivitas 1: Mengenal Kata Kunci Pseudocode & Konsep Variabel -->
+                <div id="aktivitas-1" class="activity-section border-2 border-blue-300 rounded-xl overflow-hidden shadow-[3px_3px_0px_#93c5fd]">
+                    <div class="activity-header-bar bg-blue-500 text-white p-2.5 px-4 font-extrabold text-sm sm:text-base flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-white text-blue-600 rounded-full w-6 h-6 flex items-center justify-center font-black text-xs">1</span> 
+                            <span>Aktivitas 1: Mengenal Kata Kunci Pseudocode &amp; Konsep Variabel</span>
+                        </div>
+                        <span class="text-[10px] bg-blue-700/80 px-2 py-0.5 rounded-full font-bold uppercase tracking-wider hidden sm:inline">C1 - C2 Memahami</span>
+                    </div>
+                    
+                    <div class="activity-body bg-blue-50/70 p-3.5 space-y-2.5">
+                        <p class="text-[11px] sm:text-xs text-blue-950 font-semibold leading-relaxed">
+                            <strong>Pseudocode (Kode Semu)</strong> adalah cara penulisan algoritma menyerupai bahasa pemrograman komputer menggunakan teks terstruktur. Data disimpan dalam <strong>Variabel</strong> (wadah di memori komputer yang isinya dinamis: <code>berat_kg</code>, <code>poin_admin</code>, <code>total_poin</code>), lalu diproses lewat: 
+                            <span class="bg-blue-200 px-1 py-0.2 rounded font-black text-blue-900">INPUT</span> (Masukan), 
+                            <span class="bg-blue-200 px-1 py-0.2 rounded font-black text-blue-900">PROSES</span> (Perhitungan &amp; IF-ELSE), dan 
+                            <span class="bg-blue-200 px-1 py-0.2 rounded font-black text-blue-900">OUTPUT</span> (Keluaran).
+                        </p>
+                        
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse bg-white rounded-lg overflow-hidden border border-blue-200 shadow-2xs">
+                                <thead>
+                                    <tr class="bg-blue-100 text-blue-950 text-[10px] font-black uppercase tracking-wider">
+                                        <th class="p-2 border-b border-blue-200 w-1/4">Kata Kunci</th>
+                                        <th class="p-2 border-b border-blue-200 w-1/3">Contoh di Patbhe Green</th>
+                                        <th class="p-2 border-b border-blue-200">Fungsi / Kegunaan (Tuliskan Analisismu)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-[10.5px] sm:text-xs font-semibold text-slate-700 divide-y divide-blue-100">
+                                    <tr class="hover:bg-blue-50/40">
+                                        <td class="p-2 align-top bg-blue-50/40 font-mono font-bold text-blue-900">VARIABEL / DEKLARASI</td>
+                                        <td class="p-2 align-top font-mono text-[10.5px] text-pink-600 bg-slate-50 font-bold">total_poin : real</td>
+                                        <td class="p-2 align-top">
+                                            <textarea rows="1" class="dotted-input" data-save="akt1_fungsi_0" placeholder=""></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-blue-50/40">
+                                        <td class="p-2 align-top bg-blue-50/40 font-mono font-bold text-blue-900">INPUT / READ</td>
+                                        <td class="p-2 align-top font-mono text-[10.5px] text-pink-600 bg-slate-50 font-bold">INPUT berat_kg</td>
+                                        <td class="p-2 align-top">
+                                            <textarea rows="1" class="dotted-input" data-save="akt1_fungsi_1" placeholder=""></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-blue-50/40">
+                                        <td class="p-2 align-top bg-blue-50/40 font-mono font-bold text-blue-900">OUTPUT / PRINT</td>
+                                        <td class="p-2 align-top font-mono text-[10.5px] text-pink-600 bg-slate-50 font-bold">PRINT "Total Poin: ", total_poin</td>
+                                        <td class="p-2 align-top">
+                                            <textarea rows="1" class="dotted-input" data-save="akt1_fungsi_2" placeholder=""></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-blue-50/40">
+                                        <td class="p-2 align-top bg-blue-50/40 font-mono font-bold text-blue-900">&lt;- (Assignment)</td>
+                                        <td class="p-2 align-top font-mono text-[10.5px] text-pink-600 bg-slate-50 font-bold">total_poin &lt;- berat_kg * poin_admin</td>
+                                        <td class="p-2 align-top">
+                                            <textarea rows="1" class="dotted-input" data-save="akt1_fungsi_3" placeholder=""></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-blue-50/40">
+                                        <td class="p-2 align-top bg-blue-50/40 font-mono font-bold text-blue-900">IF ... THEN</td>
+                                        <td class="p-2 align-top font-mono text-[10.5px] text-pink-600 bg-slate-50 font-bold">IF total_poin &gt;= 100 THEN</td>
+                                        <td class="p-2 align-top">
+                                            <textarea rows="1" class="dotted-input" data-save="akt1_fungsi_4" placeholder=""></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-blue-50/40">
+                                        <td class="p-2 align-top bg-blue-50/40 font-mono font-bold text-blue-900">ELSE</td>
+                                        <td class="p-2 align-top font-mono text-[10.5px] text-pink-600 bg-slate-50 font-bold">ELSE PRINT "Ayo Tingkatkan"</td>
+                                        <td class="p-2 align-top">
+                                            <textarea rows="1" class="dotted-input" data-save="akt1_fungsi_5" placeholder=""></textarea>
+                                        </td>
+                                    </tr>
+                                    <tr class="hover:bg-blue-50/40">
+                                        <td class="p-2 align-top bg-blue-50/40 font-mono font-bold text-blue-900">END IF</td>
+                                        <td class="p-2 align-top font-mono text-[10.5px] text-pink-600 bg-slate-50 font-bold">END IF</td>
+                                        <td class="p-2 align-top">
+                                            <textarea rows="1" class="dotted-input" data-save="akt1_fungsi_6" placeholder=""></textarea>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Mini Catatan Edukasi Variabel -->
+                        <div class="var-note p-2 bg-white rounded-lg border border-blue-200 text-[10px] text-slate-700 flex items-start gap-1.5 shadow-2xs">
+                            <span class="text-sm text-blue-600">📦</span>
+                            <div class="leading-tight">
+                                <strong>Konsep Variabel:</strong> Wadah penyimpanan data di memori komputer yang diberi nama pengenal (contoh: <code>berat_kg</code>, <code>total_poin</code>, <code>poin_admin</code>) di mana nilainya <strong>dapat berubah-ubah (dinamis)</strong> sepanjang program berjalan.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Print Footer Halaman 1 -->
+                <div class="print-footer">
+                    <span>LKPD Informatika Fase E • Sistem Patbhe Green</span>
+                    <span>Halaman 1 dari 4 (Identitas, TP &amp; Konsep Dasar)</span>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ========================================================================= -->
+        <!-- ============================== HALAMAN 2 ============================== -->
+        <!-- ========================================================================= -->
+        <div id="lkm-page-2" class="lkm-page bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-amber-200">
+            <div class="main-content-wrapper p-4 sm:p-5 md:p-6 space-y-4">
+
+                <!-- Aktivitas 2: Target C4 - Menganalisis & Melacak Kode (Tracing) -->
+                <div id="aktivitas-2" class="activity-section border-2 border-amber-300 rounded-xl overflow-hidden shadow-[3px_3px_0px_#fcd34d]">
+                    <div class="activity-header-bar bg-amber-500 text-white p-2.5 px-4 font-extrabold text-sm sm:text-base flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-white text-amber-600 rounded-full w-6 h-6 flex items-center justify-center font-black text-xs">2</span> 
+                            <span>Aktivitas 2: Menganalisis &amp; Melacak Pseudocode (Target C4 - Tracing Poin Patbhe Green)</span>
+                        </div>
+                        <span class="text-[10px] bg-amber-700/80 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider hidden sm:inline">Target C4 Analisis</span>
+                    </div>
+                    
+                    <div class="activity-body bg-amber-50/70 p-4 space-y-3.5">
+                        
+                        <!-- Konteks Studi Kasus Patbhe Green -->
+                        <div class="konteks-box print-avoid-break bg-white p-3 rounded-xl border border-amber-200 shadow-2xs space-y-1">
+                            <div class="flex items-center gap-1.5 text-amber-950 font-extrabold text-xs sm:text-sm border-b border-amber-100 pb-1">
+                                <span>🌱</span>
+                                <h4>Studi Kasus Kontekstual: Sistem Pencatatan Setoran Sampah "Patbhe Green"</h4>
+                            </div>
+                            <p class="text-[11px] sm:text-xs text-slate-700 font-semibold leading-snug">
+                                Bank Sampah Sekolah <strong>"Patbhe Green"</strong> mengembangkan program di posko penimbangan untuk mencatat setoran sampah botol plastik dari tiap kelas. 
+                                Tarif poin per kilogram (<code>poin_admin</code>) bersifat dinamis (dapat diubah saat ada pekan lingkungan). 
+                                Total poin diperoleh dari rumus perkalian: <strong><code>total_poin = berat_kg * poin_admin</code></strong>.
+                            </p>
+                        </div>
+
+                        <!-- Kode Program & Tabel Tracing Dua Kolom -->
+                        <div class="grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-stretch">
+                            
+                            <!-- Kolom Kiri: Console Pseudocode Sekuensial -->
+                            <div class="code-console lg:col-span-5 bg-[#0f172a] text-[#38bdf8] p-3.5 rounded-xl font-mono text-[11px] sm:text-xs shadow-md border-2 border-slate-800 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center justify-between text-slate-400 mb-2 border-b border-slate-700 pb-1.5 text-[10px]">
+                                        <span class="flex items-center gap-1 font-bold text-slate-300">
+                                            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                                            <span>patbhe_green_sekuensial.pseudo</span>
+                                        </span>
+                                        <span class="text-[9px] bg-slate-800 px-1.5 py-0.2 rounded text-amber-400 font-bold">SEKUENSIAL</span>
+                                    </div>
+                                    <div class="space-y-0.5 leading-snug text-slate-200">
+                                        <div><span class="text-slate-500 select-none mr-1.5">1.</span><span class="text-blue-400 font-bold">Program</span> Hitung_Poin_Patbhe_Green</div>
+                                        <div><span class="text-slate-500 select-none mr-1.5">2.</span><span class="text-slate-400 italic">{ Menghitung poin perolehan kelas }</span></div>
+                                        <div><span class="text-slate-500 select-none mr-1.5">3.</span><span class="text-amber-400 font-bold">Deklarasi:</span></div>
+                                        <div class="pl-3"><span class="text-slate-500 select-none mr-1.5">4.</span>nama_kelas : <span class="text-emerald-400 font-bold">string</span></div>
+                                        <div class="pl-3"><span class="text-slate-500 select-none mr-1.5">5.</span>berat_kg, poin_admin, total_poin : <span class="text-emerald-400 font-bold">real</span></div>
+                                        <div><span class="text-slate-500 select-none mr-1.5">6.</span><span class="text-emerald-400 font-bold">Algoritma:</span></div>
+                                        <div class="pl-3"><span class="text-slate-500 select-none mr-1.5">7.</span><span class="text-purple-400 font-bold">INPUT</span> nama_kelas</div>
+                                        <div class="pl-3"><span class="text-slate-500 select-none mr-1.5">8.</span><span class="text-purple-400 font-bold">INPUT</span> berat_kg</div>
+                                        <div class="pl-3"><span class="text-slate-500 select-none mr-1.5">9.</span><span class="text-purple-400 font-bold">INPUT</span> poin_admin</div>
+                                        <div class="pl-3 bg-slate-800/80 py-0.2 rounded px-1 -mx-0.5"><span class="text-slate-400 select-none mr-1.5">10.</span><span class="text-yellow-300 font-bold">total_poin &lt;- berat_kg * poin_admin</span></div>
+                                        <div class="pl-3"><span class="text-slate-500 select-none mr-1.5">11.</span><span class="text-purple-400 font-bold">OUTPUT</span> <span class="text-pink-300">"=== BUKTI SETORAN ==="</span></div>
+                                        <div class="pl-3"><span class="text-slate-500 select-none mr-1.5">12.</span><span class="text-purple-400 font-bold">OUTPUT</span> <span class="text-pink-300">"Kelas      : "</span>, nama_kelas</div>
+                                        <div class="pl-3"><span class="text-slate-500 select-none mr-1.5">13.</span><span class="text-purple-400 font-bold">OUTPUT</span> <span class="text-pink-300">"Total Poin : "</span>, total_poin</div>
+                                        <div><span class="text-slate-500 select-none mr-1.5">14.</span><span class="text-blue-400 font-bold">END</span></div>
+                                    </div>
+                                </div>
+                                <div class="mt-2 pt-1.5 border-t border-slate-700/80 text-[10px] text-slate-400">
+                                    💡 <em>Komputer mengeksekusi instruksi sekuensial dari atas ke bawah.</em>
+                                </div>
+                            </div>
+
+                            <!-- Kolom Kanan: Pelacakan (Tracing) Tabel Uji Logika -->
+                            <div class="trace-table-box lg:col-span-7 bg-white p-3.5 rounded-xl border border-amber-200 shadow-2xs flex flex-col justify-between space-y-2.5">
+                                <div>
+                                    <h4 class="font-extrabold text-amber-950 text-xs sm:text-sm flex items-center gap-1.5 border-b border-amber-100 pb-1">
+                                        <span>🔍</span>
+                                        <span>Tabel Pelacakan (Trace Table) Masukan Data Admin:</span>
+                                    </h4>
+                                    <p class="text-[10.5px] text-slate-600 font-medium mt-0.5 mb-2">
+                                        Lakukan tracing baris kode di samping berdasarkan 3 skenario berikut:
+                                    </p>
+
+                                    <div class="overflow-x-auto">
+                                        <table class="trace-table w-full text-left border-collapse border border-slate-200 text-[10.5px]">
+                                            <thead>
+                                                <tr class="bg-amber-100/70 text-amber-950 font-black uppercase tracking-wider text-[10px]">
+                                                    <th class="p-1.5 border border-slate-200 text-center w-10">Uji</th>
+                                                    <th class="p-1.5 border border-slate-200">Data Masukan (Input)</th>
+                                                    <th class="p-1.5 border border-slate-200">Jejak Rumus (Baris 10)</th>
+                                                    <th class="p-1.5 border border-slate-200">Output Layar (Baris 13)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-200 font-semibold text-slate-700">
+                                                <tr class="hover:bg-amber-50/30">
+                                                    <td class="p-1.5 align-top text-center font-bold text-amber-800">#1</td>
+                                                    <td class="p-1.5 align-top">
+                                                        <div>Kelas: <strong>X E7</strong></div>
+                                                        <div>berat_kg: <strong>5</strong> | poin_admin: <strong>20</strong></div>
+                                                    </td>
+                                                    <td class="p-1.5 align-top font-mono text-slate-600">
+                                                        <textarea rows="1" class="dotted-input font-mono text-[10.5px]" data-save="akt2_uji1_rumus" placeholder=""></textarea>
+                                                    </td>
+                                                    <td class="p-1.5 align-top">
+                                                        <textarea rows="1" class="dotted-input font-mono text-emerald-700 font-bold" data-save="akt2_uji1_output" placeholder=""></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr class="hover:bg-amber-50/30">
+                                                    <td class="p-1.5 align-top text-center font-bold text-amber-800">#2</td>
+                                                    <td class="p-1.5 align-top">
+                                                        <div>Kelas: <strong>X E2</strong></div>
+                                                        <div>berat_kg: <strong>3.5</strong> | poin_admin: <strong>20</strong></div>
+                                                    </td>
+                                                    <td class="p-1.5 align-top font-mono">
+                                                        <textarea rows="1" class="dotted-input font-mono text-[10.5px]" data-save="akt2_uji2_rumus" placeholder=""></textarea>
+                                                    </td>
+                                                    <td class="p-1.5 align-top">
+                                                        <textarea rows="1" class="dotted-input font-mono text-emerald-700 font-bold" data-save="akt2_uji2_output" placeholder=""></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr class="hover:bg-amber-50/30">
+                                                    <td class="p-1.5 align-top text-center font-bold text-amber-800">#3</td>
+                                                    <td class="p-1.5 align-top">
+                                                        <div>Kelas: <strong>X E5</strong></div>
+                                                        <div>berat_kg: <strong>4</strong> | poin_admin: <strong class="text-purple-700">30 (Pekan Lingkungan)</strong></div>
+                                                    </td>
+                                                    <td class="p-1.5 align-top font-mono">
+                                                        <textarea rows="1" class="dotted-input font-mono text-[10.5px]" data-save="akt2_uji3_rumus" placeholder=""></textarea>
+                                                    </td>
+                                                    <td class="p-1.5 align-top">
+                                                        <textarea rows="1" class="dotted-input font-mono text-emerald-700 font-bold" data-save="akt2_uji3_output" placeholder=""></textarea>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pertanyaan Analisis Logika Kode (C4) -->
+                        <div class="pertanyaan-c4-box print-avoid-break pt-2 border-t border-amber-200/60 space-y-2 text-xs">
+                            <h5 class="font-bold text-amber-900 flex items-center gap-1.5">
+                                <span>🧠</span>
+                                <span>Pertanyaan Analisis Logika &amp; Struktur Kode (Target C4):</span>
+                            </h5>
+                            
+                            <div class="space-y-0.5">
+                                <label class="font-bold text-slate-800 block text-[11px] leading-tight">
+                                    1. Analisis Variabel: Variabel mana bertindak sebagai <u>INPUT</u>, mana penyimpan <u>PROSES</u>, dan mengapa tipe <code>real</code> lebih tepat daripada <code>integer</code> untuk <code>berat_kg</code>?
+                                </label>
+                                <textarea rows="1" class="dotted-input" data-save="akt2_soal1" placeholder=""></textarea>
+                            </div>
+
+                            <div class="space-y-0.5">
+                                <label class="font-bold text-slate-800 block text-[11px] leading-tight">
+                                    2. Analisis Alur Eksekusi: Pada baris ke berapa nilai <code>total_poin</code> terbentuk di memori? Apa yang terjadi jika baris ke-10 dipindahkan sebelum baris ke-8?
+                                </label>
+                                <textarea rows="1" class="dotted-input" data-save="akt2_soal2" placeholder=""></textarea>
+                            </div>
+
+                            <div class="space-y-0.5">
+                                <label class="font-bold text-slate-800 block text-[11px] leading-tight">
+                                    3. Analisis Kebijakan Dinamis: Mengapa nilai <code>poin_admin</code> dirancang sebagai masukan dinamis, bukan angka tetap di rumus? Analisis keuntungannya bagi pengelola!
+                                </label>
+                                <textarea rows="1" class="dotted-input" data-save="akt2_soal3" placeholder=""></textarea>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Print Footer Halaman 2 -->
+                <div class="print-footer">
+                    <span>LKPD Informatika Fase E • Sistem Patbhe Green</span>
+                    <span>Halaman 2 dari 4 (Target C4: Analisis &amp; Tracing Sekuensial)</span>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ========================================================================= -->
+        <!-- ============================== HALAMAN 3 ============================== -->
+        <!-- ========================================================================= -->
+        <div id="lkm-page-3" class="lkm-page bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-emerald-200">
+            <div class="main-content-wrapper p-4 sm:p-5 md:p-6 space-y-4">
+
+                <!-- Aktivitas 3: Target C6 - Bagian 1: Analisis Masalah & Urutan Logika -->
+                <div id="aktivitas-3-part1" class="activity-section border-2 border-emerald-300 rounded-xl overflow-hidden shadow-[3px_3px_0px_#6ee7b7]">
+                    <div class="activity-header-bar bg-emerald-600 text-white p-2.5 px-4 font-extrabold text-sm sm:text-base flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-white text-emerald-700 rounded-full w-6 h-6 flex items-center justify-center font-black text-xs">3</span> 
+                            <span>Aktivitas 3: Merancang Pseudocode Percabangan (Target C6 - Bagian 1: Analisis IPO &amp; Urutan Logika)</span>
+                        </div>
+                        <span class="text-[10px] bg-emerald-800/80 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider hidden sm:inline">Target C6 Merancang</span>
+                    </div>
+                    
+                    <div class="activity-body bg-emerald-50/60 p-4 space-y-3.5">
+                        
+                        <!-- Tantangan Pemecahan Masalah (Problem Statement Lengkap & Kontekstual) -->
+                        <div class="problem-box print-avoid-break bg-white p-3 rounded-xl border border-emerald-200 shadow-2xs space-y-1.5">
+                            <div class="flex items-center gap-1.5 text-emerald-950 font-extrabold text-xs sm:text-sm border-b border-emerald-100 pb-1">
+                                <span>🏆</span>
+                                <h4>Studi Kasus: Otomatisasi Sistem Perankingan Kelas Patbhe Green</h4>
+                            </div>
+                            
+                            <div class="space-y-1 text-[10.5px] sm:text-xs text-slate-700 leading-snug">
+                                <p>
+                                    Sebagai bagian dari komitmen <strong>Sekolah Adiwiyata Mandiri</strong> di SMA Negeri 4 Yogyakarta, panitia program <strong>"Patbhe Green"</strong> menyelenggarakan kompetisi kebersihan dan pengumpulan sampah daur ulang antarkelas setiap bulannya. Di setiap akhir periode, pihak sekolah mengumumkan pergerakan peringkat kelas untuk memberikan apresiasi bagi kelas yang paling konsisten menjaga lingkungan.
+                                </p>
+                                <p>
+                                    Namun, selama ini panitia Adiwiyata masih membandingkan perolehan nilai kelas satu per satu secara manual. Proses manual ini memakan waktu lama, rawan salah catat, dan sering membuat pengumuman peringkat kelas terlambat diumumkan saat apel sekolah.
+                                </p>
+                                <p class="font-semibold text-emerald-950 bg-emerald-50/80 p-1.5 rounded-lg border border-emerald-200 text-[10px] sm:text-[11px]">
+                                    💡 <strong>Tantangan Komputasional Kelompokmu:</strong><br>
+                                    Pihak sekolah meminta kelompok kalian merancang logika program <em>pseudocode</em> percabangan (<code>IF-ELSE</code>) yang dapat mengambil keputusan otomatis: 
+                                    Sistem akan menerima masukan berupa nilai poin terkini (<code>nilai</code>) dan nilai poin periode sebelumnya (<code>nilai_sebelumnya</code>). 
+                                    <strong>Jika nilai sekarang lebih besar dari nilai sebelumnya, maka peringkat kelas naik (lebih tinggi)</strong>. Sebaliknya jika tidak, peringkat kelas tidak naik.
+                                </p>
+                            </div>
+
+                            <!-- 2 Kotak Kondisi Keputusan -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-2 pt-0.5">
+                                <div class="p-2 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-950 text-xs space-y-0.5">
+                                    <div class="font-extrabold flex items-center gap-1 text-emerald-800 text-[10.5px]">
+                                        <span>📈</span>
+                                        <span>Kondisi 1: Nilai Lebih Besar dari Nilai Sebelumnya</span>
+                                    </div>
+                                    <p class="text-slate-700 leading-tight text-[10px]">
+                                        Jika <code>nilai &gt; nilai_sebelumnya</code>, cetak: <strong class="text-emerald-800 font-mono">"Peringkat Lebih Tinggi 🏆"</strong>
+                                    </p>
+                                </div>
+                                <div class="p-2 rounded-lg bg-amber-50 border border-amber-300 text-amber-950 text-xs space-y-0.5">
+                                    <div class="font-extrabold flex items-center gap-1 text-amber-800 text-[10.5px]">
+                                        <span>📉</span>
+                                        <span>Kondisi 2: Tidak Lebih Besar (ELSE / Tetap atau Turun)</span>
+                                    </div>
+                                    <p class="text-slate-700 leading-tight text-[10px]">
+                                        Jika tidak (nilai &le; nilai sebelumnya), cetak: <strong class="text-amber-800 font-mono">"Peringkat Tetap / Turun ⬇️"</strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAHAP 1: Analisis Masalah - Pertanyaan Penentuan (I-P-O) -->
+                        <div class="tahap-box print-avoid-break bg-white p-3.5 rounded-xl border border-emerald-200 shadow-2xs space-y-2.5">
+                            <div class="flex items-center gap-2 border-b border-emerald-100 pb-1.5">
+                                <span class="w-5 h-5 rounded bg-emerald-600 text-white font-extrabold flex items-center justify-center text-xs shrink-0">1</span>
+                                <div>
+                                    <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm">
+                                        Tahap 1: Analisis Masalah — Pertanyaan Penentuan Alur (I-P-O)
+                                    </h4>
+                                    <p class="text-[10px] text-slate-500 font-medium">Jawablah pertanyaan penentuan berikut untuk menganalisis alur data dan logika percabangan program:</p>
+                                </div>
+                            </div>
+
+                            <!-- 3 Kartu Pertanyaan Penentuan: Input, Proses, Output -->
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-0.5">
+                                <!-- 1. Penentuan Input -->
+                                <div class="p-2.5 rounded-lg bg-blue-50/80 border border-blue-200 space-y-1.5 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex items-center gap-1 text-blue-900 font-extrabold text-[11px]">
+                                            <span class="bg-blue-600 text-white text-[9px] px-1.5 py-0.2 rounded font-black">INPUT</span>
+                                            <span>Penentuan Masukan</span>
+                                        </div>
+                                        <p class="text-[10.5px] text-slate-800 leading-snug font-bold mt-1">
+                                            Mana yang merupakan inputan?
+                                        </p>
+                                    </div>
+                                    <div class="pt-1">
+                                        <textarea rows="1" class="dotted-input text-blue-900 font-medium text-xs w-full" data-save="akt3_input" placeholder=""></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- 2. Penentuan Proses -->
+                                <div class="p-2.5 rounded-lg bg-purple-50/80 border border-purple-200 space-y-1.5 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex items-center gap-1 text-purple-900 font-extrabold text-[11px]">
+                                            <span class="bg-purple-600 text-white text-[9px] px-1.5 py-0.2 rounded font-black">PROSES</span>
+                                            <span>Penentuan Proses</span>
+                                        </div>
+                                        <p class="text-[10.5px] text-slate-800 leading-snug font-bold mt-1">
+                                            Bagian mana melakukan proses perhitungan atau perbandingan?
+                                        </p>
+                                    </div>
+                                    <div class="pt-1">
+                                        <textarea rows="1" class="dotted-input text-purple-900 font-medium text-xs w-full" data-save="akt3_proses" placeholder=""></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- 3. Penentuan Output -->
+                                <div class="p-2.5 rounded-lg bg-emerald-50/80 border border-emerald-200 space-y-1.5 flex flex-col justify-between">
+                                    <div>
+                                        <div class="flex items-center gap-1 text-emerald-900 font-extrabold text-[11px]">
+                                            <span class="bg-emerald-600 text-white text-[9px] px-1.5 py-0.2 rounded font-black">OUTPUT</span>
+                                            <span>Penentuan Keluaran</span>
+                                        </div>
+                                        <p class="text-[10.5px] text-slate-800 leading-snug font-bold mt-1">
+                                            Keluaran layar dari dua perbandingan apa saja?
+                                        </p>
+                                    </div>
+                                    <div class="pt-1">
+                                        <textarea rows="1" class="dotted-input text-emerald-900 font-medium text-xs w-full" data-save="akt3_output" placeholder=""></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAHAP 2: Menyusun Urutan Langkah Algoritma (Dinamis: Siswa Tentukan Sendiri Jumlah Langkah) -->
+                        <div class="tahap-box print-avoid-break bg-white p-3.5 rounded-xl border border-emerald-200 shadow-2xs space-y-2">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-emerald-100 pb-1.5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded bg-teal-600 text-white font-extrabold flex items-center justify-center text-xs shrink-0">2</span>
+                                    <div>
+                                        <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm">
+                                            Tahap 2: Menyusun Urutan Langkah Algoritma (Deskripsi Logis Runtut)
+                                        </h4>
+                                        <p class="text-[10px] text-slate-500 font-medium">Susunlah urutan langkah penyelesaian masalah secara runtut dari awal hingga akhir:</p>
+                                    </div>
+                                </div>
+                                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-teal-50 text-teal-800 border border-teal-200 self-start sm:self-auto">
+                                    Tentukan Langkah Kelompokmu
+                                </span>
+                            </div>
+
+                            <!-- Dynamic Steps Container -->
+                            <div id="container-langkah" class="space-y-1.5 bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+                                <!-- Steps rendered dynamically by JavaScript -->
+                            </div>
+
+                            <!-- Tombol Opsi Tambah / Hapus Langkah (No-Print) -->
+                            <div class="no-print flex items-center justify-between gap-2 pt-1 border-t border-slate-100">
+                                <span class="text-[10.5px] text-slate-500 font-semibold">Tentukan sendiri berapa langkah yang dibutuhkan:</span>
+                                <div class="flex items-center gap-2">
+                                    <button type="button" onclick="tambahLangkah()" class="px-2.5 py-1 rounded-lg bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white font-bold text-xs flex items-center gap-1 transition shadow-xs">
+                                        <span>➕</span> <span>Tambah Langkah</span>
+                                    </button>
+                                    <button type="button" onclick="hapusLangkah()" class="px-2.5 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 active:bg-slate-400 text-slate-700 font-bold text-xs flex items-center gap-1 transition">
+                                        <span>➖</span> <span>Hapus</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Print Footer Halaman 3 -->
+                <div class="print-footer">
+                    <span>LKPD Informatika Fase E • Sistem Patbhe Green</span>
+                    <span>Halaman 3 dari 4 (Target C6: Analisis IPO &amp; Urutan Logika)</span>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ========================================================================= -->
+        <!-- ============================== HALAMAN 4 ============================== -->
+        <!-- ========================================================================= -->
+        <div id="lkm-page-4" class="lkm-page bg-white rounded-3xl shadow-xl overflow-hidden border-4 border-teal-200">
+            <div class="main-content-wrapper p-4 sm:p-5 md:p-6 space-y-4">
+
+                <!-- Aktivitas 3: Target C6 - Bagian 2: Notasi Baku & Verifikasi -->
+                <div id="aktivitas-3-part2" class="activity-section border-2 border-emerald-300 rounded-xl overflow-hidden shadow-[3px_3px_0px_#6ee7b7]">
+                    <div class="activity-header-bar bg-emerald-600 text-white p-2.5 px-4 font-extrabold text-sm sm:text-base flex items-center justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-white text-emerald-700 rounded-full w-6 h-6 flex items-center justify-center font-black text-xs">3</span> 
+                            <span>Aktivitas 3: Merancang Pseudocode Percabangan (Target C6 - Bagian 2: Notasi Formal &amp; Uji Logika)</span>
+                        </div>
+                        <span class="text-[10px] bg-emerald-800/80 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider hidden sm:inline">Target C6 Merancang</span>
+                    </div>
+                    
+                    <div class="activity-body bg-emerald-50/60 p-4 space-y-3">
+                        
+                        <!-- TAHAP 3: Menuliskan dalam Bentuk Notasi Pseudocode Formal -->
+                        <div class="tahap-box print-avoid-break bg-white p-3.5 rounded-xl border border-emerald-200 shadow-2xs space-y-2.5">
+                            <div class="flex items-center justify-between gap-2 border-b border-emerald-100 pb-1.5">
+                                <div class="flex items-center gap-2">
+                                    <span class="w-5 h-5 rounded bg-emerald-700 text-white font-extrabold flex items-center justify-center text-xs shrink-0">3</span>
+                                    <div>
+                                        <h4 class="font-extrabold text-slate-900 text-xs sm:text-sm">
+                                            Tahap 3: Menuliskan Notasi Pseudocode Formal (Format Baku 3 Bagian)
+                                        </h4>
+                                        <p class="text-[10px] text-slate-500 font-medium">Terjemahkan analisismu ke format baku: Judul, Deklarasi, &amp; Baris Algoritma:</p>
+                                    </div>
+                                </div>
+                                <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 hidden sm:inline">
+                                    Struktur Baku Pseudocode
+                                </span>
+                            </div>
+
+                            <!-- 1. Judul Program & Deklarasi -->
+                            <div class="space-y-1.5 bg-slate-50 p-2.5 rounded-lg border border-slate-200 font-mono text-[11px] sm:text-xs">
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-blue-700 w-20 shrink-0">Program</span>
+                                    <textarea rows="1" class="dotted-input font-mono text-blue-800 font-bold" data-save="akt3_judul" placeholder=""></textarea>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="font-bold text-slate-400 w-20 shrink-0">{ Ket }</span>
+                                    <textarea rows="1" class="dotted-input font-mono text-slate-600 italic" data-save="akt3_ket" placeholder=""></textarea>
+                                </div>
+                                <div class="flex items-center gap-2 pt-1 border-t border-slate-200">
+                                    <span class="font-bold text-amber-700 w-20 shrink-0">Deklarasi:</span>
+                                    <textarea rows="1" class="dotted-input font-mono text-emerald-700 font-bold" data-save="akt3_deklarasi_formal" placeholder=""></textarea>
+                                </div>
+                            </div>
+
+                            <!-- 2. Algoritma (Baris Dinamis: Siswa yang Tentukan) -->
+                            <div class="space-y-1.5">
+                                <div class="flex items-center justify-between">
+                                    <span class="font-extrabold text-emerald-950 text-xs uppercase tracking-wide flex items-center gap-1">
+                                        <span>⚙️</span>
+                                        <span>Algoritma (Tuliskan Baris Instruksi Logika Pseudocode):</span>
+                                    </span>
+                                </div>
+
+                                <div id="container-algoritma" class="bg-slate-900 p-3 rounded-xl border-2 border-slate-800 text-slate-100 space-y-1.5 font-mono text-[11px] sm:text-xs">
+                                    <!-- Dynamic lines rendered by JavaScript -->
+                                </div>
+
+                                <!-- Tombol Opsi Tambah / Hapus Baris Algoritma (No-Print) -->
+                                <div class="no-print flex items-center justify-between gap-2 pt-1">
+                                    <span class="text-[10.5px] text-slate-500 font-semibold">Tentukan sendiri jumlah baris yang dibutuhkan programmu:</span>
+                                    <div class="flex items-center gap-2">
+                                        <button type="button" onclick="tambahBarisAlgoritma()" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-xs flex items-center gap-1 transition shadow-xs">
+                                            <span>➕</span> <span>Tambah Baris</span>
+                                        </button>
+                                        <button type="button" onclick="hapusBarisAlgoritma()" class="px-2.5 py-1 rounded-lg bg-slate-200 hover:bg-slate-300 active:bg-slate-400 text-slate-700 font-bold text-xs flex items-center gap-1 transition">
+                                            <span>➖</span> <span>Hapus</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAHAP 4: Uji Logika Hasil Rancangan -->
+                            <div class="print-avoid-break p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 space-y-1.5">
+                                <div class="flex items-center gap-1.5">
+                                    <span class="w-5 h-5 rounded bg-emerald-600 text-white font-extrabold flex items-center justify-center text-[10px] shrink-0">4</span>
+                                    <h5 class="text-xs font-extrabold text-emerald-950 flex items-center gap-1">
+                                        <span>🧪</span>
+                                        <span>Tahap 4: Uji Logika Hasil Rancanganmu (Verifikasi Alur Komputer):</span>
+                                    </h5>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-[10.5px]">
+                                    <div class="bg-white p-2 rounded-lg border border-emerald-200 shadow-2xs">
+                                        <span class="font-bold text-slate-800 block">Uji A: Kelas X E7 memperoleh nilai = 120 dan nilai_sebelumnya = 95</span>
+                                        <span class="text-slate-600 block text-[10px]">Baris nomor berapa yang dieksekusi dan apa output layarnya?</span>
+                                        <textarea rows="1" class="dotted-input mt-1 text-emerald-700 font-mono font-bold" data-save="akt3_uji_a" placeholder=""></textarea>
+                                    </div>
+                                    <div class="bg-white p-2 rounded-lg border border-emerald-200 shadow-2xs">
+                                        <span class="font-bold text-slate-800 block">Uji B: Kelas X E2 memperoleh nilai = 80 dan nilai_sebelumnya = 90</span>
+                                        <span class="text-slate-600 block text-[10px]">Baris nomor berapa yang dieksekusi dan apa output layarnya?</span>
+                                        <textarea rows="1" class="dotted-input mt-1 text-amber-700 font-mono font-bold" data-save="akt3_uji_b" placeholder=""></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="no-print mt-1 pt-1 border-t border-emerald-200/80 flex flex-wrap items-center justify-between gap-1.5">
+                                    <span class="text-[11px] text-emerald-950 font-bold flex items-center gap-1">
+                                        <span>💡</span>
+                                        <span>LKPD ini dicetak fisik. Untuk menguji &amp; mengirimkan kode ke proyektor kelas/GAS Guru, buka modul <b>Simulasi &amp; Kirim</b> di portal:</span>
+                                    </span>
+                                    <a href="simulasi_pseudocode.html" target="_blank" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs shadow-md transition hover:scale-102">
+                                        <span>💻</span>
+                                        <span>Buka Simulasi &amp; Kirim (GAS) ↗</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Aktivitas 4: Refleksi Analisis & Pemecahan Masalah -->
+                <div id="aktivitas-4" class="activity-section print-avoid-break border-2 border-teal-300 rounded-xl overflow-hidden shadow-[3px_3px_0px_#5eead4]">
+                    <div class="activity-header-bar bg-teal-500 text-white p-2 px-4 font-extrabold text-sm sm:text-base flex items-center gap-2">
+                        <span class="bg-white text-teal-600 rounded-full w-6 h-6 flex items-center justify-center font-black text-xs">4</span> 
+                        <span>Aktivitas 4: Refleksi Analisis &amp; Pemecahan Masalah</span>
+                    </div>
+                    
+                    <div class="activity-body bg-teal-50/70 p-3 space-y-2.5">
+                        <div class="refleksi-box bg-white p-3 rounded-lg border border-teal-200 shadow-2xs relative">
+                            <label class="block font-bold text-teal-950 mb-1 text-xs">
+                                1. Mengapa membaca dan melacak (*tracing*) alur instruksi serta nilai variabel (seperti Aktivitas 2 perhitungan poin Patbhe Green) sangat penting dilakukan sebelum program dibuat di komputer?
+                            </label>
+                            <textarea rows="2" class="refleksi-textarea w-full bg-teal-50/30 border-2 border-solid border-teal-300 rounded-lg p-2 focus:outline-none focus:border-teal-500 text-slate-700 font-semibold text-xs" data-save="akt4_refleksi_1" placeholder="Tuliskan refleksi pemahaman di sini..."></textarea>
+                        </div>
+
+                        <div class="refleksi-box bg-white p-3 rounded-lg border border-teal-200 shadow-2xs relative">
+                            <label class="block font-bold text-teal-950 mb-1 text-xs">
+                                2. Bagaimana struktur percabangan <code>IF-ELSE</code> yang kalian rancang pada Aktivitas 3 dapat membantu pihak sekolah menciptakan sistem "Patbhe Green" yang transparan, otomatis, dan memotivasi?
+                            </label>
+                            <textarea rows="2" class="refleksi-textarea w-full bg-teal-50/30 border-2 border-solid border-teal-300 rounded-lg p-2 focus:outline-none focus:border-teal-500 text-slate-700 font-semibold text-xs" data-save="akt4_refleksi_2" placeholder="Tuliskan refleksi pemahaman di sini..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Print Footer Halaman 4 -->
+                <div class="print-footer">
+                    <span>LKPD Informatika Fase E • Sistem Patbhe Green</span>
+                    <span>Halaman 4 dari 4 (Target C6: Notasi Baku &amp; Refleksi)</span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ========================================================================= -->
+        <!-- ============ AREA AKSI CETAK & UNDUH PDF DI BAWAH (NO-PRINT) ============ -->
+        <!-- ========================================================================= -->
+        <div class="no-print mt-8 p-6 bg-gradient-to-r from-purple-100 via-indigo-50 to-emerald-100 rounded-3xl border-2 border-purple-200 shadow-lg text-center space-y-4">
+            <div class="max-w-xl mx-auto space-y-1">
+                <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-purple-600 text-white text-xs font-extrabold shadow-xs">
+                    <span>💾</span>
+                    <span>Penyimpanan Otomatis &amp; Cetak Berkas LKPD</span>
+                </div>
+                <h3 class="text-base sm:text-lg font-black text-slate-800">Selesai Mengerjakan Lembar Kerja Kelompok?</h3>
+                <p class="text-xs text-slate-600 font-medium">
+                    Seluruh isian kelompokmu tersimpan aman di browser ini meskipun halaman di-reload. Setelah selesai berdiskusi, simpan atau cetak hasil pekerjaan kalian dalam format PDF 4 halaman.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-3 pt-1">
+                <button onclick="window.print()" type="button" class="px-5 py-3 rounded-full bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white text-xs sm:text-sm font-extrabold shadow-md hover:scale-105 active:scale-95 transition flex items-center gap-2">
+                    <span>🖨️</span>
+                    <span>Cetak / Simpan PDF (Beserta Isian Saya)</span>
+                </button>
+                <a href="LKPD_Pseudocode.pdf?v=20261110_compact_4p" download="LKPD_Pseudocode.pdf" class="px-4 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs sm:text-sm font-bold shadow-md hover:scale-105 active:scale-95 transition flex items-center gap-2">
+                    <span>📥</span>
+                    <span>Unduh PDF Format Kosong Baru</span>
+                </a>
+                <button onclick="resetLKPD()" type="button" class="px-3.5 py-3 rounded-full bg-white hover:bg-red-50 active:bg-red-100 text-red-600 border border-red-200 text-xs font-bold transition flex items-center gap-1.5" title="Hapus semua isian yang tersimpan di browser">
+                    <span>🗑️</span>
+                    <span>Reset Isian</span>
+                </button>
+            </div>
+            
+            <div id="save-status-bottom" class="text-[11px] font-bold text-emerald-700 flex items-center justify-center gap-1.5">
+                <span>✅</span>
+                <span>Data tersimpan otomatis setiap kali kamu mengetik.</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- ===================== JAVASCRIPT STATE ENGINE =========================== -->
+    <!-- ========================================================================= -->
+    <script>
+        const STORAGE_KEY = 'patbhe_green_lkpd_v2';
+
+        // Initial default state
+        const defaultState = {
+            static: {},
+            langkah: ['', '', '', '', ''], // Default 5 blank steps
+            algoritma: ['', '', '', '', '', ''] // Default 6 blank pseudocode lines
+        };
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // Auto-expand textarea height downward as student types
+        function autoResize(el) {
+            if (!el || el.tagName.toLowerCase() !== 'textarea') return;
+            el.style.height = 'auto';
+            const minH = el.classList.contains('refleksi-textarea') ? 48 : 22;
+            el.style.height = Math.max(minH, el.scrollHeight) + 'px';
+        }
+
+        function getState() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (!parsed.static) parsed.static = {};
+                    if (!Array.isArray(parsed.langkah) || parsed.langkah.length === 0) {
+                        parsed.langkah = defaultState.langkah.slice();
+                    }
+                    if (!Array.isArray(parsed.algoritma) || parsed.algoritma.length === 0) {
+                        parsed.algoritma = defaultState.algoritma.slice();
+                    }
+                    return parsed;
+                }
+            } catch (e) {
+                console.error('Error loading state:', e);
+            }
+            return {
+                static: {},
+                langkah: defaultState.langkah.slice(),
+                algoritma: defaultState.algoritma.slice()
+            };
+        }
+
+        function saveState(state) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+                const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                const bottomIndicator = document.getElementById('save-status-bottom');
+                if (bottomIndicator) {
+                    bottomIndicator.innerHTML = '<span>✅</span> <span>Tersimpan otomatis ke browser (' + timeStr + ')</span>';
+                }
+            } catch (e) {
+                console.error('Error saving state:', e);
+            }
+        }
+
+        // Render dynamic steps (Tahap 2) with auto-expanding textarea
+        function renderLangkah(stepsArray) {
+            const container = document.getElementById('container-langkah');
+            if (!container) return;
+            container.innerHTML = '';
+            stepsArray.forEach((val, idx) => {
+                const stepNum = idx + 1;
+                const row = document.createElement('div');
+                row.className = 'flex items-start gap-2';
+                row.innerHTML = `
+                    <span class="w-5 h-5 rounded bg-teal-600 text-white font-bold flex items-center justify-center text-[10px] shrink-0 mt-0.5">${stepNum}</span>
+                    <div class="flex-1">
+                        <textarea rows="1" class="dotted-input input-langkah text-slate-800 font-semibold" data-step-index="${idx}" placeholder="">${escapeHtml(val)}</textarea>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+            initMirrors();
+            container.querySelectorAll('textarea').forEach(autoResize);
+            container.querySelectorAll('textarea.input-algoritma').forEach(ta => {
+                ta.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        e.preventDefault();
+                        const start = ta.selectionStart;
+                        const end = ta.selectionEnd;
+                        ta.value = ta.value.substring(0, start) + '  ' + ta.value.substring(end);
+                        ta.selectionStart = ta.selectionEnd = start + 2;
+                        ta.dispatchEvent(new Event('input'));
+                    }
+                });
+            });
+        }
+
+        // Render dynamic pseudocode lines (Tahap 3) with auto-expanding textarea
+        function renderAlgoritma(linesArray) {
+            const container = document.getElementById('container-algoritma');
+            if (!container) return;
+            container.innerHTML = '';
+            linesArray.forEach((val, idx) => {
+                const lineNum = idx + 1;
+                const row = document.createElement('div');
+                row.className = 'flex items-start gap-2';
+                row.innerHTML = `
+                    <span class="w-5 h-5 rounded bg-slate-800 text-blue-400 font-bold flex items-center justify-center shrink-0 border border-slate-700 text-[10px] mt-0.5">${lineNum}.</span>
+                    <div class="flex-1">
+                        <textarea rows="1" class="dotted-input input-algoritma font-mono text-emerald-300 font-bold placeholder:text-slate-600" data-line-index="${idx}" placeholder="">${escapeHtml(val)}</textarea>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+            initMirrors();
+            container.querySelectorAll('textarea').forEach(autoResize);
+            container.querySelectorAll('textarea.input-algoritma').forEach(ta => {
+                ta.addEventListener('keydown', (e) => {
+                    if (e.key === 'Tab') {
+                        e.preventDefault();
+                        const start = ta.selectionStart;
+                        const end = ta.selectionEnd;
+                        ta.value = ta.value.substring(0, start) + '  ' + ta.value.substring(end);
+                        ta.selectionStart = ta.selectionEnd = start + 2;
+                        ta.dispatchEvent(new Event('input'));
+                    }
+                });
+            });
+        }
+
+        // Add/Remove Steps
+        function tambahLangkah() {
+            const state = getState();
+            state.langkah.push('');
+            saveState(state);
+            renderLangkah(state.langkah);
+        }
+
+        function hapusLangkah() {
+            const state = getState();
+            if (state.langkah.length > 1) {
+                state.langkah.pop();
+                saveState(state);
+                renderLangkah(state.langkah);
+            }
+        }
+
+        // Add/Remove Pseudocode Lines
+        function tambahBarisAlgoritma() {
+            const state = getState();
+            state.algoritma.push('');
+            saveState(state);
+            renderAlgoritma(state.algoritma);
+        }
+
+        function hapusBarisAlgoritma() {
+            const state = getState();
+            if (state.algoritma.length > 1) {
+                state.algoritma.pop();
+                saveState(state);
+                renderAlgoritma(state.algoritma);
+            }
+        }
+
+        // Reset all answers
+        function resetLKPD() {
+            if (confirm("Apakah kamu yakin ingin mengosongkan seluruh jawaban yang tersimpan di browser ini?")) {
+                localStorage.removeItem(STORAGE_KEY);
+                location.reload();
+            }
+        }
+
+        // Mirror generation for printing
+        function initMirrors() {
+            document.querySelectorAll('input.dotted-input, textarea.dotted-input, textarea.refleksi-textarea').forEach(el => {
+                let mirror = el.nextElementSibling;
+                if (!mirror || !mirror.classList.contains('print-mirror')) {
+                    mirror = document.createElement('span');
+                    mirror.className = 'print-mirror';
+                    mirror.style.display = 'none';
+                    el.parentNode.insertBefore(mirror, el.nextSibling);
+                }
+                mirror.textContent = el.value || ' ';
+            });
+        }
+
+        // Initialization on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = getState();
+
+            // 1. Restore static fields
+            document.querySelectorAll('[data-save]').forEach(el => {
+                const key = el.getAttribute('data-save');
+                if (state.static && state.static[key] !== undefined) {
+                    el.value = state.static[key];
+                }
+            });
+
+            // 2. Restore dynamic lists
+            renderLangkah(state.langkah);
+            renderAlgoritma(state.algoritma);
+            initMirrors();
+
+            // 3. Auto-resize all textareas to fit loaded content
+            document.querySelectorAll('textarea').forEach(autoResize);
+
+            // 4. Event listeners for input changes
+            document.addEventListener('input', (e) => {
+                const target = e.target;
+                const currentState = getState();
+
+                // Auto-expand textarea downward
+                if (target.tagName.toLowerCase() === 'textarea') {
+                    autoResize(target);
+                }
+
+                // Static field change
+                if (target.hasAttribute('data-save')) {
+                    const key = target.getAttribute('data-save');
+                    currentState.static[key] = target.value;
+                    saveState(currentState);
+                }
+
+                // Langkah step change
+                if (target.classList.contains('input-langkah')) {
+                    const idx = parseInt(target.getAttribute('data-step-index'), 10);
+                    if (!isNaN(idx)) {
+                        currentState.langkah[idx] = target.value;
+                        saveState(currentState);
+                    }
+                }
+
+                // Algoritma line change
+                if (target.classList.contains('input-algoritma')) {
+                    const idx = parseInt(target.getAttribute('data-line-index'), 10);
+                    if (!isNaN(idx)) {
+                        currentState.algoritma[idx] = target.value;
+                        saveState(currentState);
+                    }
+                }
+
+                // Update corresponding print mirror
+                const mirror = target.nextElementSibling;
+                if (mirror && mirror.classList.contains('print-mirror')) {
+                    mirror.textContent = target.value || ' ';
+                }
+            });
+
+            document.addEventListener('change', (e) => {
+                const target = e.target;
+                if (target.hasAttribute('data-save')) {
+                    const currentState = getState();
+                    const key = target.getAttribute('data-save');
+                    currentState.static[key] = target.value;
+                    saveState(currentState);
+                }
+            });
+        });
+
+        // ==========================================
+        // KIRIM RANCANGAN PSEUDOCODE KE DASBOR GURU (KELOMPOK 1 - 9)
+        // ==========================================
+        function kirimRancanganKeGuru() {
+            const state = getState();
+            const rawKelompok = document.querySelector('[data-save="nama_kelompok"]')?.value || state.static['nama_kelompok'] || 'Kelompok 1';
+            const matchNum = rawKelompok.match(/\d+/);
+            const groupNum = matchNum ? parseInt(matchNum[0], 10) : 1;
+            const namaKelompok = 'Kelompok ' + groupNum;
+
+            const a1 = document.querySelector('[data-save="anggota_1_nama"]')?.value || state.static['anggota_1_nama'] || '';
+            const a2 = document.querySelector('[data-save="anggota_2_nama"]')?.value || state.static['anggota_2_nama'] || '';
+            const a3 = document.querySelector('[data-save="anggota_3_nama"]')?.value || state.static['anggota_3_nama'] || '';
+            const a4 = document.querySelector('[data-save="anggota_4_nama"]')?.value || state.static['anggota_4_nama'] || '';
+            const members = [a1, a2, a3, a4].filter(Boolean);
+            const memberStr = members.length > 0 ? members.join(', ') : 'Anggota ' + namaKelompok;
+
+            const identKelas = document.querySelector('[data-save="kelas"]')?.value || state.static['kelas'] || 'Informatika - X E7';
+
+            const progJudul = state.static['akt3_judul'] || document.querySelector('[data-save="akt3_judul"]')?.value || 'Tentukan_Peringkat_Kelas';
+            const progKet = state.static['akt3_ket'] || document.querySelector('[data-save="akt3_ket"]')?.value || '';
+            const progDecl = state.static['akt3_deklarasi_formal'] || document.querySelector('[data-save="akt3_deklarasi_formal"]')?.value || '';
+            const lines = state.algoritma || [];
+
+            const now = new Date();
+            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ' WIB';
+
+            const submission = {
+                groupId: groupNum,
+                absen: groupNum, // compatibility
+                nama: namaKelompok,
+                namaKelompok: namaKelompok,
+                members: members,
+                memberStr: memberStr,
+                kelas: identKelas,
+                submittedAt: timeStr,
+                progName: progJudul,
+                progDesc: progKet || ('{ Rancangan: ' + namaKelompok + (memberStr ? ' - ' + memberStr : '') + ' }'),
+                progDecl: progDecl,
+                lines: lines,
+                ipo: {
+                    input: state.static['akt3_input'] || '',
+                    proses: state.static['akt3_proses'] || '',
+                    output: state.static['akt3_output'] || ''
+                },
+                ujiA: state.static['akt3_uji_a'] || '',
+                ujiB: state.static['akt3_uji_b'] || ''
+            };
+
+            // Simpan ke daftar seluruh kiriman kelompok (eduassess_student_submissions_v2)
+            let allSubs = {};
+            try {
+                allSubs = JSON.parse(localStorage.getItem('eduassess_student_submissions_v2') || '{}');
+            } catch(e) {}
+            allSubs[groupNum] = submission;
+            allSubs['kelompok_' + groupNum] = submission;
+            localStorage.setItem('eduassess_student_submissions_v2', JSON.stringify(allSubs));
+
+            // Simpan juga ke session active simulasi agar langsung sinkron
+            try {
+                localStorage.setItem('student_simulasi_data', JSON.stringify({
+                    name: progJudul,
+                    desc: submission.progDesc,
+                    decl: progDecl,
+                    lines: lines
+                }));
+            } catch(e) {}
+
+            // Sinkronkan ke teacher records
+            try {
+                let recs = JSON.parse(localStorage.getItem('eduassess_teacher_records_v2') || '[]');
+                const idx = recs.findIndex(r => Number(r.absen) === Number(submission.absen));
+                if (idx !== -1) {
+                    recs[idx].pseudocode = submission;
+                    localStorage.setItem('eduassess_teacher_records_v2', JSON.stringify(recs));
+                }
+            } catch(e) {}
+
+            showKirimSuccessModal(submission);
+        }
+
+        function showKirimSuccessModal(sub) {
+            let modal = document.getElementById('modal-kirim-sukses');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'modal-kirim-sukses';
+                modal.className = 'fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-center justify-center p-4';
+                document.body.appendChild(modal);
+            }
+            modal.innerHTML = `
+                <div class="bg-white rounded-3xl shadow-2xl border-2 border-emerald-300 max-w-md w-full p-5 sm:p-6 text-center space-y-3.5 transform transition-all">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto shadow-inner">
+                        🎉
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                            Berhasil Dikirim ke Guru
+                        </span>
+                        <h3 class="text-lg font-black text-slate-900 mt-1">Rancangan Siap Disimulasikan!</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mt-1">
+                            Rancangan Pseudocode dari <b>${escapeHtml(sub.namaKelompok)}</b> telah berhasil tersimpan dan siap dipanggil oleh Guru di layar proyektor kelas.
+                        </p>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-left font-mono text-xs space-y-1">
+                        <div><b>Kelompok:</b> <span class="text-purple-700 font-bold">${escapeHtml(sub.namaKelompok)}</span></div>
+                        <div><b>Anggota:</b> <span class="text-slate-600 font-sans">${escapeHtml(sub.memberStr || '-')}</span></div>
+                        <div><b>Program:</b> <code>${escapeHtml(sub.progName)}</code></div>
+                        <div><b>Deklarasi:</b> <code>${escapeHtml(sub.progDecl || '(belum dideklarasi)')}</code></div>
+                        <div><b>Jumlah Baris:</b> ${sub.lines.length} Baris Algoritma</div>
+                        <div class="text-[10px] text-slate-400 pt-0.5">Waktu kirim: ${sub.submittedAt}</div>
+                    </div>
+                    <button type="button" onclick="document.getElementById('modal-kirim-sukses').remove()" class="w-full py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-black text-xs transition cursor-pointer shadow-md">
+                        Siap, Terima Kasih!
+                    </button>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

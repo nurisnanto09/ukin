@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduInformatika - Portal Belajar &amp; Asesmen Pseudocode</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Custom LMS Styles Sesuai Mockup -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#f3f4f9] text-slate-800 min-h-screen flex flex-col p-2 sm:p-5 md:p-8">
+
+  <!-- ==================== WRAPPER CONTAINER TANPA SIDEBAR (SESUAI MOCKUP) ==================== -->
+  <div class="max-w-7xl w-full mx-auto bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden flex flex-col flex-1">
+
+    <!-- ==================== TOP NAVIGATION BAR ==================== -->
+    <header class="p-4 sm:px-8 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4 bg-white/95 sticky top-0 z-30">
+      
+      <!-- Brand Logo / Name -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-purple-600 text-white flex items-center justify-center font-black text-xl shadow-md shadow-indigo-500/20">
+          💻
+        </div>
+        <div>
+          <span class="text-lg font-black text-slate-900 tracking-tight">EduInformatika</span>
+          <span class="block text-[11px] font-bold text-indigo-600 uppercase tracking-wider">Fase E / Kelas X • Pseudocode</span>
+        </div>
+      </div>
+
+      <!-- Search Bar Mockup -->
+      <div class="flex-1 max-w-md hidden md:block">
+        <div class="relative">
+          <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            🔍
+          </span>
+          <input type="text" placeholder="Cari topik pelajaran, pseudocode, simulasi, atau LKPD..." class="w-full pl-10 pr-4 py-2 rounded-2xl bg-slate-50 border border-slate-200 text-xs font-medium text-slate-700 focus:outline-none focus:border-indigo-500 focus:bg-white transition-all">
+        </div>
+      </div>
+
+      <!-- Right Header Actions & Profile -->
+      <div class="flex items-center gap-2.5">
+        <!-- Live Status Pill -->
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">
+          <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+          <span>Online</span>
+        </span>
+
+        <!-- Akses Langsung Laman Guru / Admin -->
+        <a href="admin.html" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition shadow-xs">
+          <span>🔒</span>
+          <span class="hidden sm:inline">Laman Guru</span>
+        </a>
+
+        <!-- Reset Sesi -->
+        <button id="openResetModalBtn" type="button" title="Reset Sesi Murid" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-rose-50 hover:text-rose-700 text-slate-500 flex items-center justify-center text-xs font-bold transition">
+          &#x21bb;
+        </button>
+
+        <!-- User Profile Pill -->
+        <button id="openIdentityModalBtn" type="button" class="flex items-center gap-2 p-1.5 pl-2.5 pr-3 rounded-2xl bg-indigo-50/70 hover:bg-indigo-100/70 border border-indigo-100 transition">
+          <div class="w-7 h-7 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-xs font-black">
+            👤
+          </div>
+          <div class="text-left text-xs">
+            <span id="topStudentNameDisplay" class="font-extrabold text-slate-900 block max-w-[110px] truncate leading-tight">Murid Belajar</span>
+            <span id="topStudentAbsenDisplay" class="text-[10px] font-bold text-indigo-600">Pilih Absen</span>
+          </div>
+        </button>
+      </div>
+
+    </header>
+
+    <!-- ==================== VIEW 1: DASHBOARD UTAMA (TANPA SIDEBAR) ==================== -->
+    <main id="viewDashboard" class="p-4 sm:p-6 md:p-8 space-y-8 flex-1">
+
+      <!-- ==================== HERO WELCOME BANNER (MATERI PSEUDOCODE) ==================== -->
+      <div class="hero-gradient rounded-3xl p-6 sm:p-8 md:p-10 text-white shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
+        
+        <!-- Sisi Kiri: Deskripsi Materi Pseudocode & Tombol Aksi -->
+        <div class="max-w-2xl space-y-4 z-10 text-center lg:text-left">
+          
+          <!-- Badge Topik Materi -->
+          <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-black tracking-wide uppercase">
+            <span>💻</span>
+            <span>Materi Inti: Notasi Pseudocode &amp; Berpikir Komputasional</span>
+          </div>
+
+          <!-- Sapaan & Judul Materi -->
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+              Halo, <span id="heroStudentNameDisplay">Siswa Informatika</span>! 👋
+            </h2>
+            <p class="text-base sm:text-lg font-bold text-indigo-100">
+              Kuasai Notasi Kode Semu, Logika IF-ELSE &amp; Penelusuran Variabel
+            </p>
+          </div>
+
+          <!-- Deskripsi Pembelajaran Pseudocode -->
+          <p class="text-xs sm:text-sm text-indigo-100/90 font-medium leading-relaxed max-w-xl">
+            Pseudocode adalah jembatan antara logika berpikir manusia dan bahasa pemrograman komputer. Di materi ini, kamu akan mempelajari deklarasi variabel, assignment panah (<code class="bg-indigo-900/40 px-1.5 py-0.5 rounded font-mono font-bold text-amber-300">&lt;-</code>), percabangan kondisi, hingga simulasi penelusuran baris per baris.
+          </p>
+
+          <!-- Pill Fitur Kunci Pseudocode -->
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1 text-[11px] font-bold text-indigo-100">
+            <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">📥 INPUT &amp; OUTPUT</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">🔄 VARIABEL &amp; PANAH (&lt;-)</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">🔀 IF - THEN - ELSE</span>
+            <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">🔁 PERULANGAN (LOOP)</span>
+          </div>
+
+          <!-- Tombol Mulai & Identitas Absen -->
+          <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+            <button id="heroStartBtn" type="button" class="px-6 py-2.5 rounded-xl bg-white text-indigo-950 font-bold text-xs sm:text-sm shadow-md hover:bg-indigo-50 transition-all hover:scale-[1.02] active:scale-95 flex items-center gap-2">
+              <span>Mulai Belajar Sekarang</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+            </button>
+            <a href="lkpd_pseudocode.html" target="_blank" data-track-material="lkm" class="px-5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white border border-white/25 font-bold text-xs sm:text-sm shadow-sm transition-all hover:scale-[1.02] flex items-center gap-2 backdrop-blur-sm">
+              <span>📖</span>
+              <span>Buka LKPD Murid</span>
+              <span>↗</span>
+            </a>
+            <span class="px-3.5 py-2 rounded-xl bg-white/10 backdrop-blur-md text-xs font-bold text-indigo-100 border border-white/20">
+              Nomor Absen: #<span id="heroStudentAbsenDisplay">-</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Sisi Kanan: Visual Card Kode Pseudocode Terminal (Glassmorphism Editor) -->
+        <div class="w-full lg:w-auto flex-shrink-0 z-10 flex justify-center">
+          <div class="w-full max-w-sm rounded-2xl bg-slate-900/90 backdrop-blur-md border border-white/20 shadow-2xl p-4 text-left font-mono text-xs text-slate-100 space-y-2.5">
+            <!-- Window Bar -->
+            <div class="flex items-center justify-between pb-2 border-b border-white/10 text-[11px] text-slate-400">
+              <div class="flex items-center gap-1.5">
+                <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+                <span class="w-3 h-3 rounded-full bg-emerald-500 inline-block"></span>
+              </div>
+              <span class="font-bold text-indigo-200">pseudocode_sample.algo</span>
+              <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/30 text-indigo-200 font-sans font-bold">FASE E</span>
+            </div>
+
+            <!-- Code Lines -->
+            <div class="space-y-1 text-[11px] sm:text-xs leading-relaxed">
+              <div class="text-slate-400"><span class="text-indigo-400 select-none mr-2">1</span><span class="text-purple-400 font-bold">ALGORITMA</span> HitungKelulusan</div>
+              <div class="text-slate-400"><span class="text-indigo-400 select-none mr-2">2</span><span class="text-purple-400 font-bold">DEKLARASI</span> nilai, kkm : <span class="text-amber-300">INTEGER</span></div>
+              <div class="text-slate-200"><span class="text-indigo-400 select-none mr-2">3</span><span class="text-emerald-400">INPUT</span>(nilai)</div>
+              <div class="text-slate-200"><span class="text-indigo-400 select-none mr-2">4</span>kkm <span class="text-amber-400 font-bold">&lt;-</span> <span class="text-cyan-300">75</span></div>
+              <div class="text-amber-300 font-bold"><span class="text-indigo-400 select-none mr-2">5</span><span class="text-rose-400">IF</span> (nilai &gt;= kkm) <span class="text-rose-400">THEN</span></div>
+              <div class="text-emerald-300 pl-4"><span class="text-indigo-400 select-none mr-2">6</span><span class="text-emerald-400 font-bold">OUTPUT</span>(<span class="text-yellow-200">"TUNTAS / PENGAYAAN"</span>)</div>
+              <div class="text-slate-300 font-bold"><span class="text-indigo-400 select-none mr-2">7</span><span class="text-rose-400">ELSE</span></div>
+              <div class="text-rose-300 pl-4"><span class="text-indigo-400 select-none mr-2">8</span><span class="text-emerald-400 font-bold">OUTPUT</span>(<span class="text-yellow-200">"REMIDI BELAJAR"</span>)</div>
+              <div class="text-slate-400"><span class="text-indigo-400 select-none mr-2">9</span><span class="text-rose-400 font-bold">ENDIF</span></div>
+            </div>
+
+            <!-- Terminal Output Live Simulation Preview -->
+            <div class="mt-2 pt-2 border-t border-white/10 bg-black/40 rounded-xl p-2.5 text-[10px] sm:text-[11px] text-emerald-400 flex items-center justify-between">
+              <div class="flex items-center gap-1.5 font-bold">
+                <span class="animate-pulse">▶</span>
+                <span>Console:</span>
+                <span class="text-white font-normal">nilai = 85 &rarr; "TUNTAS / PENGAYAAN"</span>
+              </div>
+              <span class="text-emerald-400 font-bold">✓ PASS</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ==================== OVERVIEW METRICS SECTION (SESUAI GAMBAR REFERENSI USER) ==================== -->
+      <section id="overviewSection" class="space-y-3.5">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <h3 class="text-base sm:text-lg font-bold text-slate-800 tracking-tight">Overview</h3>
+            <span class="text-xs text-slate-400 font-medium hidden sm:inline">• Progres Pembelajaran Real-Time</span>
+          </div>
+          <span class="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2.5 py-0.5 rounded-full">
+            Sinkronisasi Otomatis
+          </span>
+        </div>
+
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-4">
+          <!-- CARD 1: PROSES BELAJAR (YELLOW/AMBER SESUAI GAMBAR) -->
+          <div class="rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-sm transition hover:shadow-md hover:scale-[1.01]" style="background-color: #f3b738;">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white/25 backdrop-blur-xs flex items-center justify-center text-white shrink-0 shadow-inner">
+              <svg class="w-6 h-6 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <div id="overviewOpenRate" class="text-2xl sm:text-3xl font-black text-white leading-none">0%</div>
+              <div class="text-[11px] sm:text-xs font-semibold text-white/95 mt-1 truncate">Proses Belajar</div>
+            </div>
+          </div>
+
+          <!-- CARD 2: TUGAS SELESAI (DARK PURPLE/INDIGO SESUAI GAMBAR) -->
+          <div class="rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-sm transition hover:shadow-md hover:scale-[1.01]" style="background-color: #372865;">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-white shrink-0 shadow-inner">
+              <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <div id="overviewCompleteRate" class="text-2xl sm:text-3xl font-black text-white leading-none">0 / 5</div>
+              <div class="text-[11px] sm:text-xs font-semibold text-white/95 mt-1 truncate">Tugas Selesai</div>
+            </div>
+          </div>
+
+          <!-- CARD 3: NILAI RATA-RATA (BRIGHT PINK/ROSE SESUAI GAMBAR) -->
+          <div class="rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-sm transition hover:shadow-md hover:scale-[1.01]" style="background-color: #f43f8e;">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center text-white shrink-0 shadow-inner">
+              <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <div id="overviewScore" class="text-2xl sm:text-3xl font-black text-white leading-none">-</div>
+              <div class="text-[11px] sm:text-xs font-semibold text-white/95 mt-1 truncate">Nilai Rata-rata</div>
+            </div>
+          </div>
+
+          <!-- CARD 4: STATUS VERIFIKASI ACC GURU (LAVENDER/PERIWINKLE SESUAI GAMBAR) -->
+          <div class="rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-sm transition hover:shadow-md hover:scale-[1.01]" style="background-color: #b4a8e8;">
+            <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white/25 backdrop-blur-xs flex items-center justify-center text-white shrink-0 shadow-inner">
+              <svg class="w-6 h-6 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
+              </svg>
+            </div>
+            <div class="min-w-0">
+              <div id="overviewActivity" class="text-base sm:text-lg lg:text-xl font-black text-white leading-tight truncate">Belum Kuis</div>
+              <div class="text-[11px] sm:text-xs font-semibold text-white/95 mt-1 truncate">Status ACC Guru</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== MAIN CONTENT: TOPIK PEMBELAJARAN (FULL WIDTH TANPA SIDEBAR) ==================== -->
+      <section id="sectionIsiTopik" class="space-y-4">
+
+        <!-- Section Title / Topic Header -->
+        <div class="flex items-center justify-between pb-3 border-b-2 border-slate-200">
+          <div class="flex items-center gap-3">
+            <span class="w-2.5 h-6 rounded-full bg-[#1a73e8]"></span>
+            <div>
+              <h3 class="text-lg sm:text-xl font-bold text-slate-800 tracking-tight">
+                1. BERPIKIR KOMPUTASIONAL &amp; NOTASI PSEUDOCODE
+              </h3>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 text-slate-500">
+            <span class="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
+              5 Modul Pembelajaran
+            </span>
+            <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition text-slate-600" title="Lipat / Bentangkan">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
+            </button>
+            <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition text-slate-600" title="Opsi">
+              &#8942;
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== SKILLSET STYLE TOPIC CARDS ==================== -->
+
+        <!-- CARD 1: MATERI (Gold/Yellow Squircle with 'M') -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <!-- Squircle with initial letter M -->
+            <div class="w-12 h-12 rounded-2xl bg-[#f5b041] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
+              M
+            </div>
+            <div class="min-w-0">
+              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                Materi Pseudocode
+              </h4>
+              <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
+                Struktur Judul, Deklarasi &amp; Isi Algoritma
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
+            <span id="materiStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+              Belum Dibuka
+            </span>
+            <a href="materi_pseudocode.html" target="_blank" data-track-material="materi" class="px-5 py-2.5 rounded-full bg-[#f5b041] hover:bg-[#e09e30] text-slate-900 font-black text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Buka Materi</span>
+              <span>↗</span>
+            </a>
+            <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
+              &#8942;
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 2: PRETEST (Coral/Red Squircle with 'P', Sesuai Hover State 'Marketing' Gambar) -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <!-- Squircle with initial letter P (Coral/Red) -->
+            <div class="w-12 h-12 rounded-2xl bg-[#ff5a5f] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
+              P
+            </div>
+            <div class="min-w-0">
+              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                Pretest Pseudocode
+              </h4>
+              <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
+                10 Soal • 30 Detik per Soal (Otomatis Kirim)
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
+            <span id="pretestStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+              Belum Dikerjakan
+            </span>
+            <button id="cardStartPretestBtn" type="button" class="px-5 py-2.5 rounded-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Buka Pretest</span>
+              <span>↗</span>
+            </button>
+            <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
+              &#8942;
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 3: LKM (Violet/Purple Squircle with 'L') -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <!-- Squircle with initial letter L (Purple) -->
+            <div class="w-12 h-12 rounded-2xl bg-[#8b5cf6] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
+              L
+            </div>
+            <div class="min-w-0">
+              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                LKM Pseudocode
+              </h4>
+              <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
+                Lembar Kerja Murid Fisik (Cetak &amp; Unduh Berkas PDF 4 Halaman)
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
+            <span id="lkmStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+              Belum Dikerjakan
+            </span>
+            <a href="lkpd_pseudocode.html" target="_blank" data-track-material="lkm" class="px-5 py-2.5 rounded-full bg-[#8b5cf6] hover:bg-[#7c3aed] text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Buka LKM</span>
+              <span>↗</span>
+            </a>
+            <a href="LKPD_Pseudocode.pdf?v=20261110_compact_4p" download="LKPD_Pseudocode.pdf" data-track-material="pdf" class="px-3.5 py-2 rounded-full bg-purple-50 hover:bg-purple-100 text-purple-800 font-bold text-xs border border-purple-200 transition">
+              Unduh PDF 📥
+            </a>
+            <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
+              &#8942;
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 4: SIMULASI & KIRIM KE GURU (GAS) (Emerald Squircle with 'S') -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <!-- Squircle with initial letter S (Emerald) -->
+            <div class="w-12 h-12 rounded-2xl bg-[#10b981] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
+              S
+            </div>
+            <div class="min-w-0">
+              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                Simulasi &amp; Kirim ke Guru (GAS)
+              </h4>
+              <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
+                Uji Logika Hasil LKPD Cetak &amp; Kirim ke Google Spreadsheet Guru
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
+            <span id="simulasiStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+              Tersedia
+            </span>
+            <a href="simulasi_pseudocode.html" target="_blank" data-track-material="simulasi" class="px-5 py-2.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-white font-black text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Buka Simulasi &amp; Kirim</span>
+              <span>🚀</span>
+            </a>
+            <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
+              &#8942;
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 5: POSTTEST (Teal Squircle with 'P') -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <!-- Squircle with initial letter P (Teal) -->
+            <div class="w-12 h-12 rounded-2xl bg-[#14b8a6] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
+              P
+            </div>
+            <div class="min-w-0">
+              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                Posttest Pseudocode
+              </h4>
+              <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
+                10 Soal HOTS (C4–C6) • Evaluasi Formatif &amp; N-Gain
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
+            <span id="posttestStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
+              Tersedia
+            </span>
+            <button id="cardStartPosttestBtn" type="button" class="px-5 py-2.5 rounded-full bg-[#14b8a6] hover:bg-[#0d9488] text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Buka Posttest</span>
+              <span>↗</span>
+            </button>
+            <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
+              &#8942;
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- ==================== VIEW 2: QUIZ RUNNER (PRETEST & POSTTEST) ==================== -->
+    <section id="viewQuizRunner" class="hidden p-4 sm:p-6 md:p-8 space-y-6 flex-1 max-w-6xl mx-auto w-full">
+
+      <!-- ==================== TAHAP 1: PENGISIAN IDENTITAS & CEK-IN (TERPISAH, TANPA TIMER) ==================== -->
+      <div id="quizStageIdentity" class="space-y-6">
+        
+        <!-- Header Top Bar Tahap 1 -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3.5">
+            <button id="quizIdentityBackBtn" type="button" class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-700 font-bold transition shadow-xs text-base hover:scale-105 active:scale-95" title="Kembali ke Beranda">
+              &larr;
+            </button>
+            <div>
+              <div class="flex items-center gap-2">
+                <span id="quizIdentityPhaseBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800">
+                  ASESMEN DIAGNOSTIK PRETEST
+                </span>
+                <span class="text-xs text-slate-500 font-medium">Informatika Fase E / Kelas X</span>
+              </div>
+              <h2 id="quizIdentityTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">
+                Pengisian Identitas Siswa &amp; Cek-in Belajar
+              </h2>
+            </div>
+          </div>
+
+          <!-- Indikator Waktu Belum Berjalan -->
+          <div class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold shadow-xs">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+            <span>Waktu Belum Berjalan</span>
+          </div>
+        </div>
+
+        <!-- 1. Langkah Pengerjaan Asesmen (Top) -->
+        <div class="p-5 rounded-2xl bg-amber-50/90 border border-amber-200 text-xs text-amber-950 space-y-2.5 shadow-xs">
+          <div class="flex items-center gap-2 font-black text-xs sm:text-sm text-amber-950">
+            <span class="text-base text-amber-600">📋</span>
+            <span>Langkah &amp; Petunjuk Pengerjaan:</span>
+          </div>
+          <ol class="list-decimal list-inside space-y-1.5 text-slate-700 leading-relaxed font-medium pl-1 text-xs sm:text-sm">
+            <li>Ketik <strong>Nomor Absen / NISN</strong> Anda. Nama lengkap akan otomatis terisi dari buku induk siswa.</li>
+            <li>Pastikan pilihan <strong>Kelas</strong> sudah sesuai (Informatika - X E7).</li>
+            <li>Pilih salah satu <strong>Emotikon Kondisi</strong> sebagai cek-in kesiapan belajar Anda hari ini.</li>
+            <li>Klik tombol <strong>"Mulai Kerjakan Pretest 🚀"</strong> di bawah.</li>
+            <li>Akan muncul <strong>notifikasi konfirmasi</strong> untuk memeriksa apakah data identitas Anda sudah benar.</li>
+            <li>Setelah konfirmasi <em>"Ya, Sudah Benar &amp; Mulai"</em>, Anda akan mulai mengerjakan <strong>10 butir soal asesmen diagnostik</strong> secara berurutan.</li>
+            <li><strong>Batas waktu setiap soal adalah 30 detik</strong>. Ada atau tidak ada jawaban, sistem langsung otomatis mengirim dan beralih ke soal berikutnya ketika 30 detik habis (termasuk di Soal 1). Pada Soal 10, kuis langsung selesai terkirim.</li>
+          </ol>
+        </div>
+
+        <!-- 2. Form Identitas Siswa & Cek-in Emotikon (Middle) -->
+        <div class="lms-card p-5 sm:p-7 rounded-2xl border border-slate-200 shadow-sm space-y-6 bg-white">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center text-lg font-black shrink-0 shadow-sm">
+                🎓
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900">Identitas Siswa</h3>
+                <p class="text-xs text-slate-500">Lengkapi data diri sebelum mengonfirmasi dan memulai asesmen.</p>
+              </div>
+            </div>
+            <div class="shrink-0">
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-700">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                Terhubung dengan Google Apps Script (Auto-Sync)
+              </span>
+            </div>
+          </div>
+
+          <!-- Input Grid: Absen, Nama Lengkap, Kelas -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <!-- Nomor Absen / NISN -->
+            <div>
+              <label for="quizInputAbsen" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Nomor Absen / NISN *
+              </label>
+              <div class="relative">
+                <input id="quizInputAbsen" type="number" min="1" max="50" placeholder="Contoh: 18" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs" />
+                <div class="text-[10px] text-blue-600 font-semibold mt-1">
+                  Ketik nomor absen (1–20) untuk mengisi nama otomatis
+                </div>
+              </div>
+            </div>
+
+            <!-- Nama Lengkap -->
+            <div>
+              <label for="quizInputNama" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Nama Lengkap *
+              </label>
+              <div class="relative">
+                <input id="quizInputNama" type="text" placeholder="Ketik nama lengkap..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm font-semibold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs" />
+                <div class="text-[10px] text-slate-400 mt-1">
+                  Terisi otomatis dari nomor absen atau ketik manual
+                </div>
+              </div>
+            </div>
+
+            <!-- Kelas -->
+            <div>
+              <label for="quizSelectKelas" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Kelas *
+              </label>
+              <div class="relative">
+                <input id="quizSelectKelas" type="text" readonly value="Informatika - X E7" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs sm:text-sm font-bold text-slate-800 cursor-not-allowed shadow-xs" />
+                <div class="text-[10px] text-blue-600 font-semibold mt-1">
+                  Terisi otomatis: Informatika - X E7
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cek-in Emotikon Kondisi -->
+          <div class="pt-4 border-t border-slate-100 space-y-2.5">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <div class="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  Pilihan Emotikon Kondisi (Cek-in Kesiapan Belajar) *
+                </div>
+                <p class="text-[11px] text-slate-500">
+                  Pilih kondisi atau perasaanmu hari ini sebelum mengerjakan asesmen:
+                </p>
+              </div>
+              <span id="quizMoodActiveLabel" class="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
+                😊 Semangat &amp; Antusias
+              </span>
+            </div>
+
+            <!-- 5 Emotikon Buttons Container -->
+            <div id="quizMoodContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 pt-1">
+              <!-- Rendered dynamically by student.js with active selection state -->
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Tombol Aksi Bawah Tahap 1 -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+          <button id="quizIdentityCancelBtn" type="button" class="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition shadow-xs flex items-center justify-center gap-2">
+            &larr; Kembali ke Beranda
+          </button>
+          <button id="btnStartQuizConfirm" type="button" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-sm sm:text-base shadow-lg shadow-blue-500/25 transition hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+            <span id="btnStartQuizConfirmText">Mulai Kerjakan Pretest</span>
+            <span>🚀</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- ==================== MODAL NOTIFIKASI KONFIRMASI KEBENARAN DATA IDENTITAS ==================== -->
+      <div id="quizConfirmIdentityModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden transition-all duration-200">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 space-y-5 animate-scaleUp">
+          
+          <div class="flex items-center gap-3.5 border-b border-slate-100 pb-4">
+            <div class="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-200 text-blue-600 flex items-center justify-center text-2xl font-black shrink-0">
+              📋
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Konfirmasi Data Identitas</h3>
+              <p class="text-xs text-slate-500">Apakah data yang Anda input sudah benar?</p>
+            </div>
+          </div>
+
+          <!-- Ringkasan Data yang Diinput Siswa -->
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs sm:text-sm">
+            <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+              <span class="text-slate-500 font-medium">Nomor Absen:</span>
+              <span id="confirmModalAbsen" class="font-bold text-slate-900">Absen #1</span>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+              <span class="text-slate-500 font-medium">Nama Lengkap:</span>
+              <span id="confirmModalNama" class="font-extrabold text-blue-700">Aditya Pratama Putra</span>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+              <span class="text-slate-500 font-medium">Kelas:</span>
+              <span id="confirmModalKelas" class="font-bold text-slate-900">Informatika - X E7</span>
+            </div>
+            <div class="flex items-center justify-between py-1">
+              <span class="text-slate-500 font-medium">Kondisi Belajar:</span>
+              <span id="confirmModalMood" class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">😊 Semangat &amp; Antusias</span>
+            </div>
+          </div>
+
+          <!-- Alert Peringatan Waktu & Timeout Nilai Kosong -->
+          <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-900 space-y-1">
+            <div class="font-extrabold flex items-center gap-1.5 text-rose-700">
+              <span>⏱️</span>
+              <span>Peringatan Waktu Pengerjaan:</span>
+            </div>
+            <p id="confirmModalWarningText" class="leading-relaxed text-slate-700 text-[11px]">
+              Setelah Anda menekan tombol <strong>"Ya, Sudah Benar &amp; Mulai"</strong>, Anda akan mulai mengerjakan <strong>10 butir soal asesmen diagnostik pretest</strong> dengan batas waktu <strong>30 detik per butir soal</strong>. Pada setiap butir soal (mulai dari Soal 1), jika waktu 30 detik habis, jawaban akan langsung <strong>otomatis terkirim</strong> dan beralih ke soal berikutnya (atau bernilai 0 jika belum dijawab).
+            </p>
+          </div>
+
+          <!-- Tombol Pilihan Konfirmasi -->
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <button id="btnCancelIdentityConfirm" type="button" class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition">
+              Periksa Kembali
+            </button>
+            <button id="btnConfirmIdentityAndStart" type="button" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-500/25 transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Ya, Sudah Benar &amp; Mulai</span>
+              <span>🚀</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==================== TAHAP 2: PENGERJAAN SOAL (10 SOAL • 30 DETIK PER SOAL) ==================== -->
+      <div id="quizStageQuestion" class="space-y-6 hidden">
+
+        <!-- Header Top Bar (Back button, Phase Badge, Title & Timer 30s) -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3.5">
+            <button id="quizBackToDashboardBtn" type="button" class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-700 font-bold transition shadow-xs text-base hover:scale-105 active:scale-95" title="Kembali ke Beranda">
+              &larr;
+            </button>
+            <div>
+              <div class="flex items-center gap-2">
+                <span id="quizHeaderPhaseBadge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800">
+                  ASESMEN DIAGNOSTIK PRETEST
+                </span>
+                <span class="text-xs text-slate-500 font-medium">Informatika Fase E / Kelas X</span>
+              </div>
+              <h2 id="quizHeaderTitle" class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">
+                Berpikir Komputasional &amp; Notasi Pseudocode
+              </h2>
+            </div>
+          </div>
+
+          <!-- Timer Countdown 30 Detik per Soal (Pretest) -->
+          <div id="quizTimerWrapper" class="flex items-center gap-3 px-4 py-2 rounded-2xl bg-rose-50 border-2 border-rose-200 shadow-sm">
+            <span class="text-2xl animate-bounce">⏱️</span>
+            <div>
+              <div id="quizTimerTopTitle" class="text-[10px] font-extrabold uppercase tracking-wider text-rose-800">Sisa Waktu Soal #1:</div>
+              <div class="flex items-baseline gap-1">
+                <span id="quizTimerDisplay" class="font-mono text-2xl font-black text-rose-600 tabular-nums">00:30</span>
+                <span class="text-[11px] font-bold text-rose-700">Detik</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timer Progress Bar 30 Detik -->
+        <div id="quizTimerBarContainer" class="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
+          <div id="quizTimerBar" class="bg-rose-500 h-2 transition-all duration-1000 ease-linear rounded-full" style="width: 100%"></div>
+        </div>
+
+        <!-- Dua Kolom: Soal Aktif (Kiri) & Navigasi Soal / Timer Card (Kanan) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Kolom Kiri: Kartu Soal Aktif -->
+          <div class="lg:col-span-8 space-y-4">
+            <div class="lms-card p-6 sm:p-7 rounded-2xl border border-slate-200 bg-white shadow-sm space-y-6">
+              
+              <!-- Header Soal (Nomor Soal & Status Tag) -->
+              <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2.5">
+                  <div id="quizActiveQuestionPill" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200">
+                    <span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center text-xs font-bold">1</span>
+                    <span class="uppercase tracking-wider text-xs font-bold text-blue-950">NOTASI PSEUDOCODE</span>
+                  </div>
+                  <span id="quizActiveBloomTag" class="text-xs text-slate-500 font-medium"></span>
+                </div>
+                <span id="quizActiveStatusTag" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
+                  Belum dijawab
+                </span>
+              </div>
+
+              <!-- Teks Pertanyaan (Stem) -->
+              <div id="quizQuestionStem" class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed">
+                Memuat pertanyaan...
+              </div>
+
+              <!-- Pilihan Jawaban A, B, C, D -->
+              <div id="quizOptionsContainer" class="space-y-3">
+                <!-- Rendered dynamically -->
+              </div>
+
+              <!-- Navigasi Bawah (Prev / Next) -->
+              <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                <button id="quizPrevBtn" type="button" class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold transition flex items-center gap-1.5 shadow-xs">
+                  &larr; Soal Sebelumnya
+                </button>
+                <button id="quizNextBtn" type="button" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 hover:scale-105 active:scale-95">
+                  Soal Berikutnya &rarr;
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: Navigasi Soal & Timer Card (Grid 1-10) -->
+          <div class="lg:col-span-4 sticky top-6 space-y-4">
+            
+            <div id="quizNavCard" class="lms-card p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-sm space-y-4">
+              
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-extrabold text-slate-900">Navigasi Soal</h3>
+                <span id="quizNavTerjawabBadge" class="px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold">
+                  0 / 10 Terjawab
+                </span>
+              </div>
+
+              <!-- Sisa Waktu Card Mini (Tampil saat Pretest Berjalan) -->
+              <div id="quizSideTimerBox" class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">⏱️</span>
+                  <div>
+                    <div id="quizSideTimerTitle" class="text-[10px] font-extrabold uppercase tracking-wider text-rose-800">Sisa Waktu Soal #1:</div>
+                    <div class="text-[11px] text-rose-600 font-medium">30 detik (otomatis kirim &amp; lanjut)</div>
+                  </div>
+                </div>
+                <div id="quizTimerDisplaySide" class="font-mono text-2xl font-black text-rose-600 tracking-tight tabular-nums">00:30</div>
+              </div>
+
+              <!-- Grid 1 - 10 (2 baris x 5 kolom) -->
+              <div id="quizNavGrid" class="grid grid-cols-5 gap-2.5 my-2">
+                <!-- Rendered dynamically -->
+              </div>
+
+              <!-- Legend Warna Sesuai Desain Standar -->
+              <div class="flex items-center gap-4 text-xs font-semibold text-slate-600 pt-2 border-t border-slate-100">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-3 rounded-full bg-blue-600"></span>
+                  <span>Sudah Dijawab</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-3 rounded-full border-2 border-slate-300 bg-white"></span>
+                  <span>Belum Dijawab</span>
+                </div>
+              </div>
+
+              <!-- Tombol Kirim Jawaban -->
+              <div class="pt-2">
+                <button id="quizSubmitBtn" type="button" class="w-full py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-extrabold text-sm shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition hover:scale-[1.01] active:scale-[0.99]">
+                  <span>✈</span>
+                  <span id="quizSubmitBtnText">Kirim Jawaban</span>
+                </button>
+                <button id="quizPretestSubmitBtn" type="button" class="hidden"></button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== VIEW 3: TRANSISI PRETEST SELESAI & BUKA LKPD ==================== -->
+    <section id="viewTransition" class="hidden p-4 sm:p-6 md:p-8 space-y-6 flex-1 text-center">
+      <div class="max-w-3xl mx-auto space-y-6">
+        <div class="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto text-3xl font-black">
+          ✓
+        </div>
+        <div>
+          <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider">Pretest Berhasil Terkirim</span>
+          <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Hasil Diagnostik Awal Tercatat!</h2>
+          <p class="text-sm text-slate-600 mt-1">
+            Silakan pelajari lembar kerja interaktif LKPD dan jalankan simulasi eksekusi baris pseudocode sebelum melanjutkan ke <strong>Posttest</strong>.
+          </p>
+        </div>
+
+        <div id="transitionSummaryGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto text-center"></div>
+
+        <!-- Bagian Tinjau & Pembahasan Soal Pretest -->
+        <div class="lms-card p-5 sm:p-7 bg-white border border-slate-200 rounded-3xl text-left space-y-4 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-800 text-[11px] font-bold uppercase tracking-wider">
+                  Kunci &amp; Pembahasan
+                </span>
+                <span class="text-xs text-slate-500 font-medium">10 Butir Soal Pretest (Acak)</span>
+              </div>
+              <h3 class="text-lg font-extrabold text-slate-900 mt-1">Pembahasan Jawaban yang Benar</h3>
+              <p class="text-xs text-slate-500">Pelajari penjelasan di setiap butir soal untuk memperkuat pemahaman sebelum eksplorasi LKPD &amp; Simulasi.</p>
+            </div>
+            <button id="togglePretestReviewBtn" type="button" class="px-4 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold transition flex items-center gap-1.5 self-start sm:self-auto border border-blue-200">
+              <span id="togglePretestReviewText">Sembunyikan Pembahasan Soal</span>
+              <span id="togglePretestReviewIcon">▲</span>
+            </button>
+          </div>
+
+          <div id="pretestReviewContainer" class="space-y-4 pt-1">
+            <!-- Di-render dinamis oleh student.js -->
+          </div>
+        </div>
+
+        <!-- Kartu Aksi Pembelajaran -->
+        <div class="lms-card p-6 bg-slate-50 text-left space-y-3">
+          <div class="flex items-center gap-3">
+            <span class="text-3xl">📖</span>
+            <div>
+              <h4 class="text-sm font-extrabold text-slate-900">Eksplorasi LKPD Pseudocode</h4>
+              <p class="text-xs text-slate-500">Buka lembar kerja di bawah ini untuk mencatat hasil analisis notasi pseudocode dan kirim ke Guru.</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <a href="lkpd_pseudocode.html" target="_blank" class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-xs transition">
+              📖 Buka LKPD Interaktif ↗
+            </a>
+            <a href="LKPD_Pseudocode.pdf?v=20261110_compact_4p" download="LKPD_Pseudocode.pdf" class="px-3.5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 text-xs font-bold transition">
+              📥 Unduh PDF
+            </a>
+          </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-center gap-3 pt-3">
+          <button id="transitionBackToDashboardBtn" type="button" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition">
+            &larr; Kembali ke Dashboard
+          </button>
+          <button id="transitionStartPosttestBtn" type="button" class="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition">
+            Lanjut Kerjakan Posttest &rarr;
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: CHECK-OUT PEMAHAMAN ==================== -->
+    <section id="viewCheckout" class="hidden p-4 sm:p-6 md:p-8 space-y-6 flex-1">
+      <div class="max-w-3xl mx-auto lms-card p-6 sm:p-8 space-y-6">
+        <div class="border-b border-slate-100 pb-4">
+          <span class="inline-block px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-1">Check-Out Pembelajaran</span>
+          <h2 class="text-xl font-extrabold text-slate-900">Refleksi Pemahaman Siswa</h2>
+          <p class="text-xs sm:text-sm text-slate-500">Bagikan perasaan dan tingkat pemahamanmu setelah menyelesaikan seluruh modul Berpikir Komputasional &amp; Pseudocode.</p>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-700 uppercase">1. Bagaimana Tingkat Pemahamanmu? *</label>
+          <div id="checkoutUnderstandingGroup" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-700 uppercase">2. Perasaanmu Setelah Asesmen *</label>
+          <div id="checkoutEmotionGroup" class="grid grid-cols-2 sm:grid-cols-4 gap-3"></div>
+        </div>
+
+        <div class="space-y-2">
+          <label class="block text-xs font-bold text-slate-700 uppercase">3. Tindak Lanjut yang Kamu Butuhkan</label>
+          <div id="checkoutNeedGroup" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <div>
+          <label for="checkoutNote" class="block text-xs font-bold text-slate-700 uppercase mb-1">4. Hal Penting yang Dipelajari / Pertanyaan untuk Guru (Isian Refleksi):</label>
+          <textarea id="checkoutNote" rows="2" class="dotted-textarea text-xs sm:text-sm" placeholder="Tuliskan refleksi singkatmu di sini..."></textarea>
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex justify-end">
+          <button id="finalizeAssessmentBtn" type="button" class="px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-xs transition">
+            Kirim Check-Out &amp; Lihat Laporan Hasil &rarr;
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 5: HASIL AKHIR & STATUS ACC ==================== -->
+    <section id="viewResult" class="hidden p-4 sm:p-6 md:p-8 space-y-6 flex-1">
+      <div class="max-w-4xl mx-auto lms-card p-6 sm:p-8 space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">Hasil Asesmen Tersimpan</span>
+            <h2 id="resultStudentTitle" class="text-xl font-extrabold text-slate-900 mt-1">Laporan Hasil Belajar Siswa</h2>
+            <p class="text-xs text-slate-500">Nilai, pemetaan Taksonomi Bloom, dan status verifikasi ACC guru telah diperbarui.</p>
+          </div>
+          <div class="flex gap-2">
+            <button id="resultBackToDashboardBtn" type="button" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">
+              Kembali ke Dashboard &rarr;
+            </button>
+          </div>
+        </div>
+
+        <div id="resultMetricsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"></div>
+        <div id="resultBloomBreakdown" class="bg-slate-50 rounded-2xl p-4 border border-slate-200"></div>
+
+        <!-- Bagian Tinjau & Pembahasan Soal Posttest -->
+        <div class="lms-card p-5 sm:p-7 bg-white border border-slate-200 rounded-3xl text-left space-y-4 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-bold uppercase tracking-wider">
+                  Kunci &amp; Pembahasan
+                </span>
+                <span class="text-xs text-slate-500 font-medium">10 Butir Soal Posttest (Acak)</span>
+              </div>
+              <h3 class="text-lg font-extrabold text-slate-900 mt-1">Pembahasan Jawaban yang Benar (Posttest)</h3>
+              <p class="text-xs text-slate-500">Evaluasi menyeluruh capaian kompetensi dan pembahasan tuntas setiap butir soal.</p>
+            </div>
+            <button id="togglePosttestReviewBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold transition flex items-center gap-1.5 self-start sm:self-auto border border-emerald-200">
+              <span id="togglePosttestReviewText">Sembunyikan Pembahasan Soal</span>
+              <span id="togglePosttestReviewIcon">▲</span>
+            </button>
+          </div>
+
+          <div id="posttestReviewContainer" class="space-y-4 pt-1">
+            <!-- Di-render dinamis oleh student.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="p-4 sm:px-8 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 bg-white">
+      <div class="flex items-center gap-2">
+        <span>💻</span>
+        <span>Informatika SMA/SMK Kelas X — Berpikir Komputasional &amp; Pseudocode (TaRL &amp; Taksonomi Bloom)</span>
+      </div>
+      <div>Portal Siswa • Bilik Komputasi © 2026</div>
+    </footer>
+
+  </div>
+
+  <!-- ==================== MODAL PILIH ABSEN / IDENTITAS SISWA ==================== -->
+  <div id="identityModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full p-6 space-y-4 fade-in">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-sm">
+            🎓
+          </div>
+          <h3 class="text-base font-extrabold text-slate-900">Identitas Siswa</h3>
+        </div>
+        <button id="closeIdentityModalBtn" type="button" class="text-slate-400 hover:text-slate-700 font-bold text-sm">✕</button>
+      </div>
+
+      <p class="text-xs text-slate-500">
+        Ketik nomor absenmu (1 s/d 20) untuk mengisi nama dan kelas secara otomatis dari data spreadsheet GAS.
+      </p>
+
+      <div class="space-y-3">
+        <div>
+          <label for="inputAbsen" class="block text-xs font-bold text-slate-700 mb-1">Nomor Absen Siswa (1 - 20) *</label>
+          <input id="inputAbsen" type="number" min="1" max="50" placeholder="Contoh: 18" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-600 outline-none text-sm font-bold text-slate-900">
+        </div>
+        <div>
+          <label for="inputNama" class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap (Otomatis)</label>
+          <input id="inputNama" type="text" readonly placeholder="Nama siswa..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-bold text-slate-900 cursor-not-allowed">
+        </div>
+        <div>
+          <label for="inputKelas" class="block text-xs font-bold text-slate-700 mb-1">Kelas &amp; Jurusan</label>
+          <input id="inputKelas" type="text" readonly value="Informatika - X E7" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-sm font-bold text-slate-900 cursor-not-allowed">
+        </div>
+      </div>
+
+      <div class="pt-2 flex justify-end">
+        <button onclick="document.getElementById('identityModal').classList.add('hidden')" type="button" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition">
+          Simpan &amp; Lanjutkan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== RESET CONFIRMATION MODAL ==================== -->
+  <div id="resetModal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-md w-full p-6 space-y-4 fade-in">
+      <div class="flex items-center gap-3 text-rose-600">
+        <span class="text-2xl">&#x26A0;</span>
+        <h3 class="text-base font-extrabold text-slate-900">Reset Sesi Siswa?</h3>
+      </div>
+      <p class="text-xs sm:text-sm text-slate-600">
+        Tindakan ini akan mengosongkan progres kuis pada perangkat ini agar murid lain dapat mengisi dari awal.
+      </p>
+      <div class="pt-2 flex justify-end gap-2.5">
+        <button id="cancelResetModalBtn" type="button" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
+          Batal
+        </button>
+        <button id="confirmResetModalBtn" type="button" class="px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition">
+          Ya, Reset Sesi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- Scripts Modular -->
+  <script src="shared.js"></script>
+  <script src="student.js"></script>
+</body>
+</html>

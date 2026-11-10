@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Admin &amp; Dasbor Guru - Sistem Operasi &amp; Model Lapisan Bawang</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+  <!-- Custom LMS Styles -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col">
+
+  <!-- ==================== TOP NAVIGATION BAR (LMS ADMIN STYLE) ==================== -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Sisi Kiri: Back to Student Portal, Badge & Judul -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" title="Kembali ke Laman Murid" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 border border-slate-200 flex items-center justify-center text-slate-700 text-sm font-bold transition">
+          &larr;
+        </a>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-800">
+              PANEL GURU &amp; ADMIN
+            </span>
+            <span class="text-xs text-slate-500 font-medium hidden sm:inline">
+              Informatika Fase E / Kelas X
+            </span>
+          </div>
+          <h1 class="text-sm sm:text-base font-extrabold text-slate-900 leading-tight">
+            Dasbor Analitik Asesmen &amp; Manajemen LKPD
+          </h1>
+        </div>
+      </div>
+
+      <!-- Sisi Kanan: Akses Langsung Berkas & Aksi ACC -->
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 text-xs font-bold transition">
+          <span>🎓</span>
+          <span class="hidden sm:inline">Laman Murid</span>
+        </a>
+        <a href="lkpd_sistem_operasi.html" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition">
+          <span>📖</span>
+          <span class="hidden md:inline">Buka LKPD</span>
+        </a>
+        <a href="simulasi_lapisan_bawang.html" target="_blank" class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-100 text-xs font-bold transition">
+          <span>🧅</span>
+          <span>Simulasi</span>
+        </a>
+        <button id="batchAccAllBtn" type="button" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1">
+          <span>✓</span>
+          <span>ACC Semua</span>
+        </button>
+        <button id="exportCsvBtn" type="button" class="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-1">
+          <span>📥</span>
+          <span class="hidden sm:inline">CSV</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== SUB-NAV TABS ==================== -->
+  <div class="bg-white border-b border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-2 overflow-x-auto">
+      <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 gap-1 text-xs font-bold">
+        <button type="button" data-teacher-tab="pretestTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg bg-white text-blue-700 shadow-xs transition">
+          1. Pretest &amp; Bloom (ACC)
+        </button>
+        <button type="button" data-teacher-tab="posttestTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          2. Posttest (Remidi &amp; Pengayaan)
+        </button>
+        <button type="button" data-teacher-tab="checkinTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          3. Filter Check-In / Out
+        </button>
+        <button type="button" data-teacher-tab="uploadJsonTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
+          4. Upload JSON &amp; Roster GAS
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Top KPI Cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5" id="teacherKpiCards"></div>
+
+    <!-- ==================== TAB 1: PRETEST, TARL & ACC ==================== -->
+    <div id="pretestTab" class="teacher-tab-panel space-y-6">
+      
+      <!-- 3 Kelompok TaRL Berdasarkan Pretest -->
+      <div>
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Diferensiasi Pembelajaran TaRL (Teaching at the Right Level)</h3>
+            <p class="text-xs text-slate-500">Kelompok otomatis berdasarkan capaian 10 Soal Pretest Taksonomi Bloom (C1–C6).</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4" id="pretestGroupCards"></div>
+      </div>
+
+      <!-- Chart.js Bloom & Tabel Skor Pretest -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Chart.js Bloom Accuracy Bar Chart -->
+        <div class="lms-card p-5 flex flex-col">
+          <div class="mb-3">
+            <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold uppercase">Statistik Kognitif</span>
+            <h4 class="text-sm font-bold text-slate-900 mt-1">Akurasi Jawaban Benar per Level Bloom (C1–C6)</h4>
+            <p class="text-xs text-slate-500">Persentase rata-rata jawaban benar seluruh murid pada tingkatan Bloom.</p>
+          </div>
+          <div class="relative flex-1 min-h-[250px]">
+            <canvas id="bloomChartCanvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Tabel Hasil Pretest dengan Aksi ACC Langsung -->
+        <div class="lg:col-span-2 lms-card p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+            <div>
+              <h4 class="text-sm font-bold text-slate-900">Daftar Skor Pretest &amp; Verifikasi ACC Guru</h4>
+              <p class="text-xs text-slate-500">Klik tombol "ACC Langsung" untuk memberikan status verifikasi pada lembar asesmen murid.</p>
+            </div>
+
+            <!-- Filter Controls -->
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="filterPretestGroupSelect" class="text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
+                <option value="ALL">Semua Kelompok</option>
+                <option value="Mahir">Mahir (&ge; 80)</option>
+                <option value="Menengah">Menengah (60–79)</option>
+                <option value="Butuh Pendampingan">Butuh Pendampingan (&lt; 60)</option>
+              </select>
+
+              <select id="filterBloomFocusSelect" class="text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
+                <option value="ALL">Semua Level Bloom</option>
+                <option value="LOTS">Kuasai LOTS (C1-C2)</option>
+                <option value="MOTS">Tuntas MOTS (C3)</option>
+                <option value="HOTS">Kuat HOTS (C4-C6)</option>
+                <option value="WEAK_HOTS">Butuh Bantuan HOTS</option>
+              </select>
+
+              <select id="filterAccSelect" class="text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
+                <option value="ALL">Semua Status ACC</option>
+                <option value="ACC">Sudah di-ACC (✓)</option>
+                <option value="PENDING">Belum di-ACC (⏳)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto max-h-96 overflow-y-auto">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 bg-slate-50 sticky top-0 z-10">
+                  <th class="py-2.5 px-3">Murid</th>
+                  <th class="py-2.5 px-3 text-center">Skor Pre</th>
+                  <th class="py-2.5 px-1.5 text-center">C1</th>
+                  <th class="py-2.5 px-1.5 text-center">C2</th>
+                  <th class="py-2.5 px-1.5 text-center">C3</th>
+                  <th class="py-2.5 px-1.5 text-center">C4</th>
+                  <th class="py-2.5 px-1.5 text-center">C5</th>
+                  <th class="py-2.5 px-1.5 text-center">C6</th>
+                  <th class="py-2.5 px-3 text-center">Kelompok</th>
+                  <th class="py-2.5 px-3 text-center">Status ACC</th>
+                  <th class="py-2.5 px-3 text-center">Aksi Guru</th>
+                </tr>
+              </thead>
+              <tbody id="pretestTableBody" class="divide-y divide-slate-100"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== TAB 2: POSTTEST (REMIDI & PENGAYAAN) ==================== -->
+    <div id="posttestTab" class="teacher-tab-panel hidden space-y-6">
+      <div class="lms-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase">Evaluasi Akhir Posttest</span>
+          <h3 class="text-sm font-extrabold text-slate-900 mt-1">Pemetaan Remidi vs Pengayaan</h3>
+          <p class="text-xs text-slate-500">Tentukan ambang batas KKM untuk memisahkan murid yang butuh remidi dan pengayaan.</p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <label for="kkmThresholdSelect" class="text-xs font-bold text-slate-600">Ambang KKM:</label>
+          <select id="kkmThresholdSelect" class="text-xs font-bold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-1.5 focus:outline-none">
+            <option value="70">KKM 70</option>
+            <option value="75" selected>KKM 75 (Standar)</option>
+            <option value="80">KKM 80</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Kolom Remidi -->
+        <div class="lms-card p-5 space-y-4 border-rose-200">
+          <div class="flex items-center justify-between border-b border-rose-100 pb-3">
+            <div>
+              <h4 class="text-sm font-bold text-rose-900 flex items-center gap-2">
+                <span>⚠️</span> Murid Wajib Remidi
+              </h4>
+              <p class="text-xs text-slate-500">Skor Posttest di bawah KKM. Memerlukan ulasan pada level Bloom yang belum tuntas.</p>
+            </div>
+            <span id="remedialCountBadge" class="w-7 h-7 rounded-lg bg-rose-600 text-white font-bold text-xs flex items-center justify-center">0</span>
+          </div>
+          <div id="remedialListContainer" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
+        </div>
+
+        <!-- Kolom Pengayaan -->
+        <div class="lms-card p-5 space-y-4 border-emerald-200">
+          <div class="flex items-center justify-between border-b border-emerald-100 pb-3">
+            <div>
+              <h4 class="text-sm font-bold text-emerald-900 flex items-center gap-2">
+                <span>🌟</span> Murid Berhak Pengayaan
+              </h4>
+              <p class="text-xs text-slate-500">Skor Posttest memenuhi KKM. Siap diberikan tantangan eksplorasi lebih lanjut.</p>
+            </div>
+            <span id="enrichmentCountBadge" class="w-7 h-7 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">0</span>
+          </div>
+          <div id="enrichmentListContainer" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: FILTER CHECK-IN & CHECK-OUT ==================== -->
+    <div id="checkinTab" class="teacher-tab-panel hidden space-y-6">
+      <!-- Quick Mood Counters -->
+      <div>
+        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Sebaran Emosi &amp; Mood Awal Siswa:</h4>
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5" id="checkinSummaryCounters"></div>
+      </div>
+
+      <!-- Filter Bar -->
+      <div class="lms-card p-4 flex flex-wrap items-center gap-3">
+        <div class="flex-1 min-w-[140px]">
+          <label for="filterMoodSelect" class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Mood Awal</label>
+          <select id="filterMoodSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
+            <option value="ALL">Semua Mood</option>
+          </select>
+        </div>
+
+        <div class="flex-1 min-w-[140px]">
+          <label for="filterEnergySelect" class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Energi Fisik</label>
+          <select id="filterEnergySelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
+            <option value="ALL">Semua Energi</option>
+          </select>
+        </div>
+
+        <div class="flex-1 min-w-[140px]">
+          <label for="filterStyleSelect" class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Gaya Belajar</label>
+          <select id="filterStyleSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
+            <option value="ALL">Semua Gaya</option>
+          </select>
+        </div>
+
+        <div class="flex-1 min-w-[160px]">
+          <label for="filterCheckoutSelect" class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Pemahaman Akhir</label>
+          <select id="filterCheckoutSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
+            <option value="ALL">Semua Pemahaman</option>
+          </select>
+        </div>
+
+        <div class="flex-1 min-w-[130px]">
+          <label for="filterCheckinAccSelect" class="block text-[10px] font-bold uppercase text-emerald-700 mb-1">Status ACC</label>
+          <select id="filterCheckinAccSelect" class="w-full text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl px-2.5 py-1.5 focus:outline-none">
+            <option value="ALL">Semua ACC</option>
+            <option value="ACC">Ter-ACC (✓)</option>
+            <option value="PENDING">Belum ACC (⏳)</option>
+          </select>
+        </div>
+
+        <div class="self-end pt-1">
+          <button id="resetCheckinFiltersBtn" type="button" class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition">
+            Reset Filter
+          </button>
+        </div>
+      </div>
+
+      <!-- Kartu Murid Terfilter -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="checkinFilteredGrid"></div>
+    </div>
+
+    <!-- ==================== TAB 4: UPLOAD JSON & GAS ==================== -->
+    <div id="uploadJsonTab" class="teacher-tab-panel hidden space-y-6">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <!-- Upload JSON Soal -->
+        <div class="lms-card p-5 space-y-4">
+          <div>
+            <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold uppercase">Manajemen Paket Soal</span>
+            <h4 class="text-sm font-bold text-slate-900 mt-1">Unggah atau Tempel Format JSON Soal</h4>
+            <p class="text-xs text-slate-500">Sesuaikan paket soal Pretest dan Posttest Taksonomi Bloom.</p>
+          </div>
+
+          <div>
+            <input id="jsonFileInput" type="file" accept=".json,application/json" class="block w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
+          </div>
+
+          <div>
+            <textarea id="jsonPasteTextarea" rows="8" class="dotted-textarea font-mono text-[11px]" placeholder="Paste JSON format { pretest: [...], posttest: [...] }"></textarea>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button id="applyJsonQuestionsBtn" type="button" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition">
+              Terapkan Paket JSON
+            </button>
+            <button id="loadSampleAlternativeJsonBtn" type="button" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition">
+              Muat Paket Alternatif
+            </button>
+            <button id="downloadTemplateJsonBtn" type="button" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition">
+              Unduh Template JSON
+            </button>
+          </div>
+        </div>
+
+        <!-- Google Apps Script Sync -->
+        <div class="lms-card p-5 space-y-4">
+          <div>
+            <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase">Sinkronisasi Spreadsheet</span>
+            <h4 class="text-sm font-bold text-slate-900 mt-1">Endpoint Google Apps Script (GAS)</h4>
+            <p class="text-xs text-slate-500">Otomatisasi daftar absen murid dari spreadsheet ke portal.</p>
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex gap-2">
+              <input id="gasUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-600">
+              <button id="fetchGasRosterBtn" type="button" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition">
+                Tarik Data
+              </button>
+            </div>
+            <div id="gasStatusText" class="text-[11px] font-bold text-emerald-700">Daftar lokal aktif (Absen 1 - 20)</div>
+          </div>
+
+          <!-- Kode GAS -->
+          <div class="bg-slate-900 text-slate-200 p-3.5 rounded-2xl text-[11px] font-mono space-y-2">
+            <div class="flex items-center justify-between text-slate-400">
+              <span>Kode Apps Script (Code.gs):</span>
+              <button id="copyGasCodeBtn" type="button" class="text-xs text-blue-400 hover:text-blue-300 font-bold underline">Salin Kode</button>
+            </div>
+            <pre id="gasCodeBlock" class="overflow-x-auto text-[10px] leading-relaxed">function doGet() {
+  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+  var data = sheet.getDataRange().getValues();
+  var result = [];
+  for (var i = 1; i &lt; data.length; i++) {
+    result.push({ absen: data[i][0], nama: data[i][1], kelas: data[i][2], nis: data[i][3] });
+  }
+  return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
+}</pre>
+          </div>
+
+          <!-- Tambah Murid Manual -->
+          <div class="pt-2 border-t border-slate-100">
+            <h5 class="text-xs font-bold text-slate-700 mb-2">Tambah / Koreksi Murid Manual:</h5>
+            <div class="flex gap-2">
+              <input id="newRosterAbsen" type="number" placeholder="Absen" class="w-20 px-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-600">
+              <input id="newRosterNama" type="text" placeholder="Nama Murid" class="flex-1 px-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-600">
+              <button id="addRosterBtn" type="button" class="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition">
+                Simpan
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Preview Soal & Daftar Roster Aktif -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 space-y-4" id="activeQuestionBankPreview"></div>
+
+        <div class="lms-card p-5 space-y-3">
+          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Daftar Murid Terdaftar (<span id="rosterCountLabel">20</span>)</h4>
+            <span class="text-[10px] text-slate-500 font-semibold">Auto-fill Absen</span>
+          </div>
+          <div id="rosterPreviewList" class="space-y-1 max-h-80 overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t border-slate-200 mt-auto py-4 text-center text-xs text-slate-500 font-medium">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span>🧅</span>
+        <span>Informatika SMA/SMK Kelas X — Kurikulum Merdeka (TaRL &amp; Bloom)</span>
+      </div>
+      <div>Page Admin &amp; Guru • Bilik Komputasi © 2026</div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- Scripts Modular -->
+  <script src="shared.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

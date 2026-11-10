@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pseudocode Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #f8fafc;
+        }
+        .font-mono {
+            font-family: 'Fira Code', monospace;
+        }
+        
+        /* Grid Board Styling */
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(5, 1fr);
+            gap: 4px;
+            background-color: #334155;
+            padding: 8px;
+            border-radius: 12px;
+            aspect-ratio: 1 / 1;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .cell {
+            background-color: #1e293b;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            position: relative;
+        }
+
+        .wall {
+            background-color: #64748b;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+        .wall::after {
+            content: '🧱';
+        }
+
+        .target::after {
+            content: '🏁';
+            animation: bounce 2s infinite;
+        }
+
+        /* Robot Entity */
+        #robot {
+            position: absolute;
+            width: calc(20% - 6.4px); /* 1/5 of grid minus gap adjustments */
+            height: calc(20% - 6.4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+        }
+
+        .facing-0 { transform: rotate(0deg); }   /* East / Right */
+        .facing-1 { transform: rotate(90deg); }  /* South / Down */
+        .facing-2 { transform: rotate(180deg); } /* West / Left */
+        .facing-3 { transform: rotate(-90deg); } /* North / Up */
+
+        /* Custom Scrollbar for code editor */
+        textarea::-webkit-scrollbar {
+            width: 8px;
+        }
+        textarea::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        textarea::-webkit-scrollbar-thumb {
+            background: #475569; 
+            border-radius: 4px;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 flex flex-col">
+
+    <header class="mb-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center">
+        <div>
+            <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
+                Pseudocode Explorer
+            </h1>
+            <p class="text-slate-400 mt-1">Gunakan notasi algoritma untuk memandu robot ke bendera!</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex gap-2">
+            <button onclick="loadLevel(1)" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded-lg font-semibold transition">Level 1</button>
+            <button onclick="loadLevel(2)" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 rounded-lg font-semibold transition">Level 2</button>
+            <button onclick="loadLevel(3)" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 rounded-lg font-semibold transition">Level 3</button>
+        </div>
+    </header>
+
+    <main class="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Kolom Kiri: Visualisasi Game & Kamus -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Game Board -->
+            <div class="glass-panel p-6 rounded-2xl shadow-xl flex flex-col items-center">
+                <div class="w-full flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold" id="level-title">Level 1: Misi Dasar</h2>
+                    <span class="px-3 py-1 bg-slate-700 rounded-full text-sm font-mono" id="langkah-counter">Langkah: 0</span>
+                </div>
+                
+                <div id="game-board">
+                    <!-- Grid dan Robot akan digenerate oleh JavaScript -->
+                    <div id="robot" class="facing-0">🤖</div>
+                </div>
+
+                <p id="level-desc" class="mt-4 text-center text-slate-300 text-sm">
+                    Gunakan aksi MOVE untuk mencapai target.
+                </p>
+            </div>
+
+            <!-- Kamus Pseudocode -->
+            <div class="glass-panel p-5 rounded-2xl shadow-xl">
+                <h3 class="text-lg font-bold mb-3 flex items-center gap-2">
+                    <span>📚</span> Kamus Notasi
+                </h3>
+                <ul class="text-sm space-y-2 text-slate-300">
+                    <li><strong class="text-blue-400">INPUT:</strong> Membaca keadaan sekitar (cth: <code class="bg-slate-800 px-1 rounded text-blue-300">READ Depan</code>)</li>
+                    <li><strong class="text-emerald-400">COMPUTE:</strong> Memproses/menghitung (cth: <code class="bg-slate-800 px-1 rounded text-emerald-300">COMPUTE langkah = langkah + 1</code>)</li>
+                    <li><strong class="text-purple-400">DECISION:</strong> Percabangan / Logika (cth: <code class="bg-slate-800 px-1 rounded text-purple-300">IF-THEN-ELSE</code>)</li>
+                    <li><strong class="text-orange-400">ITERATION:</strong> Perulangan (cth: <code class="bg-slate-800 px-1 rounded text-orange-300">WHILE Not_Finish DO</code>)</li>
+                    <li><strong class="text-pink-400">OUTPUT:</strong> Menampilkan hasil (cth: <code class="bg-slate-800 px-1 rounded text-pink-300">PRINT "Teks"</code>)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Kolom Kanan: Editor Kode & Panel Kontrol -->
+        <div class="lg:col-span-7 flex flex-col gap-4">
+            
+            <!-- Panel Tombol Snippet -->
+            <div class="glass-panel p-4 rounded-2xl shadow-xl">
+                <h3 class="text-sm font-bold text-slate-400 uppercase mb-3">Blok Konstruksi Kode</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    <button onclick="insertCode('READ Depan')" class="bg-blue-900/50 hover:bg-blue-800 border border-blue-500/30 text-blue-200 text-xs py-2 px-3 rounded text-left transition">
+                        [INPUT] Read Depan
+                    </button>
+                    <button onclick="insertCode('WHILE Not_Finish DO\n  \nENDWHILE')" class="bg-orange-900/50 hover:bg-orange-800 border border-orange-500/30 text-orange-200 text-xs py-2 px-3 rounded text-left transition">
+                        [ITERATION] While Loop
+                    </button>
+                    <button onclick="insertCode('IF Depan == &quot;Aman&quot; THEN\n  \nELSE\n  \nENDIF')" class="bg-purple-900/50 hover:bg-purple-800 border border-purple-500/30 text-purple-200 text-xs py-2 px-3 rounded text-left transition">
+                        [DECISION] If-Else
+                    </button>
+                    <button onclick="insertCode('COMPUTE langkah = langkah + 1')" class="bg-emerald-900/50 hover:bg-emerald-800 border border-emerald-500/30 text-emerald-200 text-xs py-2 px-3 rounded text-left transition">
+                        [COMPUTE] Hitung Langkah
+                    </button>
+                    <button onclick="insertCode('PRINT &quot;Berhasil!&quot;')" class="bg-pink-900/50 hover:bg-pink-800 border border-pink-500/30 text-pink-200 text-xs py-2 px-3 rounded text-left transition">
+                        [OUTPUT] Print Hasil
+                    </button>
+                    
+                    <!-- Aksi Dasar (Bukan notasi spesifik, tapi penting untuk game) -->
+                    <button onclick="insertCode('MOVE')" class="bg-slate-700 hover:bg-slate-600 text-white text-xs py-2 px-3 rounded text-left transition">
+                        ⚡ Aksi: MOVE
+                    </button>
+                    <button onclick="insertCode('TURN_RIGHT')" class="bg-slate-700 hover:bg-slate-600 text-white text-xs py-2 px-3 rounded text-left transition">
+                        ⚡ Aksi: TURN_RIGHT
+                    </button>
+                    <button onclick="insertCode('TURN_LEFT')" class="bg-slate-700 hover:bg-slate-600 text-white text-xs py-2 px-3 rounded text-left transition">
+                        ⚡ Aksi: TURN_LEFT
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor -->
+            <div class="glass-panel p-4 rounded-2xl shadow-xl flex-1 flex flex-col relative">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase">Teks Editor Pseudocode</h3>
+                    <button onclick="clearCode()" class="text-xs text-red-400 hover:text-red-300">Hapus Semua</button>
+                </div>
+                <textarea id="codeEditor" class="w-full flex-1 bg-[#0f172a] text-emerald-300 font-mono text-sm p-4 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 resize-none shadow-inner" spellcheck="false" placeholder="// Tuliskan pseudocode Anda di sini...&#10;// Gunakan tombol di atas untuk bantuan."></textarea>
+                
+                <!-- Tombol Eksekusi -->
+                <div class="mt-4 flex gap-3">
+                    <button id="runBtn" onclick="executeCode()" class="flex-1 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-900 font-bold py-3 px-6 rounded-xl shadow-lg transform transition hover:-translate-y-1">
+                        ▶ JALANKAN PROGRAM
+                    </button>
+                    <button onclick="resetGame()" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg">
+                        🔄 Reset Posisi
+                    </button>
+                </div>
+            </div>
+
+            <!-- Console Output -->
+            <div class="glass-panel p-4 rounded-2xl shadow-xl h-40 flex flex-col">
+                <h3 class="text-sm font-bold text-slate-400 uppercase mb-2">Terminal Output</h3>
+                <div id="console-log" class="flex-1 bg-black/50 rounded-lg p-3 font-mono text-sm overflow-y-auto space-y-1">
+                    <div class="text-slate-500">Sistem siap...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Konfigurasi Level Game
+        // 0 = Kosong, 1 = Tembok, 2 = Tujuan
+        const levels = {
+            1: {
+                title: "Level 1: Sekuensial & Output",
+                desc: "Gunakan aksi MOVE beberapa kali, lalu akhiri dengan OUTPUT: PRINT untuk merayakan.",
+                grid: [
+                    [0, 0, 0, 0, 2],
+                    [1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1],
+                    [1, 1, 1, 1, 1]
+                ],
+                start: {x: 0, y: 0, dir: 0} // dir: 0=East, 1=South, 2=West, 3=North
+            },
+            2: {
+                title: "Level 2: Iteration & Compute",
+                desc: "Jalan lurus terlalu jauh jika ditulis manual. Gunakan [ITERATION: While] dan jangan lupa hitung langkah dengan [COMPUTE]!",
+                grid: [
+                    [0, 0, 0, 0, 0],
+                    [1, 1, 1, 1, 0],
+                    [1, 1, 1, 1, 0],
+                    [1, 1, 1, 1, 0],
+                    [1, 1, 1, 1, 2]
+                ],
+                start: {x: 0, y: 0, dir: 0}
+            },
+            3: {
+                title: "Level 3: Misi Penuh (Logika Sensor)",
+                desc: "Gunakan [WHILE], baca kondisi dengan [INPUT: Read], dan buat keputusan berbelok dengan [DECISION: If-Else]!",
+                grid: [
+                    [0, 1, 1, 1, 1],
+                    [0, 0, 0, 1, 1],
+                    [1, 1, 0, 1, 1],
+                    [1, 1, 0, 0, 0],
+                    [1, 1, 1, 1, 2]
+                ],
+                start: {x: 0, y: 0, dir: 1} // Menghadap ke bawah (South)
+            }
+        };
+
+        // State Global
+        let currentLevel = 1;
+        let grid = [];
+        let robot = { x: 0, y: 0, dir: 0 };
+        let isRunning = false;
+        let stepCount = 0;
+
+        // Elemen DOM
+        const boardEl = document.getElementById('game-board');
+        const robotEl = document.getElementById('robot');
+        const consoleEl = document.getElementById('console-log');
+        const codeEditor = document.getElementById('codeEditor');
+        const runBtn = document.getElementById('runBtn');
+
+        function initBoard() {
+            boardEl.innerHTML = '';
+            const levelData = levels[currentLevel];
+            grid = levelData.grid;
+            
+            // Buat Grid Cells
+            for (let y = 0; y < 5; y++) {
+                for (let x = 0; x < 5; x++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    if (grid[y][x] === 1) cell.classList.add('wall');
+                    if (grid[y][x] === 2) cell.classList.add('target');
+                    boardEl.appendChild(cell);
+                }
+            }
+            // Tambahkan ulang robot ke dalam board
+            boardEl.appendChild(robotEl);
+            resetRobot();
+        }
+
+        function loadLevel(levelNum) {
+            if (isRunning) return;
+            currentLevel = levelNum;
+            document.getElementById('level-title').innerText = levels[levelNum].title;
+            document.getElementById('level-desc').innerText = levels[levelNum].desc;
+            
+            // Berikan kode awal berdasarkan level untuk membantu murid
+            if(levelNum === 1) {
+                codeEditor.value = "MOVE\nMOVE\n\nPRINT \"Berhasil!\"";
+            } else if(levelNum === 2) {
+                codeEditor.value = "WHILE Not_Finish DO\n  MOVE\n  COMPUTE langkah = langkah + 1\nENDWHILE\nPRINT \"Selesai!\"";
+            } else if (levelNum === 3) {
+                codeEditor.value = "WHILE Not_Finish DO\n  READ Depan\n  IF Depan == \"Aman\" THEN\n    MOVE\n    COMPUTE langkah = langkah + 1\n  ELSE\n    TURN_LEFT\n  ENDIF\nENDWHILE\nPRINT \"Misi Sukses!\"";
+            }
+
+            clearConsole();
+            logMsg(`Level ${levelNum} dimuat.`, 'text-blue-400');
+            initBoard();
+        }
+
+        function resetRobot() {
+            const start = levels[currentLevel].start;
+            robot = { ...start };
+            stepCount = 0;
+            updateStepUI();
+            updateRobotVisual();
+        }
+
+        function resetGame() {
+            if(isRunning) return;
+            resetRobot();
+            clearConsole();
+            logMsg("Posisi di-reset.", "text-slate-400");
+        }
+
+        function updateRobotVisual() {
+            // Kalkulasi posisi berdasarkan ukuran grid (20% per sel)
+            // Ditambah sedikit padding (gap) agar pas di tengah sel
+            robotEl.style.left = `calc(${robot.x * 20}% + ${robot.x * 1}px + 4px)`;
+            robotEl.style.top = `calc(${robot.y * 20}% + ${robot.y * 1}px + 4px)`;
+            
+            robotEl.className = ''; // reset
+            robotEl.classList.add(`facing-${robot.dir}`);
+        }
+
+        function insertCode(text) {
+            const cursorPos = codeEditor.selectionStart;
+            const currentCode = codeEditor.value;
+            codeEditor.value = currentCode.substring(0, cursorPos) + text + "\n" + currentCode.substring(cursorPos);
+            codeEditor.focus();
+        }
+
+        function clearCode() {
+            codeEditor.value = "";
+            codeEditor.focus();
+        }
+
+        function clearConsole() {
+            consoleEl.innerHTML = '';
+        }
+
+        function logMsg(msg, colorClass = 'text-slate-300') {
+            const line = document.createElement('div');
+            line.className = colorClass;
+            // Tambahkan timestamp
+            const time = new Date().toLocaleTimeString('id-ID', { hour12: false, hour: "numeric", minute: "numeric", second: "numeric" });
+            line.innerHTML = `<span class="text-slate-600">[${time}]</span> ${msg}`;
+            consoleEl.appendChild(line);
+            consoleEl.scrollTop = consoleEl.scrollHeight;
+        }
+
+        function updateStepUI() {
+            document.getElementById('langkah-counter').innerText = `Langkah: ${stepCount}`;
+        }
+
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+
+        function isFinished() {
+            return grid[robot.y][robot.x] === 2;
+        }
+
+        function getFrontStatus() {
+            logMsg("Memproses [INPUT]...", "text-blue-400");
+            let nextX = robot.x;
+            let nextY = robot.y;
+            
+            if (robot.dir === 0) nextX++;
+            else if (robot.dir === 1) nextY++;
+            else if (robot.dir === 2) nextX--;
+            else if (robot.dir === 3) nextY--;
+
+            // Cek batas map
+            if (nextX < 0 || nextX > 4 || nextY < 0 || nextY > 4) return "Mentok";
+            // Cek tembok
+            if (grid[nextY][nextX] === 1) return "Mentok";
+            
+            return "Aman";
+        }
+
+        async function moveForward() {
+            logMsg("Aksi: Bergerak maju...", "text-slate-300");
+            let nextX = robot.x;
+            let nextY = robot.y;
+            
+            if (robot.dir === 0) nextX++;
+            else if (robot.dir === 1) nextY++;
+            else if (robot.dir === 2) nextX--;
+            else if (robot.dir === 3) nextY--;
+
+            if (nextX < 0 || nextX > 4 || nextY < 0 || nextY > 4 || grid[nextY][nextX] === 1) {
+                throw new Error("Karakter menabrak rintangan atau batas area!");
+            }
+
+            robot.x = nextX;
+            robot.y = nextY;
+            updateRobotVisual();
+            await delay(400); // Waktu animasi
+        }
+
+        async function turnRight() {
+            logMsg("Aksi: Putar Kanan", "text-slate-400");
+            robot.dir = (robot.dir + 1) % 4;
+            updateRobotVisual();
+            await delay(300);
+        }
+
+        async function turnLeft() {
+            logMsg("Aksi: Putar Kiri", "text-slate-400");
+            robot.dir = (robot.dir - 1 + 4) % 4;
+            updateRobotVisual();
+            await delay(300);
+        }
+
+        function doCompute() {
+            stepCount++;
+            updateStepUI();
+            logMsg(`Memproses [COMPUTE]: langkah = ${stepCount}`, "text-emerald-400");
+        }
+
+        function doPrint(msg) {
+            logMsg(`[OUTPUT] Print: "${msg}"`, "text-pink-400 font-bold");
+        }
+
+        async function executeCode() {
+            if (isRunning) return;
+            
+            const rawCode = codeEditor.value.trim();
+            if(!rawCode) {
+                logMsg("Error: Kode kosong!", "text-red-400");
+                return;
+            }
+
+            isRunning = true;
+            runBtn.innerHTML = "⏳ MENGEKSEKUSI...";
+            runBtn.classList.replace('from-emerald-500', 'from-yellow-500');
+            runBtn.classList.replace('to-teal-500', 'to-orange-500');
+            
+            resetRobot();
+            clearConsole();
+            logMsg("Memulai kompilasi pseudocode...", "text-slate-400");
+
+            // Transformasi teks sederhana menggunakan Regex
+            // Ini mensimulasikan "Parsing" dari pseudocode menjadi JS yang dapat dijalankan (eval)
+            let compiledJS = `
+                let loopGuard = 0;
+                try {
+            `;
+
+            let lines = rawCode.split('\n');
+            for(let i=0; i<lines.length; i++) {
+                let line = lines[i].trim();
+                if(line === "" || line.startsWith("//")) continue;
+
+                if (line === "WHILE Not_Finish DO") {
+                    compiledJS += `while(!isFinished()) { loopGuard++; if(loopGuard > 100) throw new Error("Infinite Loop (Perulangan tak terbatas)!"); await delay(300); `;
+                    logMsg(`Mengenali [ITERATION] baris ${i+1}`, 'text-orange-400 text-xs');
+                }
+                else if (line === "ENDWHILE") {
+                    compiledJS += `} `;
+                }
+                else if (line === "READ Depan") {
+                    compiledJS += `let Depan = getFrontStatus(); `;
+                }
+                else if (line === "IF Depan == \"Aman\" THEN") {
+                    compiledJS += `if (Depan === 'Aman') { `;
+                    logMsg(`Mengenali [DECISION] baris ${i+1}`, 'text-purple-400 text-xs');
+                }
+                else if (line === "ELSE") {
+                    compiledJS += `} else { `;
+                }
+                else if (line === "ENDIF") {
+                    compiledJS += `} `;
+                }
+                else if (line === "MOVE") {
+                    compiledJS += `await moveForward(); `;
+                }
+                else if (line === "TURN_RIGHT") {
+                    compiledJS += `await turnRight(); `;
+                }
+                else if (line === "TURN_LEFT") {
+                    compiledJS += `await turnLeft(); `;
+                }
+                else if (line.startsWith("COMPUTE langkah = langkah + 1")) {
+                    compiledJS += `doCompute(); `;
+                }
+                else if (line.startsWith("PRINT")) {
+                    // Extract text inside quotes
+                    let match = line.match(/PRINT\s+"([^"]+)"/);
+                    let msg = match ? match[1] : "Hello";
+                    compiledJS += `doPrint("${msg}"); `;
+                }
+                else {
+                    compiledJS += `throw new Error("Sintaks tidak dikenali pada baris ${i+1}: ${line}"); `;
+                }
+            }
+
+            compiledJS += `
+                    if (isFinished()) {
+                        logMsg("MISI BERHASIL! Robot mencapai tujuan.", "text-emerald-400 text-lg font-bold");
+                        robotEl.innerHTML = "🥳";
+                    } else {
+                        logMsg("Program selesai, tapi robot belum mencapai bendera.", "text-yellow-400");
+                    }
+                } catch (e) {
+                    logMsg(e.message, "text-red-500 font-bold");
+                    robotEl.innerHTML = "😵";
+                }
+            `;
+
+            // Eksekusi fungsi dinamis
+            const AsyncFunc = Object.getPrototypeOf(async function(){}).constructor;
+            try {
+                const runner = new AsyncFunc('delay', 'isFinished', 'getFrontStatus', 'moveForward', 'turnRight', 'turnLeft', 'doCompute', 'doPrint', 'logMsg', 'robotEl', compiledJS);
+                await runner(delay, isFinished, getFrontStatus, moveForward, turnRight, turnLeft, doCompute, doPrint, logMsg, robotEl);
+            } catch(e) {
+                logMsg("Fatal Error pada Compiler internal.", "text-red-500");
+                console.error(e);
+            }
+
+            // Kembalikan status tombol
+            isRunning = false;
+            runBtn.innerHTML = "▶ JALANKAN PROGRAM";
+            runBtn.classList.replace('from-yellow-500', 'from-emerald-500');
+            runBtn.classList.replace('to-orange-500', 'to-teal-500');
+            if(robotEl.innerHTML !== "🥳" && robotEl.innerHTML !== "😵") {
+                 robotEl.innerHTML = "🤖";
+            }
+        }
+
+        // Jalankan inisiasi saat halaman dimuat
+        window.onload = () => {
+            loadLevel(1);
+        };
+    </script>
+</body>
+</html>

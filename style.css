@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Base & Typography - Tema Dashboard LMS Modern Sesuai Mockup */
+body {
+  font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #f8fafc;
+  background-image: radial-gradient(#e2e8f0 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  color: #0f172a;
+  min-height: 100vh;
+}
+
+/* Card Modern LMS */
+.lms-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lms-card-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lms-card-hover:hover {
+  transform: translateY(-3px);
+  border-color: #cbd5e1;
+  box-shadow: 0 12px 24px -6px rgba(15, 23, 42, 0.08), 0 4px 8px -4px rgba(15, 23, 42, 0.03);
+}
+
+/* Hero Banner Gradient */
+.hero-gradient {
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 40%, #8b5cf6 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-gradient::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -10%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.hero-gradient::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: 20%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Isian Interaktif (Dotted Sesuai LKPD) */
+.dotted-input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px dashed #94a3b8;
+  width: 100%;
+  padding: 6px 8px;
+  color: #0f172a;
+  font-weight: 700;
+  transition: all 0.2s ease-in-out;
+}
+
+.dotted-input:focus {
+  outline: none;
+  border-bottom-color: #4f46e5;
+  background-color: rgba(238, 242, 255, 0.6);
+}
+
+.dotted-textarea {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 2px dashed #94a3b8;
+  border-radius: 0.85rem;
+  padding: 10px 14px;
+  color: #0f172a;
+  font-weight: 600;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.dotted-textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+  background-color: #ffffff;
+}
+
+/* LMS Modern Form Field */
+.lms-field {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.lms-field:focus-within {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+}
+
+.lms-field input, .lms-field select {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Animations */
+.fade-in {
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.pulse-fast {
+  animation: pulseFast 1s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulseFast {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Google Classroom Style Topic Cards */
+.gc-topic-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.03);
+  transition: all 0.2s ease-in-out;
+}
+
+.gc-topic-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px -2px rgba(15, 23, 42, 0.05);
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+/* Print Utilities */
+@media print {
+  body {
+    background-image: none !important;
+    background-color: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    padding: 0 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi &amp; Simulasi Struktur Pseudocode - EduInformatika</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom LMS Styles -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .font-code {
+      font-family: 'Fira Code', monospace;
+    }
+    .active-code-line {
+      background-color: #fef08a !important; /* Yellow-200 */
+      border-left: 4px solid #eab308 !important;
+      color: #713f12 !important;
+      font-weight: 700;
+    }
+    .pulse-glow {
+      animation: pulseGlow 1.8s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+      50% { box-shadow: 0 0 0 10px rgba(99, 102, 241, 0); }
+    }
+    .badge-step {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 9999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body class="bg-[#f3f4f9] text-slate-800 min-h-screen flex flex-col p-2 sm:p-5 md:p-8">
+
+  <!-- ==================== MAIN WRAPPER CONTAINER ==================== -->
+  <div class="max-w-6xl w-full mx-auto bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden flex flex-col flex-1">
+
+    <!-- ==================== TOP NAVIGATION BAR ==================== -->
+    <header class="p-4 sm:px-8 border-b border-slate-100 flex flex-wrap items-center justify-between gap-4 bg-white/95 sticky top-0 z-30">
+      
+      <!-- Logo & Breadcrumb -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-600 text-white flex items-center justify-center font-black text-xl shadow-md shadow-amber-500/20 hover:scale-105 transition">
+          M
+        </a>
+        <div>
+          <div class="flex items-center gap-2 text-[11px] font-bold text-slate-400">
+            <a href="index.html" class="hover:text-indigo-600 transition">Portal Siswa</a>
+            <span>/</span>
+            <span class="text-amber-600">Materi &amp; Simulasi Pseudocode</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+            Modul Struktur Notasi Pseudocode
+          </h1>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="index.html" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition shadow-xs">
+          <span>&larr;</span>
+          <span>Kembali ke Beranda</span>
+        </a>
+        <a href="lkpd_pseudocode.html" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold border border-purple-200 transition shadow-xs">
+          <span>📖</span>
+          <span class="hidden sm:inline">Buka LKM</span>
+        </a>
+        <a href="admin.html" class="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
+          <span>🔒</span>
+          <span class="hidden md:inline">Guru</span>
+        </a>
+      </div>
+
+    </header>
+
+    <!-- ==================== MAIN CONTENT ==================== -->
+    <main class="p-4 sm:p-6 md:p-8 space-y-8 flex-1">
+
+      <!-- ==================== HERO WELCOME BANNER ==================== -->
+      <div class="hero-gradient rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="space-y-3 max-w-2xl text-center md:text-left z-10">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-black tracking-wide uppercase">
+            <span>💡</span>
+            <span>Materi Inti Berpikir Komputasional • Fase E</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+            Struktur Notasi Pseudocode &amp; Simulasi Interaktif
+          </h2>
+          <p class="text-xs sm:text-sm text-indigo-100/95 font-medium leading-relaxed">
+            Algoritma yang ditulis dalam notasi pseudocode standar tersusun atas 3 bagian pokok: 
+            <strong class="text-amber-300">1. Judul</strong>, 
+            <strong class="text-purple-300">2. Deklarasi</strong>, dan 
+            <strong class="text-emerald-300">3. Isi (Deskripsi)</strong>. 
+            Pelajari setiap bagian melalui penjelasan ringkas dan simulasi interaktif langsung!
+          </p>
+        </div>
+
+        <!-- 3 Pillars Badges -->
+        <div class="grid grid-cols-3 gap-2.5 shrink-0 z-10 w-full md:w-auto text-center">
+          <div class="p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+            <div class="text-xl font-black text-amber-300">01</div>
+            <div class="text-[11px] font-extrabold text-white">JUDUL</div>
+            <div class="text-[9px] text-white/80">Header</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+            <div class="text-xl font-black text-purple-300">02</div>
+            <div class="text-[11px] font-extrabold text-white">DEKLARASI</div>
+            <div class="text-[9px] text-white/80">Kamus RAM</div>
+          </div>
+          <div class="p-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20">
+            <div class="text-xl font-black text-emerald-300">03</div>
+            <div class="text-[11px] font-extrabold text-white">ISI</div>
+            <div class="text-[9px] text-white/80">Algoritma</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== TAB NAVIGATION (PER LANGKAH MATERI) ==================== -->
+      <div class="border-b border-slate-200">
+        <nav class="flex space-x-2 sm:space-x-4 overflow-x-auto pb-2 scrollbar-none" aria-label="Tabs">
+          <button onclick="switchTab('tab-pengenalan')" id="btn-tab-pengenalan" class="tab-btn px-4 py-2.5 text-xs sm:text-sm font-bold rounded-2xl transition flex items-center gap-2 shrink-0 bg-indigo-600 text-white shadow-sm">
+            <span>🌟</span>
+            <span>Konsep Dasar</span>
+          </button>
+          <button onclick="switchTab('tab-judul')" id="btn-tab-judul" class="tab-btn px-4 py-2.5 text-xs sm:text-sm font-bold rounded-2xl transition flex items-center gap-2 shrink-0 bg-slate-100 text-slate-600 hover:bg-slate-200">
+            <span class="w-5 h-5 rounded-full bg-amber-500 text-white text-[10px] flex items-center justify-center font-black">1</span>
+            <span>Bagian 1: Judul</span>
+          </button>
+          <button onclick="switchTab('tab-deklarasi')" id="btn-tab-deklarasi" class="tab-btn px-4 py-2.5 text-xs sm:text-sm font-bold rounded-2xl transition flex items-center gap-2 shrink-0 bg-slate-100 text-slate-600 hover:bg-slate-200">
+            <span class="w-5 h-5 rounded-full bg-purple-600 text-white text-[10px] flex items-center justify-center font-black">2</span>
+            <span>Bagian 2: Deklarasi</span>
+          </button>
+          <button onclick="switchTab('tab-isi')" id="btn-tab-isi" class="tab-btn px-4 py-2.5 text-xs sm:text-sm font-bold rounded-2xl transition flex items-center gap-2 shrink-0 bg-slate-100 text-slate-600 hover:bg-slate-200">
+            <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[10px] flex items-center justify-center font-black">3</span>
+            <span>Bagian 3: Isi</span>
+          </button>
+          <button onclick="switchTab('tab-simulasi-terpadu')" id="btn-tab-simulasi-terpadu" class="tab-btn px-4 py-2.5 text-xs sm:text-sm font-bold rounded-2xl transition flex items-center gap-2 shrink-0 bg-slate-100 text-slate-600 hover:bg-slate-200">
+            <span>🚀</span>
+            <span>Simulasi Terpadu (Live Runner)</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- ========================================================================= -->
+      <!-- TAB 1: PENGENALAN KONSEP PSEUDOCODE -->
+      <!-- ========================================================================= -->
+      <section id="tab-pengenalan" class="tab-content space-y-6">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Card Definisi -->
+          <div class="lms-card p-6 md:col-span-2 space-y-4">
+            <div class="flex items-center gap-3">
+              <span class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-xl font-bold">
+                💡
+              </span>
+              <div>
+                <h3 class="text-lg font-extrabold text-slate-900">Apa Itu Pseudocode?</h3>
+                <p class="text-xs text-slate-500 font-medium">Berasal dari kata <em>pseudo</em> (semu/tiruan) dan <em>code</em> (kode program)</p>
+              </div>
+            </div>
+
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              <strong>Pseudocode</strong> (Kode Semu) adalah cara penulisan algoritma menggunakan bahasa manusia terstruktur yang menyerupai bahasa pemrograman, namun tidak terikat oleh aturan sintaksis bahasa komputer manapun (seperti titik koma, kurung kurawal, atau tanda kurung kaku).
+            </p>
+
+            <div class="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-100 space-y-2">
+              <h4 class="text-xs font-bold text-indigo-900 flex items-center gap-1.5 uppercase tracking-wider">
+                <span>🎯</span>
+                <span>Mengapa Kita Menggunakan Pseudocode?</span>
+              </h4>
+              <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside">
+                <li><strong>Fokus pada Logika Solusi:</strong> Pemrogram dapat merancang algoritma tanpa terdistraksi kesalahan penulisan (*syntax error*).</li>
+                <li><strong>Universal &amp; Agnostik:</strong> Algoritma pseudocode yang sama bisa diubah ke bahasa Python, C++, Java, maupun JavaScript dengan mudah.</li>
+                <li><strong>Mudah Dipahami Manusia:</strong> Menggunakan kata-kata intuitif seperti <code class="font-bold text-indigo-700">INPUT</code>, <code class="font-bold text-indigo-700">OUTPUT</code>, <code class="font-bold text-indigo-700">IF-THEN-ELSE</code>, dan tanda panah <code class="font-bold text-indigo-700">&lt;-</code>.</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Mini Callout Aturan Emas -->
+          <div class="lms-card p-6 bg-gradient-to-br from-amber-500/10 to-amber-500/5 border border-amber-200/80 space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-xl bg-amber-500 text-white flex items-center justify-center text-sm font-black">
+                  ⭐
+                </span>
+                <h4 class="text-sm font-extrabold text-slate-900">3 Aturan Emas Notasi</h4>
+              </div>
+              <div class="space-y-2 text-xs text-slate-700">
+                <div class="p-2.5 rounded-xl bg-white/80 border border-amber-200">
+                  <span class="font-bold text-amber-800">1. HURUF KAPITAL:</span><br>
+                  Kata kunci ditulis huruf besar: <code class="text-indigo-600 font-bold">PROGRAM</code>, <code class="text-indigo-600 font-bold">DEKLARASI</code>, <code class="text-indigo-600 font-bold">INPUT</code>, <code class="text-indigo-600 font-bold">IF</code>.
+                </div>
+                <div class="p-2.5 rounded-xl bg-white/80 border border-amber-200">
+                  <span class="font-bold text-amber-800">2. Operator Panah (&lt;-):</span><br>
+                  Mengisi variabel: <code class="text-indigo-600 font-bold">nilai &lt;- 80</code> (bukan tanda sama dengan <code class="text-slate-400">=</code>).
+                </div>
+                <div class="p-2.5 rounded-xl bg-white/80 border border-amber-200">
+                  <span class="font-bold text-amber-800">3. Indentasi Menjorok:</span><br>
+                  Beri spasi masuk untuk baris di dalam blok <code class="text-indigo-600 font-bold">IF...THEN</code>.
+                </div>
+              </div>
+            </div>
+
+            <button onclick="switchTab('tab-judul')" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition flex items-center justify-center gap-2">
+              <span>Lanjut ke Bagian 1: Judul</span>
+              <span>&rarr;</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabel Perbandingan Visual (Bahasa Alami vs Pseudocode vs Python) -->
+        <div class="lms-card p-6 space-y-4">
+          <h4 class="text-sm sm:text-base font-extrabold text-slate-900 flex items-center gap-2">
+            <span>🔄</span>
+            <span>Perbandingan: Bahasa Sehari-hari vs Pseudocode vs Python</span>
+          </h4>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+            <!-- Kolom 1 -->
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+              <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                <span class="font-black text-slate-700">1. Bahasa Alami</span>
+                <span class="px-2 py-0.5 rounded-full bg-slate-200 text-slate-700 text-[10px] font-bold">Deskriptif</span>
+              </div>
+              <p class="text-slate-600 italic leading-relaxed">
+                "Minta pengguna memasukkan nilai ujian. Jika nilai tersebut 75 atau lebih, katakan siswa lulus. Namun jika di bawah 75, katakan siswa remedial."
+              </p>
+              <div class="text-[10px] text-slate-400 font-semibold">Kelemahan: Terlalu panjang, ambigu.</div>
+            </div>
+
+            <!-- Kolom 2: Pseudocode (Bintang Utama) -->
+            <div class="p-4 rounded-2xl bg-indigo-50/70 border-2 border-indigo-300 space-y-2 shadow-xs">
+              <div class="flex items-center justify-between border-b border-indigo-200 pb-2">
+                <span class="font-black text-indigo-900">2. Notasi Pseudocode</span>
+                <span class="px-2 py-0.5 rounded-full bg-indigo-600 text-white text-[10px] font-bold">Standar Kita</span>
+              </div>
+              <pre class="font-code text-[11px] text-indigo-950 leading-relaxed bg-white p-2.5 rounded-xl border border-indigo-100">INPUT(nilai)
+IF nilai >= 75 THEN
+    OUTPUT("Lulus")
+ELSE
+    OUTPUT("Remedial")
+ENDIF</pre>
+              <div class="text-[10px] text-indigo-700 font-bold">Kelebihan: Rapi, terstruktur, siap dikoding.</div>
+            </div>
+
+            <!-- Kolom 3: Python -->
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+              <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+                <span class="font-black text-slate-700">3. Bahasa Pemrograman (Python)</span>
+                <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-bold">Eksekusi Mesin</span>
+              </div>
+              <pre class="font-code text-[11px] text-slate-800 leading-relaxed bg-slate-900 text-emerald-300 p-2.5 rounded-xl">nilai = int(input())
+if nilai >= 75:
+    print("Lulus")
+else:
+    print("Remedial")</pre>
+              <div class="text-[10px] text-slate-400 font-semibold">Harus patuh aturan sintaks bahasa.</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- TAB 2: BAGIAN 1 - JUDUL (HEADER) -->
+      <!-- ========================================================================= -->
+      <section id="tab-judul" class="tab-content hidden space-y-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Penjelasan Teori Judul -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="lms-card p-6 space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center font-black text-lg shadow-sm">
+                  1
+                </span>
+                <div>
+                  <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Bagian 1: Judul (Header)</h3>
+                  <p class="text-xs text-amber-700 font-semibold">Identitas &amp; Spesifikasi Algoritma</p>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Bagian <strong>Judul</strong> berfungsi memberikan nama pengenal unik untuk algoritma serta menjelaskan secara ringkas apa tujuan program tersebut dibuat.
+              </p>
+
+              <!-- Format Penulisan -->
+              <div class="space-y-2">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">Format Standar:</span>
+                <div class="p-3 rounded-xl bg-slate-900 text-amber-400 font-code text-xs space-y-1">
+                  <div><span class="text-purple-400">PROGRAM</span> Nama_Algoritma</div>
+                  <div class="text-slate-400 italic">{ Penjelasan ringkas apa yang dikerjakan program }</div>
+                </div>
+              </div>
+
+              <!-- Aturan Penamaan Judul -->
+              <div class="space-y-2">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">Aturan Penamaan Algoritma:</span>
+                <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside">
+                  <li><strong>Tidak boleh ada spasi:</strong> Gunakan garis bawah (<code class="bg-slate-100 px-1 py-0.5 rounded font-bold">_</code>) atau huruf kapital camelCase.</li>
+                  <li><strong>Harus diawali huruf alfabet:</strong> Contoh: <code class="text-emerald-700 font-bold">Hitung_Luas</code> (Benar), <code class="text-rose-600 font-bold">123Hitung</code> (Salah).</li>
+                  <li><strong>Tidak menggunakan karakter khusus:</strong> Dilarang memakai simbol <code class="text-rose-600 font-bold">! @ # $ % ^ &amp; * ( ) - +</code>.</li>
+                  <li><strong>Bermakna &amp; Singkat:</strong> Menggambarkan tugas algoritma secara spesifik.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMULASI INTERAKTIF BAGIAN JUDUL -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="lms-card p-6 border-2 border-amber-300 space-y-5 bg-gradient-to-b from-amber-50/40 to-white">
+              
+              <div class="flex items-center justify-between border-b border-amber-200 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl">🛠️</span>
+                  <div>
+                    <h4 class="text-sm font-extrabold text-slate-900">Simulasi Interaktif: Uji Validasi Judul</h4>
+                    <p class="text-[11px] text-slate-500 font-medium">Ketik nama program untuk mengecek aturan sintaks secara langsung</p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 text-[10px] font-black uppercase">
+                  Validator Live
+                </span>
+              </div>
+
+              <!-- Form Input Simulasi -->
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">
+                    Nama Algoritma / Program:
+                  </label>
+                  <input id="inputSimulasiNamaJudul" type="text" value="Hitung_Luas_Persegi" placeholder="Contoh: Hitung_Gaji_Karyawan" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-amber-500 focus:ring-2 focus:ring-amber-200 outline-none text-xs font-code font-bold transition">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-bold text-slate-700 mb-1">
+                    Deskripsi / Spesifikasi Algoritma:
+                  </label>
+                  <input id="inputSimulasiDeskripsiJudul" type="text" value="Menghitung luas persegi panjang berdasarkan input panjang dan lebar" placeholder="Contoh: Menghitung total belanja dengan diskon" class="w-full px-4 py-2 rounded-xl border border-slate-300 focus:border-amber-500 outline-none text-xs font-medium transition">
+                </div>
+
+                <!-- Template Cepat -->
+                <div class="flex flex-wrap items-center gap-2 pt-1">
+                  <span class="text-[11px] font-bold text-slate-500">Coba Template:</span>
+                  <button type="button" onclick="setJudulPreset('Cek_Kelulusan_Siswa', 'Mengevaluasi nilai siswa apakah memenuhi KKM 75 atau remedial')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-amber-400 text-[11px] font-semibold text-slate-700 transition">
+                    Cek_Kelulusan
+                  </button>
+                  <button type="button" onclick="setJudulPreset('Tukar_Dua_Variabel', 'Menukar isi variabel A dan variabel B menggunakan peubah pembantu temp')" class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 hover:border-amber-400 text-[11px] font-semibold text-slate-700 transition">
+                    Tukar_Variabel
+                  </button>
+                  <button type="button" onclick="setJudulPreset('Hitung Luas Lingkaran', 'Contoh nama salah dengan spasi untuk melihat respon error')" class="px-2.5 py-1 rounded-lg bg-rose-50 border border-rose-200 hover:border-rose-400 text-[11px] font-semibold text-rose-700 transition">
+                    Uji Coba Error (Spasi)
+                  </button>
+                </div>
+
+                <!-- Live Status & Feedback -->
+                <div id="judulValidationBox" class="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-2.5 text-xs text-emerald-800">
+                  <span id="judulValidationIcon" class="text-base font-bold">✓</span>
+                  <div id="judulValidationText" class="font-medium">
+                    Nama algoritma <strong>VALID</strong>! Memenuhi kaidah penamaan pseudocode.
+                  </div>
+                </div>
+
+                <!-- Preview Output Pseudocode Header -->
+                <div class="space-y-1.5">
+                  <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                    Hasil Format Judul Pseudocode:
+                  </span>
+                  <div class="p-4 rounded-2xl bg-slate-900 text-white font-code text-xs relative overflow-hidden shadow-inner">
+                    <div class="text-slate-500 text-[10px] mb-1">// BAGIAN 1: JUDUL ALGORITMA</div>
+                    <div class="text-amber-300 font-bold">
+                      <span class="text-purple-400">PROGRAM</span> <span id="previewNamaJudul">Hitung_Luas_Persegi</span>
+                    </div>
+                    <div class="text-slate-400 italic">
+                      { <span id="previewDeskripsiJudul">Menghitung luas persegi panjang berdasarkan input panjang dan lebar</span> }
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- TAB 3: BAGIAN 2 - DEKLARASI (KAMUS) -->
+      <!-- ========================================================================= -->
+      <section id="tab-deklarasi" class="tab-content hidden space-y-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Penjelasan Teori Deklarasi -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="lms-card p-6 space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-black text-lg shadow-sm">
+                  2
+                </span>
+                <div>
+                  <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Bagian 2: Deklarasi (Kamus)</h3>
+                  <p class="text-xs text-purple-700 font-semibold">Pemesanan Memori &amp; Tipe Data</p>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Sebelum komputer dapat menyimpan atau mengolah data, komputer harus <strong>memesan wadah (alokasi memori RAM)</strong> terlebih dahulu. Bagian Deklarasi adalah tempat mengenalkan semua variabel dan konstanta yang akan dipakai.
+              </p>
+
+              <!-- 4 Tipe Data Utama -->
+              <div class="space-y-2">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">4 Tipe Data Dasar:</span>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                  <div class="p-2.5 rounded-xl bg-purple-50 border border-purple-100">
+                    <div class="font-bold text-purple-900">integer</div>
+                    <div class="text-[10px] text-slate-500">Bilangan bulat</div>
+                    <div class="font-code text-[11px] text-purple-700 font-bold mt-0.5">10, -5, 100</div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-blue-50 border border-blue-100">
+                    <div class="font-bold text-blue-900">real / float</div>
+                    <div class="text-[10px] text-slate-500">Bilangan desimal</div>
+                    <div class="font-code text-[11px] text-blue-700 font-bold mt-0.5">3.14, 85.5</div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-100">
+                    <div class="font-bold text-emerald-900">string</div>
+                    <div class="text-[10px] text-slate-500">Teks / Karakter</div>
+                    <div class="font-code text-[11px] text-emerald-700 font-bold mt-0.5">"Budi", "Lulus"</div>
+                  </div>
+                  <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-100">
+                    <div class="font-bold text-amber-900">boolean</div>
+                    <div class="text-[10px] text-slate-500">Logika benar/salah</div>
+                    <div class="font-code text-[11px] text-amber-700 font-bold mt-0.5">true, false</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Format Sintaks -->
+              <div class="space-y-1.5">
+                <span class="text-xs font-bold text-slate-700 uppercase tracking-wider block">Format Standar:</span>
+                <pre class="p-3 rounded-xl bg-slate-900 text-purple-300 font-code text-xs">DEKLARASI:
+    nama : string
+    nilai, kkm : integer
+    ipk : real
+    lulus : boolean
+    KONSTANTA PI = 3.14</pre>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMULASI INTERAKTIF BAGIAN DEKLARASI (VIRTUAL RAM ALLOCATOR) -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="lms-card p-6 border-2 border-purple-300 space-y-5 bg-gradient-to-b from-purple-50/40 to-white">
+              
+              <div class="flex items-center justify-between border-b border-purple-200 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl">💾</span>
+                  <div>
+                    <h4 class="text-sm font-extrabold text-slate-900">Simulasi Interaktif: Alokasi Memori RAM</h4>
+                    <p class="text-[11px] text-slate-500 font-medium">Tambahkan variabel ke kamus dan amati slot memori virtual tercipta</p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-purple-100 text-purple-800 text-[10px] font-black uppercase">
+                  Memory Inspector
+                </span>
+              </div>
+
+              <!-- Form Tambah Variabel -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                <div class="sm:col-span-5">
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Nama Variabel:</label>
+                  <input id="inputNamaVarSim" type="text" placeholder="misal: skor_ujian" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-code font-bold outline-none focus:border-purple-500">
+                </div>
+                <div class="sm:col-span-4">
+                  <label class="block text-xs font-bold text-slate-700 mb-1">Tipe Data:</label>
+                  <select id="selectTipeDataSim" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold outline-none focus:border-purple-500 bg-white">
+                    <option value="integer">integer (Bulat)</option>
+                    <option value="real">real (Desimal)</option>
+                    <option value="string">string (Teks)</option>
+                    <option value="boolean">boolean (True/False)</option>
+                  </select>
+                </div>
+                <div class="sm:col-span-3">
+                  <button type="button" onclick="alokasiVariabelBaru()" class="w-full py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md transition hover:scale-105 active:scale-95">
+                    + Alokasi
+                  </button>
+                </div>
+              </div>
+
+              <!-- Papan Visualisasi Slot RAM Komputer -->
+              <div class="space-y-2">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-extrabold text-slate-800 flex items-center gap-1.5">
+                    <span>🗄️</span>
+                    <span>Status Slot Memori Komputer (RAM):</span>
+                  </span>
+                  <button type="button" onclick="resetMemorySimulation()" class="text-[11px] text-slate-400 hover:text-rose-600 font-semibold underline">
+                    Reset Memori
+                  </button>
+                </div>
+
+                <!-- Grid Slot Memori -->
+                <div id="memorySlotsContainer" class="grid grid-cols-2 sm:grid-cols-3 gap-3 min-h-[120px] p-4 rounded-2xl bg-slate-900 border border-slate-800 shadow-inner">
+                  <!-- Default Variables diinjeksikan lewat JS -->
+                </div>
+              </div>
+
+              <!-- Preview Kode Deklarasi Realtime -->
+              <div class="space-y-1.5">
+                <span class="text-xs font-bold text-slate-500 uppercase tracking-wider block">
+                  Sintaks Pseudocode Deklarasi Terbentuk:
+                </span>
+                <pre id="previewDeklarasiCode" class="p-3.5 rounded-2xl bg-slate-900 text-purple-300 font-code text-xs overflow-x-auto leading-relaxed shadow-inner">DEKLARASI:
+    panjang, lebar : integer
+    luas : integer
+    nama_siswa : string</pre>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- TAB 4: BAGIAN 3 - ISI / DESKRIPSI (ALGORITMA) -->
+      <!-- ========================================================================= -->
+      <section id="tab-isi" class="tab-content hidden space-y-6">
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Penjelasan Teori Bagian Isi -->
+          <div class="lg:col-span-5 space-y-4">
+            <div class="lms-card p-6 space-y-4">
+              <div class="flex items-center gap-3">
+                <span class="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-lg shadow-sm">
+                  3
+                </span>
+                <div>
+                  <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Bagian 3: Isi (Deskripsi)</h3>
+                  <p class="text-xs text-emerald-700 font-semibold">Jantung Aksi &amp; Alur Eksekusi</p>
+                </div>
+              </div>
+
+              <p class="text-xs text-slate-600 leading-relaxed">
+                Bagian <strong>Isi</strong> adalah jantung dari seluruh algoritma. Di sinilah urutan perintah komputasi dijalankan secara sistematis baris demi baris dari atas ke bawah.
+              </p>
+
+              <!-- 4 Perintah Kunci di Bagian Isi -->
+              <div class="space-y-2.5 text-xs text-slate-700">
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div class="font-extrabold text-indigo-700 flex items-center gap-1.5">
+                    <span>📥</span>
+                    <span>1. INPUT / READ (Membaca Masukan)</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600">Menerima data masukan dari pengguna dan menyimpannya ke variabel.</p>
+                  <code class="font-code text-indigo-900 font-bold block bg-white p-1 rounded">INPUT(panjang, lebar)</code>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div class="font-extrabold text-amber-700 flex items-center gap-1.5">
+                    <span>🔄</span>
+                    <span>2. ASSIGNMENT (&lt;-) (Pemberian Nilai)</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600">Menghitung ekspresi di kanan panah, lalu menyimpannya ke variabel kiri.</p>
+                  <code class="font-code text-amber-900 font-bold block bg-white p-1 rounded">luas &lt;- panjang * lebar</code>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div class="font-extrabold text-purple-700 flex items-center gap-1.5">
+                    <span>🔀</span>
+                    <span>3. PERCABANGAN (IF - THEN - ELSE)</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600">Menentukan percabangan aksi berdasarkan kondisi benar (true) atau salah (false).</p>
+                  <code class="font-code text-purple-900 font-bold block bg-white p-1 rounded">IF nilai >= 75 THEN ... ELSE ... ENDIF</code>
+                </div>
+
+                <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
+                  <div class="font-extrabold text-emerald-700 flex items-center gap-1.5">
+                    <span>📤</span>
+                    <span>4. OUTPUT / WRITE (Menampilkan Keluaran)</span>
+                  </div>
+                  <p class="text-[11px] text-slate-600">Mencetak hasil perhitungan ke layar pengguna.</p>
+                  <code class="font-code text-emerald-900 font-bold block bg-white p-1 rounded">OUTPUT("Luas = ", luas)</code>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMULASI MINI TRACING BAGIAN ISI -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="lms-card p-6 border-2 border-emerald-300 space-y-5 bg-gradient-to-b from-emerald-50/40 to-white">
+              
+              <div class="flex items-center justify-between border-b border-emerald-200 pb-3">
+                <div class="flex items-center gap-2.5">
+                  <span class="text-xl">⚙️</span>
+                  <div>
+                    <h4 class="text-sm font-extrabold text-slate-900">Simulasi Interaktif: Tracing Baris Algoritma</h4>
+                    <p class="text-[11px] text-slate-500 font-medium">Jalankan instruksi baris demi baris dan perhatikan perubahan memori</p>
+                  </div>
+                </div>
+                <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black uppercase">
+                  Step Tracer
+                </span>
+              </div>
+
+              <!-- Papan Kode Tracing Baris -->
+              <div class="p-4 rounded-2xl bg-slate-900 text-white font-code text-xs space-y-1.5 shadow-inner">
+                <div id="trace-l-1" class="p-2 rounded-lg transition-all duration-200">
+                  <span class="text-slate-500 select-none mr-2">1.</span>
+                  <span class="text-indigo-400 font-bold">INPUT</span>(panjang) <span class="text-slate-500">// user masukkan 8</span>
+                </div>
+                <div id="trace-l-2" class="p-2 rounded-lg transition-all duration-200">
+                  <span class="text-slate-500 select-none mr-2">2.</span>
+                  <span class="text-indigo-400 font-bold">INPUT</span>(lebar) <span class="text-slate-500">// user masukkan 5</span>
+                </div>
+                <div id="trace-l-3" class="p-2 rounded-lg transition-all duration-200">
+                  <span class="text-slate-500 select-none mr-2">3.</span>
+                  luas <span class="text-amber-400 font-bold">&lt;-</span> panjang * lebar
+                </div>
+                <div id="trace-l-4" class="p-2 rounded-lg transition-all duration-200">
+                  <span class="text-slate-500 select-none mr-2">4.</span>
+                  <span class="text-emerald-400 font-bold">OUTPUT</span>("Luas Persegi Panjang: ", luas)
+                </div>
+              </div>
+
+              <!-- Penjelasan Eksekusi Komputer -->
+              <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-2 shadow-xs">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Logika Proses yang Berjalan:</div>
+                <div id="traceStatusText" class="text-xs font-semibold text-slate-700 leading-relaxed min-h-[40px]">
+                  Klik tombol <strong>"Langkah Selanjutnya &rarr;"</strong> untuk mulai menelusuri bagaimana komputer mengeksekusi baris 1.
+                </div>
+              </div>
+
+              <!-- Live Inspector & Console Mini -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 space-y-2">
+                  <span class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block">Memori Variabel RAM:</span>
+                  <div class="grid grid-cols-3 gap-2 text-center text-xs">
+                    <div class="p-2 rounded-xl bg-white border border-slate-200">
+                      <div class="text-[10px] text-slate-400 font-bold">panjang</div>
+                      <div id="miniVarPanjang" class="text-base font-black text-indigo-600 mt-0.5">-</div>
+                    </div>
+                    <div class="p-2 rounded-xl bg-white border border-slate-200">
+                      <div class="text-[10px] text-slate-400 font-bold">lebar</div>
+                      <div id="miniVarLebar" class="text-base font-black text-indigo-600 mt-0.5">-</div>
+                    </div>
+                    <div class="p-2 rounded-xl bg-white border border-slate-200">
+                      <div class="text-[10px] text-slate-400 font-bold">luas</div>
+                      <div id="miniVarLuas" class="text-base font-black text-emerald-600 mt-0.5">-</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="p-3.5 rounded-2xl bg-slate-900 border border-slate-800 space-y-1.5 shadow-inner">
+                  <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Monitor Output Layar:</span>
+                  <div id="miniConsoleOutput" class="font-code text-xs font-bold text-emerald-400 min-h-[40px] flex items-center">
+                    _
+                  </div>
+                </div>
+              </div>
+
+              <!-- Tombol Kontrol Tracing -->
+              <div class="flex items-center gap-3">
+                <button id="btnMiniTraceNext" type="button" onclick="stepMiniTrace()" class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-2">
+                  <span>Langkah Selanjutnya</span>
+                  <span>&rarr;</span>
+                </button>
+                <button type="button" onclick="resetMiniTrace()" class="px-4 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs transition">
+                  ↺ Reset
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- TAB 5: SIMULASI TERPADU (LIVE ALGORITHM RUNNER - 3 BAGIAN LENGKAP) -->
+      <!-- ========================================================================= -->
+      <section id="tab-simulasi-terpadu" class="tab-content hidden space-y-6">
+
+        <div class="lms-card p-6 space-y-6">
+          
+          <!-- Top Control Header -->
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+            <div>
+              <span class="px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 text-[11px] font-black uppercase tracking-wider">
+                Simulasi Integrasi 3 Bagian Lengkap
+              </span>
+              <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1">
+                Live Simulator Notasi Pseudocode
+              </h3>
+              <p class="text-xs text-slate-500 font-medium">
+                Pilih skenario algoritma dan jalankan secara interaktif langkah demi langkah
+              </p>
+            </div>
+
+            <!-- Skenario Selector -->
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="text-xs font-bold text-slate-600">Pilih Kasus:</span>
+              <button id="btnSkenario1" onclick="pilihSkenario(1)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-indigo-600 text-white shadow-sm">
+                1. Runtunan (Luas)
+              </button>
+              <button id="btnSkenario2" onclick="pilihSkenario(2)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700">
+                2. Percabangan (IF-ELSE)
+              </button>
+              <button id="btnSkenario3" onclick="pilihSkenario(3)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700">
+                3. Pertukaran Variabel (Temp)
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Simulation Layout (Left: Code with Color Badges, Right: Virtual CPU & RAM) -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Panel Kiri: Code Editor (Full Structure: Judul, Deklarasi, Isi) -->
+            <div class="lg:col-span-7 space-y-3">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                  <span>📄</span>
+                  <span>Kode Pseudocode Berwarna:</span>
+                </span>
+                <div class="flex items-center gap-2 text-[10px] font-bold">
+                  <span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800">Judul</span>
+                  <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800">Deklarasi</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Isi</span>
+                </div>
+              </div>
+
+              <!-- Container Kode dengan Line Number & Color Coding -->
+              <div id="runnerCodeContainer" class="p-4 sm:p-5 rounded-2xl bg-slate-900 text-white font-code text-xs sm:text-[13px] space-y-1 shadow-xl border border-slate-800 overflow-x-auto leading-relaxed">
+                <!-- Diisi otomatis oleh JavaScript sesuai skenario -->
+              </div>
+
+              <!-- Tombol Kontrol Eksekusi Runner -->
+              <div class="flex flex-wrap items-center gap-2.5 pt-2">
+                <button id="btnRunnerStep" onclick="runnerStepForward()" type="button" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+                  <span>⏭ Langkah Berikutnya</span>
+                </button>
+                <button id="btnRunnerAuto" onclick="runnerToggleAuto()" type="button" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200 font-bold text-xs transition">
+                  ▶ Jalankan Otomatis
+                </button>
+                <button onclick="runnerReset()" type="button" class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 font-bold text-xs transition">
+                  ↺ Reset
+                </button>
+                <div class="ml-auto flex items-center gap-2 text-xs text-slate-500 font-medium">
+                  <span>Status:</span>
+                  <span id="runnerStatusBadge" class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold text-[11px]">
+                    Siap
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Panel Kanan: Status Eksekusi CPU, RAM Memori & Output Console -->
+            <div class="lg:col-span-5 space-y-4">
+              
+              <!-- Penjelasan Langkah Saat Ini -->
+              <div class="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 space-y-1.5 shadow-xs">
+                <div class="flex items-center justify-between text-[11px] font-bold text-indigo-900 uppercase tracking-wider">
+                  <span>🧠 Narasi Eksekusi CPU:</span>
+                  <span id="runnerCurrentLineBadge" class="text-indigo-700">Baris: -</span>
+                </div>
+                <p id="runnerExplanationText" class="text-xs font-semibold text-slate-700 leading-relaxed min-h-[48px]">
+                  Pilih skenario lalu klik <strong>"Langkah Berikutnya"</strong> untuk mulai melihat penelusuran baris.
+                </p>
+              </div>
+
+              <!-- Virtual RAM State (Nilai Variabel Real-Time) -->
+              <div class="lms-card p-4 space-y-3">
+                <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+                  <div class="flex items-center gap-2">
+                    <span class="text-base">💾</span>
+                    <h5 class="text-xs font-black text-slate-800">Tabel Memori RAM Real-Time</h5>
+                  </div>
+                  <span class="text-[10px] text-slate-400 font-semibold">Live Variables</span>
+                </div>
+
+                <div id="runnerRamTable" class="space-y-2">
+                  <!-- Diisi secara dinamis oleh JS -->
+                </div>
+              </div>
+
+              <!-- Terminal Output Console -->
+              <div class="p-4 rounded-2xl bg-slate-900 text-white font-code space-y-2 shadow-inner border border-slate-800">
+                <div class="flex items-center justify-between text-[10px] text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-1.5">
+                  <span class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span>Monitor Keluaran (Console Output)</span>
+                  </span>
+                  <span>Terminal</span>
+                </div>
+                <div id="runnerConsoleOutput" class="text-xs text-emerald-400 min-h-[60px] font-bold leading-relaxed whitespace-pre-wrap">
+                  > Menunggu program dijalankan...
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ==================== TANTANGAN PEMAHAMAN KILAT (MINI QUIZ) ==================== -->
+      <section class="lms-card p-6 bg-gradient-to-r from-indigo-50/60 via-purple-50/40 to-white border border-indigo-100 space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-black text-base shadow-xs">
+              🎯
+            </span>
+            <div>
+              <h3 class="text-base font-extrabold text-slate-900">Uji Cepat Pemahaman Struktur Pseudocode</h3>
+              <p class="text-xs text-slate-500 font-medium">Coba jawab 3 pertanyaan kilat berikut sebelum melanjutkan</p>
+            </div>
+          </div>
+          <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-800 text-xs font-bold">
+            3 Soal Kilat
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs pt-1">
+          <!-- Soal 1 -->
+          <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-xs">
+            <span class="font-bold text-slate-800 block">1. Bagian manakah yang digunakan untuk memesan variabel &amp; tipe data?</span>
+            <div class="space-y-1.5">
+              <button onclick="checkMiniQuiz(1, 'A', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">A. Judul (Header)</button>
+              <button onclick="checkMiniQuiz(1, 'B', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">B. Deklarasi (Kamus)</button>
+              <button onclick="checkMiniQuiz(1, 'C', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">C. Deskripsi (Isi)</button>
+            </div>
+            <div id="quizFeedback1" class="text-[11px] font-bold hidden"></div>
+          </div>
+
+          <!-- Soal 2 -->
+          <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-xs">
+            <span class="font-bold text-slate-800 block">2. Manakah contoh penulisan Judul Pseudocode yang BENAR?</span>
+            <div class="space-y-1.5">
+              <button onclick="checkMiniQuiz(2, 'A', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">A. PROGRAM 1_Hitung Luas</button>
+              <button onclick="checkMiniQuiz(2, 'B', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">B. PROGRAM Hitung_Diskon</button>
+              <button onclick="checkMiniQuiz(2, 'C', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">C. PROGRAM Hitung-Gaji!</button>
+            </div>
+            <div id="quizFeedback2" class="text-[11px] font-bold hidden"></div>
+          </div>
+
+          <!-- Soal 3 -->
+          <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-3 shadow-xs">
+            <span class="font-bold text-slate-800 block">3. Apa arti dari baris notasi: <code class="font-code text-indigo-700 font-bold">temp &lt;- A</code>?</span>
+            <div class="space-y-1.5">
+              <button onclick="checkMiniQuiz(3, 'A', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">A. Nilai A disimpan ke temp</button>
+              <button onclick="checkMiniQuiz(3, 'B', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">B. Nilai temp disimpan ke A</button>
+              <button onclick="checkMiniQuiz(3, 'C', this)" class="quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 hover:bg-indigo-50 font-medium transition">C. Membandingkan temp &amp; A</button>
+            </div>
+            <div id="quizFeedback3" class="text-[11px] font-bold hidden"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ==================== BOTTOM NAV LINKS ==================== -->
+      <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100">
+        <a href="index.html" class="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs transition">
+          <span>&larr;</span>
+          <span>Kembali ke Menu Topik Utama</span>
+        </a>
+
+        <div class="flex items-center gap-3">
+          <a href="lkpd_pseudocode.html" class="px-5 py-2.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 font-bold text-xs transition flex items-center gap-1.5">
+            <span>📖 Buka LKM Digital</span>
+            <span>&rarr;</span>
+          </a>
+          <a href="index.html#pretest" class="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition flex items-center gap-1.5">
+            <span>🚀 Lanjut Kerjakan Pretest</span>
+            <span>&rarr;</span>
+          </a>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT LOGIC UNTUK SEMUA SIMULASI INTERAKTIF -->
+  <!-- ========================================================================= -->
+  <script>
+    // Record material activity to localStorage
+    try {
+      const sKey = 'eduinf_pseudocode_session_v1';
+      const raw = localStorage.getItem(sKey);
+      if (raw) {
+        const s = JSON.parse(raw);
+        s.openedMaterials = s.openedMaterials || {};
+        s.openedMaterials['materi_interaktif'] = new Date().toISOString();
+        s.activityCount = (s.activityCount || 0) + 1;
+        localStorage.setItem(sKey, JSON.stringify(s));
+      }
+    } catch (e) {}
+
+    // ==================== TAB SWITCHER ====================
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      const activeEl = document.getElementById(tabId);
+      if (activeEl) activeEl.classList.remove('hidden');
+
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-sm');
+        btn.classList.add('bg-slate-100', 'text-slate-600');
+      });
+
+      const activeBtn = document.getElementById('btn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-100', 'text-slate-600');
+        activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-sm');
+      }
+
+      window.scrollTo({ top: 120, behavior: 'smooth' });
+    }
+
+    // ==================== TAB 2: SIMULASI JUDUL ====================
+    const inputNamaJudul = document.getElementById('inputSimulasiNamaJudul');
+    const inputDeskripsiJudul = document.getElementById('inputSimulasiDeskripsiJudul');
+    const previewNamaJudul = document.getElementById('previewNamaJudul');
+    const previewDeskripsiJudul = document.getElementById('previewDeskripsiJudul');
+    const boxValidation = document.getElementById('judulValidationBox');
+    const iconValidation = document.getElementById('judulValidationIcon');
+    const textValidation = document.getElementById('judulValidationText');
+
+    function updateJudulValidation() {
+      const val = (inputNamaJudul.value || '').trim();
+      const desc = (inputDeskripsiJudul.value || '').trim();
+
+      previewNamaJudul.textContent = val || '[Belum Ada Nama]';
+      previewDeskripsiJudul.textContent = desc || 'Penjelasan singkat apa yang dikerjakan program';
+
+      if (!val) {
+        setValidationState(false, 'Nama algoritma tidak boleh kosong!');
+        return;
+      }
+
+      if (/\s/.test(val)) {
+        setValidationState(false, 'Terdapat SPASI! Notasi pseudocode tidak memperbolehkan spasi pada judul (gunakan underscore "_").');
+        return;
+      }
+
+      if (!/^[a-zA-Z]/.test(val)) {
+        setValidationState(false, 'Karakter pertama harus huruf alfabet (A-Z)! Tidak boleh diawali angka atau simbol.');
+        return;
+      }
+
+      if (!/^[a-zA-Z0-9_]+$/.test(val)) {
+        setValidationState(false, 'Mengandung simbol terlarang! Hanya diperbolehkan huruf, angka, dan garis bawah (_).');
+        return;
+      }
+
+      setValidationState(true, 'Nama algoritma <strong>VALID</strong>! Memenuhi kaidah penamaan pseudocode standar.');
+    }
+
+    function setValidationState(isValid, msg) {
+      if (isValid) {
+        boxValidation.className = 'p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-2.5 text-xs text-emerald-800';
+        iconValidation.textContent = '✓';
+        textValidation.innerHTML = msg;
+      } else {
+        boxValidation.className = 'p-3 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-xs text-rose-800';
+        iconValidation.textContent = '✕';
+        textValidation.innerHTML = msg;
+      }
+    }
+
+    function setJudulPreset(nama, desc) {
+      inputNamaJudul.value = nama;
+      inputDeskripsiJudul.value = desc;
+      updateJudulValidation();
+    }
+
+    if (inputNamaJudul) inputNamaJudul.addEventListener('input', updateJudulValidation);
+    if (inputDeskripsiJudul) inputDeskripsiJudul.addEventListener('input', updateJudulValidation);
+
+    // ==================== TAB 3: SIMULASI DEKLARASI (RAM MEMORY) ====================
+    let allocatedVariables = [
+      { name: 'panjang', type: 'integer', value: 'null' },
+      { name: 'lebar', type: 'integer', value: 'null' },
+      { name: 'luas', type: 'integer', value: 'null' },
+      { name: 'nama_siswa', type: 'string', value: 'null' }
+    ];
+
+    function renderMemorySlots() {
+      const container = document.getElementById('memorySlotsContainer');
+      const previewCode = document.getElementById('previewDeklarasiCode');
+      if (!container) return;
+
+      container.innerHTML = '';
+      allocatedVariables.forEach(v => {
+        let badgeColor = 'bg-purple-900/60 text-purple-300 border-purple-700';
+        if (v.type === 'string') badgeColor = 'bg-emerald-900/60 text-emerald-300 border-emerald-700';
+        if (v.type === 'real') badgeColor = 'bg-blue-900/60 text-blue-300 border-blue-700';
+        if (v.type === 'boolean') badgeColor = 'bg-amber-900/60 text-amber-300 border-amber-700';
+
+        const div = document.createElement('div');
+        div.className = 'p-3 rounded-xl bg-slate-800/90 border ' + badgeColor + ' flex flex-col justify-between text-xs space-y-1';
+        div.innerHTML = 
+          '<div class="flex items-center justify-between text-[10px] font-bold opacity-80">' +
+            '<span>RAM: 0x' + Math.floor(Math.random() * 899 + 100) + '</span>' +
+            '<span class="uppercase">' + v.type + '</span>' +
+          '</div>' +
+          '<div class="font-code font-bold text-white text-sm truncate">' + v.name + '</div>' +
+          '<div class="text-[10px] text-slate-400 font-mono">Nilai: <span class="text-amber-300 font-bold">' + v.value + '</span></div>';
+        container.appendChild(div);
+      });
+
+      // Update Preview Code
+      if (previewCode) {
+        let code = 'DEKLARASI:\n';
+        const grouped = {};
+        allocatedVariables.forEach(v => {
+          grouped[v.type] = grouped[v.type] || [];
+          grouped[v.type].push(v.name);
+        });
+        for (const t in grouped) {
+          code += '    ' + grouped[t].join(', ') + ' : ' + t + '\n';
+        }
+        previewCode.textContent = code;
+      }
+    }
+
+    function alokasiVariabelBaru() {
+      const nameInput = document.getElementById('inputNamaVarSim');
+      const typeSelect = document.getElementById('selectTipeDataSim');
+      if (!nameInput || !typeSelect) return;
+
+      const raw = nameInput.value.trim();
+      if (!raw) {
+        alert('Silakan ketikkan nama variabel!');
+        return;
+      }
+
+      if (/\s/.test(raw) || !/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(raw)) {
+        alert('Nama variabel tidak valid! Hindari spasi dan simbol.');
+        return;
+      }
+
+      const exists = allocatedVariables.some(v => v.name.toLowerCase() === raw.toLowerCase());
+      if (exists) {
+        alert('Variabel dengan nama "' + raw + '" sudah ada di memori!');
+        return;
+      }
+
+      allocatedVariables.push({
+        name: raw,
+        type: typeSelect.value,
+        value: 'null'
+      });
+
+      nameInput.value = '';
+      renderMemorySlots();
+    }
+
+    function resetMemorySimulation() {
+      allocatedVariables = [
+        { name: 'panjang', type: 'integer', value: 'null' },
+        { name: 'lebar', type: 'integer', value: 'null' },
+        { name: 'luas', type: 'integer', value: 'null' }
+      ];
+      renderMemorySlots();
+    }
+
+    // ==================== TAB 4: SIMULASI MINI TRACE ====================
+    let miniTraceStep = 0;
+    const miniStepsData = [
+      {
+        lineId: 'trace-l-1',
+        text: '<strong>Baris 1: INPUT(panjang)</strong> &rarr; Komputer membaca input dari user (angka 8) dan menyimpannya ke variabel <code>panjang</code>.',
+        p: 8, l: '-', luas: '-', console: '>'
+      },
+      {
+        lineId: 'trace-l-2',
+        text: '<strong>Baris 2: INPUT(lebar)</strong> &rarr; Komputer membaca input kedua (angka 5) dan mengalokasikannya ke variabel <code>lebar</code>.',
+        p: 8, l: 5, luas: '-', console: '>'
+      },
+      {
+        lineId: 'trace-l-3',
+        text: '<strong>Baris 3: luas &lt;- panjang * lebar</strong> &rarr; Komputer mengalikan 8 &times; 5 = 40. Nilai 40 dimasukkan ke wadah memori <code>luas</code>.',
+        p: 8, l: 5, luas: 40, console: '>'
+      },
+      {
+        lineId: 'trace-l-4',
+        text: '<strong>Baris 4: OUTPUT("Luas: ", luas)</strong> &rarr; Nilai akhir (40) dicetak ke layar monitor pengguna. Algoritma selesai!',
+        p: 8, l: 5, luas: 40, console: 'Luas Persegi Panjang: 40'
+      }
+    ];
+
+    function stepMiniTrace() {
+      miniTraceStep++;
+      if (miniTraceStep > miniStepsData.length) {
+        miniTraceStep = 1;
+      }
+
+      document.querySelectorAll('#tab-isi [id^="trace-l-"]').forEach(el => el.classList.remove('active-code-line'));
+      const d = miniStepsData[miniTraceStep - 1];
+
+      const activeEl = document.getElementById(d.lineId);
+      if (activeEl) activeEl.classList.add('active-code-line');
+
+      document.getElementById('traceStatusText').innerHTML = d.text;
+      document.getElementById('miniVarPanjang').textContent = d.p;
+      document.getElementById('miniVarLebar').textContent = d.l;
+      document.getElementById('miniVarLuas').textContent = d.luas;
+      document.getElementById('miniConsoleOutput').textContent = d.console;
+
+      const btn = document.getElementById('btnMiniTraceNext');
+      if (miniTraceStep === miniStepsData.length) {
+        btn.innerHTML = '<span>Ulangi Tracing</span> <span>↺</span>';
+      } else {
+        btn.innerHTML = '<span>Langkah Selanjutnya</span> <span>&rarr;</span>';
+      }
+    }
+
+    function resetMiniTrace() {
+      miniTraceStep = 0;
+      document.querySelectorAll('#tab-isi [id^="trace-l-"]').forEach(el => el.classList.remove('active-code-line'));
+      document.getElementById('traceStatusText').innerHTML = 'Klik tombol <strong>"Langkah Selanjutnya &rarr;"</strong> untuk mulai menelusuri bagaimana komputer mengeksekusi baris 1.';
+      document.getElementById('miniVarPanjang').textContent = '-';
+      document.getElementById('miniVarLebar').textContent = '-';
+      document.getElementById('miniVarLuas').textContent = '-';
+      document.getElementById('miniConsoleOutput').textContent = '_';
+      const btn = document.getElementById('btnMiniTraceNext');
+      if (btn) btn.innerHTML = '<span>Langkah Selanjutnya</span> <span>&rarr;</span>';
+    }
+
+    // ==================== TAB 5: SIMULASI TERPADU LIVE RUNNER ====================
+    let currentSkenarioId = 1;
+    let runnerStep = 0;
+    let runnerAutoTimer = null;
+
+    const skenarioList = {
+      1: {
+        title: 'PROGRAM Hitung_Luas_Persegi',
+        desc: '{ Menghitung luas persegi panjang dengan runtunan }',
+        codeLines: [
+          { num: 1, type: 'judul', text: '<span class="text-purple-400 font-bold">PROGRAM</span> Hitung_Luas_Persegi', exp: 'Judul algoritma diidentifikasi oleh sistem.' },
+          { num: 2, type: 'judul', text: '<span class="text-slate-400 italic">{ Menghitung luas persegi panjang }</span>', exp: 'Komentar penjelasan program (tidak dieksekusi mesin).' },
+          { num: 3, type: 'deklarasi', text: '<span class="text-purple-400 font-bold">DEKLARASI:</span>', exp: 'Memasuki bagian pemesanan memori variabel.' },
+          { num: 4, type: 'deklarasi', text: '    panjang, lebar, luas : <span class="text-amber-400 font-bold">integer</span>', exp: 'Memesan 3 wadah memori bulat: panjang, lebar, dan luas.' },
+          { num: 5, type: 'isi', text: '<span class="text-emerald-400 font-bold">ALGORITMA:</span>', exp: 'Memulai eksekusi instruksi pemrosesan.' },
+          { num: 6, type: 'isi', text: '    panjang <span class="text-amber-400 font-bold">&lt;-</span> 12', exp: 'Memasukkan angka 12 ke variabel panjang.', ram: { panjang: 12 } },
+          { num: 7, type: 'isi', text: '    lebar <span class="text-amber-400 font-bold">&lt;-</span> 6', exp: 'Memasukkan angka 6 ke variabel lebar.', ram: { lebar: 6 } },
+          { num: 8, type: 'isi', text: '    luas <span class="text-amber-400 font-bold">&lt;-</span> panjang * lebar', exp: 'Menghitung 12 * 6 = 72, disimpan ke variabel luas.', ram: { luas: 72 } },
+          { num: 9, type: 'isi', text: '    <span class="text-emerald-400 font-bold">OUTPUT</span>("Luas Persegi = ", luas)', exp: 'Mencetak hasil 72 ke monitor pengguna.', out: 'Luas Persegi = 72' }
+        ],
+        defaultRam: { panjang: '-', lebar: '-', luas: '-' }
+      },
+      2: {
+        title: 'PROGRAM Evaluasi_Nilai_Siswa',
+        desc: '{ Menentukan kelulusan siswa berdasarkan KKM 75 }',
+        codeLines: [
+          { num: 1, type: 'judul', text: '<span class="text-purple-400 font-bold">PROGRAM</span> Evaluasi_Nilai_Siswa', exp: 'Judul program evaluasi kelulusan.' },
+          { num: 2, type: 'deklarasi', text: '<span class="text-purple-400 font-bold">DEKLARASI:</span>', exp: 'Memasuki bagian deklarasi tipe data.' },
+          { num: 3, type: 'deklarasi', text: '    nilai : <span class="text-amber-400 font-bold">integer</span>; status : <span class="text-emerald-400 font-bold">string</span>', exp: 'Alokasi memori variabel nilai (integer) dan status (string).' },
+          { num: 4, type: 'isi', text: '<span class="text-emerald-400 font-bold">ALGORITMA:</span>', exp: 'Memulai pemrosesan logika percabangan.' },
+          { num: 5, type: 'isi', text: '    nilai <span class="text-amber-400 font-bold">&lt;-</span> 82', exp: 'Variabel nilai diisi skor 82.', ram: { nilai: 82 } },
+          { num: 6, type: 'isi', text: '    <span class="text-purple-400 font-bold">IF</span> nilai >= 75 <span class="text-purple-400 font-bold">THEN</span>', exp: 'CPU mengecek kondisi: Apakah 82 >= 75? Jawabannya BENAR (TRUE).' },
+          { num: 7, type: 'isi', text: '        status <span class="text-amber-400 font-bold">&lt;-</span> "LULUS"', exp: 'Karena kondisi IF benar, status diisi "LULUS".', ram: { status: 'LULUS' } },
+          { num: 8, type: 'isi', text: '    <span class="text-purple-400 font-bold">ELSE</span>', exp: 'Bagian ELSE dilewati karena IF sudah terpenuhi.' },
+          { num: 9, type: 'isi', text: '        status <span class="text-amber-400 font-bold">&lt;-</span> "REMEDIAL"', exp: 'Baris ini dilewati (tidak dijalankan).' },
+          { num: 10, type: 'isi', text: '    <span class="text-purple-400 font-bold">ENDIF</span>', exp: 'Blok percabangan IF selesai.' },
+          { num: 11, type: 'isi', text: '    <span class="text-emerald-400 font-bold">OUTPUT</span>("Status Siswa: ", status)', exp: 'Mencetak kata "LULUS" ke layar.', out: 'Status Siswa: LULUS 🎉' }
+        ],
+        defaultRam: { nilai: '-', status: '-' }
+      },
+      3: {
+        title: 'PROGRAM Tukar_Dua_Variabel',
+        desc: '{ Menukar nilai variabel A dan B menggunakan peubah temp }',
+        codeLines: [
+          { num: 1, type: 'judul', text: '<span class="text-purple-400 font-bold">PROGRAM</span> Tukar_Dua_Variabel', exp: 'Algoritma swap nilai (studi kasus LKM).' },
+          { num: 2, type: 'deklarasi', text: '<span class="text-purple-400 font-bold">DEKLARASI:</span>', exp: 'Mendefinisikan 3 variabel penampung.' },
+          { num: 3, type: 'deklarasi', text: '    A, B, temp : <span class="text-amber-400 font-bold">integer</span>', exp: 'Memesan memori A, B, dan peubah sementara temp.' },
+          { num: 4, type: 'isi', text: '<span class="text-emerald-400 font-bold">ALGORITMA:</span>', exp: 'Mulai urutan pertukaran data.' },
+          { num: 5, type: 'isi', text: '    A <span class="text-amber-400 font-bold">&lt;-</span> 10; B <span class="text-amber-400 font-bold">&lt;-</span> 20', exp: 'Nilai awal: A = 10 dan B = 20.', ram: { A: 10, B: 20, temp: '-' } },
+          { num: 6, type: 'isi', text: '    temp <span class="text-amber-400 font-bold">&lt;-</span> A', exp: 'Langkah 1 Swap: Isi A (10) diamankan ke temp.', ram: { temp: 10 } },
+          { num: 7, type: 'isi', text: '    A <span class="text-amber-400 font-bold">&lt;-</span> B', exp: 'Langkah 2 Swap: Nilai B (20) ditimpa ke wadah A. Sekarang A = 20.', ram: { A: 20 } },
+          { num: 8, type: 'isi', text: '    B <span class="text-amber-400 font-bold">&lt;-</span> temp', exp: 'Langkah 3 Swap: Nilai temp (10) dimasukkan ke wadah B. Sekarang B = 10!', ram: { B: 10 } },
+          { num: 9, type: 'isi', text: '    <span class="text-emerald-400 font-bold">OUTPUT</span>("Nilai A: ", A, " | Nilai B: ", B)', exp: 'Pertukaran sukses! Tercetak A=20 dan B=10.', out: 'Hasil Tukar: A = 20 | B = 10 ✨' }
+        ],
+        defaultRam: { A: '-', B: '-', temp: '-' }
+      }
+    };
+
+    let activeRam = {};
+
+    function pilihSkenario(id) {
+      runnerReset();
+      currentSkenarioId = id;
+
+      for (let i = 1; i <= 3; i++) {
+        const btn = document.getElementById('btnSkenario' + i);
+        if (i === id) {
+          btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold transition bg-indigo-600 text-white shadow-sm';
+        } else {
+          btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700';
+        }
+      }
+
+      renderRunnerCode();
+      initRunnerRam();
+    }
+
+    function renderRunnerCode() {
+      const container = document.getElementById('runnerCodeContainer');
+      const sk = skenarioList[currentSkenarioId];
+      if (!container || !sk) return;
+
+      container.innerHTML = '';
+      sk.codeLines.forEach((l, idx) => {
+        let badgeColor = 'bg-slate-800 text-slate-400';
+        if (l.type === 'judul') badgeColor = 'bg-amber-900/40 text-amber-300 border border-amber-800';
+        if (l.type === 'deklarasi') badgeColor = 'bg-purple-900/40 text-purple-300 border border-purple-800';
+        if (l.type === 'isi') badgeColor = 'bg-emerald-900/40 text-emerald-300 border border-emerald-800';
+
+        const row = document.createElement('div');
+        row.id = 'runner-line-' + idx;
+        row.className = 'p-1.5 rounded-lg flex items-center gap-2 transition-all duration-200';
+        row.innerHTML = 
+          '<span class="w-6 text-right text-slate-600 select-none font-bold text-[10px]">' + l.num + '</span>' +
+          '<span class="text-[9px] uppercase px-1 rounded font-bold shrink-0 ' + badgeColor + '">' + l.type.substr(0, 3) + '</span>' +
+          '<div class="flex-1">' + l.text + '</div>';
+        container.appendChild(row);
+      });
+    }
+
+    function initRunnerRam() {
+      const sk = skenarioList[currentSkenarioId];
+      activeRam = { ...sk.defaultRam };
+      renderRamTable();
+      document.getElementById('runnerConsoleOutput').textContent = '> Menunggu program dijalankan...';
+      document.getElementById('runnerExplanationText').textContent = 'Pilih skenario lalu klik "Langkah Berikutnya" untuk mulai.';
+      document.getElementById('runnerCurrentLineBadge').textContent = 'Baris: -';
+      document.getElementById('runnerStatusBadge').textContent = 'Siap';
+      document.getElementById('runnerStatusBadge').className = 'px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold text-[11px]';
+    }
+
+    function renderRamTable() {
+      const container = document.getElementById('runnerRamTable');
+      if (!container) return;
+
+      container.innerHTML = '';
+      for (const k in activeRam) {
+        const div = document.createElement('div');
+        div.className = 'p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs';
+        div.innerHTML = 
+          '<div class="flex items-center gap-2">' +
+            '<span class="w-6 h-6 rounded-lg bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-[10px]">' + k.charAt(0) + '</span>' +
+            '<span class="font-code font-bold text-slate-800">' + k + '</span>' +
+          '</div>' +
+          '<span class="font-code font-black text-indigo-700 text-sm bg-white px-2 py-0.5 rounded border border-slate-200">' + activeRam[k] + '</span>';
+        container.appendChild(div);
+      }
+    }
+
+    function runnerStepForward() {
+      const sk = skenarioList[currentSkenarioId];
+      if (!sk) return;
+
+      if (runnerStep >= sk.codeLines.length) {
+        runnerReset();
+        return;
+      }
+
+      // Clear previous active line
+      document.querySelectorAll('#runnerCodeContainer [id^="runner-line-"]').forEach(el => el.classList.remove('active-code-line'));
+
+      const curr = sk.codeLines[runnerStep];
+      const activeEl = document.getElementById('runner-line-' + runnerStep);
+      if (activeEl) {
+        activeEl.classList.add('active-code-line');
+        activeEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+
+      // Update RAM
+      if (curr.ram) {
+        for (const rk in curr.ram) {
+          activeRam[rk] = curr.ram[rk];
+        }
+        renderRamTable();
+      }
+
+      // Update Console Output
+      if (curr.out) {
+        document.getElementById('runnerConsoleOutput').textContent += '\n' + curr.out;
+      }
+
+      // Explanation
+      document.getElementById('runnerCurrentLineBadge').textContent = 'Baris ' + curr.num;
+      document.getElementById('runnerExplanationText').innerHTML = '<strong>Baris ' + curr.num + ' (' + curr.type.toUpperCase() + '):</strong> ' + curr.exp;
+
+      runnerStep++;
+
+      const btnStep = document.getElementById('btnRunnerStep');
+      const badge = document.getElementById('runnerStatusBadge');
+
+      if (runnerStep >= sk.codeLines.length) {
+        badge.textContent = 'Selesai ✓';
+        badge.className = 'px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[11px]';
+        btnStep.innerHTML = '<span>Ulangi Program ↺</span>';
+        if (runnerAutoTimer) runnerToggleAuto();
+      } else {
+        badge.textContent = 'Berjalan (Step ' + runnerStep + '/' + sk.codeLines.length + ')';
+        badge.className = 'px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-800 font-bold text-[11px]';
+        btnStep.innerHTML = '<span>⏭ Langkah Berikutnya</span>';
+      }
+    }
+
+    function runnerToggleAuto() {
+      const btnAuto = document.getElementById('btnRunnerAuto');
+      if (runnerAutoTimer) {
+        clearInterval(runnerAutoTimer);
+        runnerAutoTimer = null;
+        btnAuto.textContent = '▶ Jalankan Otomatis';
+        btnAuto.className = 'px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 border border-slate-200 font-bold text-xs transition';
+      } else {
+        btnAuto.textContent = '⏸ Jeda (Pause)';
+        btnAuto.className = 'px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs shadow-md transition';
+        runnerAutoTimer = setInterval(() => {
+          const sk = skenarioList[currentSkenarioId];
+          if (runnerStep >= sk.codeLines.length) {
+            runnerToggleAuto();
+          } else {
+            runnerStepForward();
+          }
+        }, 1500);
+      }
+    }
+
+    function runnerReset() {
+      if (runnerAutoTimer) runnerToggleAuto();
+      runnerStep = 0;
+      document.querySelectorAll('#runnerCodeContainer [id^="runner-line-"]').forEach(el => el.classList.remove('active-code-line'));
+      initRunnerRam();
+      const btnStep = document.getElementById('btnRunnerStep');
+      if (btnStep) btnStep.innerHTML = '<span>⏭ Langkah Berikutnya</span>';
+    }
+
+    // ==================== MINI QUIZ VALIDATOR ====================
+    const miniQuizAnswers = {
+      1: { ans: 'B', note: 'Benar! Bagian Deklarasi digunakan untuk memesan variabel dan menetapkan tipe datanya.' },
+      2: { ans: 'B', note: 'Benar! PROGRAM Hitung_Diskon diawali huruf dan tidak memiliki spasi.' },
+      3: { ans: 'A', note: 'Benar! Operator panah (<-) berarti nilai di sebelah kanan (A) disimpan ke dalam wadah sebelah kiri (temp).' }
+    };
+
+    function checkMiniQuiz(qId, choice, btnEl) {
+      const parent = btnEl.parentElement;
+      parent.querySelectorAll('.quiz-opt-btn').forEach(b => {
+        b.className = 'quiz-opt-btn w-full p-2 text-left rounded-xl border border-slate-200 font-medium transition';
+      });
+
+      const info = miniQuizAnswers[qId];
+      const feedbackEl = document.getElementById('quizFeedback' + qId);
+
+      if (choice === info.ans) {
+        btnEl.className = 'quiz-opt-btn w-full p-2 text-left rounded-xl border border-emerald-500 bg-emerald-50 text-emerald-900 font-bold';
+        feedbackEl.className = 'text-[11px] font-bold text-emerald-700 block';
+        feedbackEl.textContent = '✓ ' + info.note;
+      } else {
+        btnEl.className = 'quiz-opt-btn w-full p-2 text-left rounded-xl border border-rose-500 bg-rose-50 text-rose-900 font-bold';
+        feedbackEl.className = 'text-[11px] font-bold text-rose-700 block';
+        feedbackEl.textContent = '✕ Belum tepat. Silakan coba lagi!';
+      }
+    }
+
+    // Initial setups
+    window.addEventListener('DOMContentLoaded', () => {
+      updateJudulValidation();
+      renderMemorySlots();
+      pilihSkenario(1);
+    });
+  </script>
+
+</body>
+</html>

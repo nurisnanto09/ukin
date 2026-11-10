@@ -1,0 +1,2194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Pseudocode - Patbhe Green</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="shared.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: transparent; }
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+        
+        /* Line styling in editor */
+        .code-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            transition: all 0.25s ease-in-out;
+            border: 1px solid transparent;
+        }
+        .code-row.active-code {
+            background-color: #1e3a8a !important; /* Blue active */
+            border-color: #60a5fa !important;
+            box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.4), 0 4px 12px rgba(30, 58, 138, 0.5);
+        }
+        .code-row.active-success {
+            background-color: #064e3b !important; /* Emerald active */
+            border-color: #34d399 !important;
+            box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.4), 0 4px 12px rgba(6, 78, 59, 0.5);
+        }
+        .code-row.active-amber {
+            background-color: #78350f !important; /* Amber active */
+            border-color: #fbbf24 !important;
+            box-shadow: 0 0 0 2px rgba(251, 191, 36, 0.4), 0 4px 12px rgba(120, 53, 15, 0.5);
+        }
+        .code-row.active-code input,
+        .code-row.active-success input,
+        .code-row.active-amber input {
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+        .code-row.row-error,
+        #box-prog-header.row-error,
+        #box-prog-decl.row-error {
+            border-color: #ef4444 !important;
+            background-color: #450a0a !important;
+            box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.4), 0 4px 12px rgba(239, 68, 68, 0.3) !important;
+            animation: shake 0.35s ease-in-out;
+        }
+        .code-row.row-error input,
+        #box-prog-header.row-error input,
+        #box-prog-decl.row-error input {
+            color: #fca5a5 !important;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-4px); }
+            40%, 80% { transform: translateX(4px); }
+        }
+    </style>
+</head>
+<body class="p-3 sm:p-5 font-sans h-full bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- Top Navigation Bar -->
+    <div class="max-w-5xl mx-auto mb-4 bg-white/95 backdrop-blur-md rounded-2xl p-3 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-2">
+            <a href="index.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-black transition border border-purple-200">
+                <span>&larr;</span>
+                <span>Portal Siswa</span>
+            </a>
+            <span class="text-xs font-bold text-slate-300">|</span>
+            <span class="text-xs font-extrabold text-slate-800 flex items-center gap-1.5">
+                <span>💻</span>
+                <span>Simulasi Interaktif: Tulis &amp; Jalankan Pseudocode Mandiri</span>
+            </span>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="lkpd_pseudocode.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition border border-emerald-200">
+                <span>📖</span>
+                <span>Buka LKPD</span>
+            </a>
+            <a href="admin.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition border border-slate-200">
+                <span>🔒</span>
+                <span>Laman Guru</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- BAR PENGIRIMAN KELOMPOK KE GURU & GAS (HASIL LKPD CETAK) -->
+    <!-- ======================================================== -->
+    <div class="max-w-5xl mx-auto mb-3 p-3.5 sm:p-4 bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 rounded-2xl border-2 border-emerald-500/80 shadow-md text-white flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+            <span class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl shadow-inner shrink-0">🚀</span>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-black uppercase tracking-wider bg-emerald-500/30 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30">Pengiriman Kelompok 1 - 9</span>
+                    <span class="text-[11px] text-slate-300 font-medium hidden sm:inline">Ketikkan hasil dari LKPD Cetak lalu kirim ke Guru</span>
+                </div>
+                <div class="text-xs sm:text-sm font-extrabold text-white mt-0.5">
+                    Kirim Rancangan Pseudocode ke Guru (Google Sheets &amp; Proyektor Kelas)
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 justify-end">
+            <select id="studentGroupSelect" class="bg-slate-900 border border-emerald-500 text-emerald-200 font-bold text-xs rounded-xl px-3 py-2 focus:outline-none cursor-pointer">
+                <option value="1">Kelompok 1</option>
+                <option value="2">Kelompok 2</option>
+                <option value="3">Kelompok 3</option>
+                <option value="4">Kelompok 4</option>
+                <option value="5">Kelompok 5</option>
+                <option value="6">Kelompok 6</option>
+                <option value="7">Kelompok 7</option>
+                <option value="8">Kelompok 8</option>
+                <option value="9">Kelompok 9</option>
+            </select>
+            <input id="studentGroupMembersInput" type="text" placeholder="Nama Anggota (Contoh: Aditya, Bagas, Cantika)" class="bg-slate-900 border border-slate-700 focus:border-emerald-500 text-slate-100 text-xs rounded-xl px-3 py-2 focus:outline-none min-w-[210px]">
+            <button type="button" onclick="kirimRancanganKelompokKeGuru()" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 active:bg-emerald-600 text-slate-950 font-black text-xs transition flex items-center gap-1.5 shadow-md cursor-pointer hover:scale-102">
+                <span>🚀</span>
+                <span>Kirim ke Guru (GAS)</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Bar Panggil Kode Murid (Laman Guru Mode) -->
+    <div class="max-w-5xl mx-auto mb-4 bg-indigo-950 p-3 sm:p-4 rounded-2xl border-2 border-indigo-700 shadow-md flex flex-wrap items-center justify-between gap-3 text-white">
+        <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-indigo-800 text-indigo-200 flex items-center justify-center text-lg shadow-inner">👨‍🏫</span>
+            <div>
+                <div class="text-[10px] font-bold text-indigo-300 uppercase tracking-wider">Mode Pengujian Guru (Live Simulator)</div>
+                <div class="text-xs sm:text-sm font-extrabold text-white">Panggil Isi Rancangan yang Dikirim oleh Kelompok (1 - 9):</div>
+            </div>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 flex-1 max-w-lg justify-end">
+            <select id="select-murid-submission" onchange="loadGroupSubmissionToSimulator(this.value)" class="bg-indigo-900 border border-indigo-600 text-indigo-100 font-bold text-xs rounded-xl px-3 py-2 focus:outline-none flex-1 min-w-[220px]">
+                <option value="">-- Pilih Kelompok untuk Memuat Kodenya --</option>
+            </select>
+            <button type="button" onclick="populateGroupDropdown(true)" class="px-3 py-2 rounded-xl bg-indigo-800 hover:bg-indigo-700 active:bg-indigo-900 text-white font-bold text-xs transition flex items-center gap-1 shadow-xs cursor-pointer" title="Perbarui daftar kiriman kelompok">
+                <span>🔄</span>
+                <span>Muat Ulang</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col lg:flex-row min-h-[560px]">
+        
+        <!-- Left Column: Code Editor & Console Screen -->
+        <div class="lg:w-7/12 bg-slate-900 p-5 sm:p-7 flex flex-col justify-between text-white border-b lg:border-b-0 lg:border-r border-slate-800">
+            <div>
+                <!-- Header Editor -->
+                <div class="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-slate-800">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-amber-500"></span>
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            <span class="text-xs font-mono font-bold text-slate-300 ml-1">editor_pseudocode.psc</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mt-1">
+                            ✍️ Tulis struktur pseudocode lengkap (Judul, Deklarasi, &amp; Algoritma):
+                        </p>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                        <button type="button" onclick="checkProgramComplianceManual()" class="px-2.5 py-1 rounded-lg bg-indigo-700/80 hover:bg-indigo-600 text-white text-xs font-bold border border-indigo-500/50 transition flex items-center gap-1 shadow-xs" title="Periksa apakah program sesuai dengan studi kasus Patbhe Green">
+                            <span>🔍</span>
+                            <span>Cek Kesesuaian</span>
+                        </button>
+                        <button type="button" onclick="loadTemplateLKPD()" class="px-2.5 py-1 rounded-lg bg-emerald-700/80 hover:bg-emerald-600 text-white text-xs font-bold border border-emerald-500/50 transition flex items-center gap-1 shadow-xs" title="Muat contoh kode rancangan LKPD">
+                            <span>💡</span>
+                            <span>Contoh LKPD</span>
+                        </button>
+                        <button type="button" onclick="resetExecution(true)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-amber-200 text-xs font-bold border border-slate-700 transition flex items-center gap-1 shadow-xs cursor-pointer" title="Reset eksekusi program ke kondisi awal">
+                            <span>🔄</span>
+                            <span>Reset Eksekusi</span>
+                        </button>
+                        <button type="button" onclick="clearCodeInputs()" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold border border-slate-700 transition flex items-center gap-1" title="Kosongkan semua baris agar bisa menulis dari awal">
+                            <span>🗑️</span>
+                            <span>Kosongkan</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kartu Studi Kasus Kontekstual Patbhe Green -->
+                <div class="mb-3.5 p-3.5 bg-gradient-to-r from-emerald-950/90 via-slate-950 to-slate-950 border border-emerald-500/40 rounded-xl space-y-2">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-1.5 text-emerald-400 font-extrabold text-xs">
+                            <span class="text-sm">🏆</span>
+                            <span>STUDI KASUS: OTOMATISASI PERANKINGAN KELAS PATBHE GREEN</span>
+                        </div>
+                        <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                            Kasus LKPD Aktivitas 3
+                        </span>
+                    </div>
+                    <div class="text-[11px] text-slate-300 leading-relaxed font-sans space-y-1">
+                        <p>
+                            Dalam program <b>Sekolah Adiwiyata Mandiri di SMA Negeri 4 Yogyakarta</b>, panitia <i>Patbhe Green</i> menyelenggarakan kompetisi kebersihan dan pengumpulan sampah daur ulang antarkelas setiap bulannya. Untuk mengatasi rekap manual yang lambat dan rawan keliru, panitia membutuhkan program komputer otomatis:
+                        </p>
+                        <div class="p-2 bg-slate-900/90 rounded-lg border border-emerald-500/30 text-emerald-200 text-[10.5px]">
+                            💡 <b>Aturan Percabangan:</b> Masukkan <code>nilai</code> terkini dan <code>nilai_sebelumnya</code>. <b>Jika nilai sekarang lebih besar dari nilai sebelumnya (<code>nilai &gt; nilai_sebelumnya</code>), maka peringkat kelas naik (<code>"Peringkat Lebih Tinggi 🏆"</code>)</b>. Jika tidak, cetak: <code>"Peringkat Tetap / Turun ⬇️"</code>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bagian 1: Judul / Nama Program -->
+                <div id="box-prog-header" class="mb-2.5 p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-2 font-mono text-xs transition-all duration-300">
+                    <div class="flex items-center justify-between text-[10px] uppercase font-sans font-extrabold text-blue-400">
+                        <span>1. Bagian Judul (Nama Program)</span>
+                        <span class="text-slate-500 font-normal">Format: Tanpa Spasi</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-blue-400 font-bold select-none shrink-0 text-xs">PROGRAM</span>
+                        <input type="text" id="prog-name" class="w-full bg-slate-900 text-blue-300 font-mono text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-blue-400 font-bold placeholder:text-slate-600 transition" placeholder="Nama Program (tanpa spasi)" autocomplete="off" spellcheck="false">
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-500 font-bold select-none shrink-0 text-xs">{ Ket }</span>
+                        <input type="text" id="prog-desc" class="w-full bg-slate-900 text-slate-400 font-mono text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-slate-500 italic placeholder:text-slate-600 transition" placeholder="{ Penjelasan fungsi program }" autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+
+                <!-- Bagian 2: Deklarasi -->
+                <div id="box-prog-decl" class="mb-2.5 p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-2 font-mono text-xs transition-all duration-300">
+                    <div class="flex items-center justify-between text-[10px] uppercase font-sans font-extrabold text-amber-400">
+                        <span>2. Bagian Deklarasi (Kamus Variabel)</span>
+                        <span class="text-slate-500 font-normal">Variabel : Tipe Data</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-amber-400 font-bold select-none shrink-0 text-xs">DEKLARASI:</span>
+                        <input type="text" id="prog-decl" class="w-full bg-slate-900 text-emerald-300 font-mono text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-amber-400 font-bold placeholder:text-slate-600 transition" placeholder="nama_variabel : tipe_data" autocomplete="off" spellcheck="false">
+                    </div>
+                </div>
+
+                <!-- Bagian 3: Baris Algoritma Dinamis (Siswa Menentukan Sendiri Jumlah Baris) -->
+                <div class="space-y-2.5 bg-slate-950 p-3 sm:p-4 rounded-2xl border border-slate-800/80 shadow-inner font-mono text-xs sm:text-sm">
+                    <div class="flex flex-wrap items-center justify-between gap-1 text-[10px] uppercase font-sans font-extrabold text-emerald-400 pb-1.5 border-b border-slate-800">
+                        <span class="flex items-center gap-1.5">
+                            <span>⚙️</span>
+                            <span>3. Bagian Algoritma</span>
+                            <span id="line-count-badge" class="normal-case font-bold px-2 py-0.5 rounded-full bg-slate-800 text-emerald-300 text-[9.5px]">6 Baris</span>
+                        </span>
+                        <span class="text-slate-400 font-normal normal-case">Tentukan sendiri jumlah baris yang kalian butuhkan</span>
+                    </div>
+
+                    <!-- Dynamic Code Rows Container -->
+                    <div id="container-code-rows" class="space-y-2">
+                        <!-- Rendered dynamically by JavaScript renderCodeRows() -->
+                    </div>
+
+                    <!-- Tombol Opsi Tambah / Hapus Baris Algoritma -->
+                    <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80 font-sans">
+                        <span class="text-[11px] text-slate-400 font-medium">Bebas tambah atau kurangi baris:</span>
+                        <div class="flex items-center gap-1.5">
+                            <button type="button" onclick="tambahBaris()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-bold text-xs flex items-center gap-1.5 transition shadow-xs cursor-pointer">
+                                <span>➕</span> <span>Tambah Baris</span>
+                            </button>
+                            <button type="button" onclick="hapusBarisTerakhir()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-slate-900 text-slate-300 font-bold text-xs flex items-center gap-1.5 border border-slate-700 transition cursor-pointer">
+                                <span>➖</span> <span>Hapus Baris</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifikasi Kesesuaian Program dengan Soal LKPD -->
+            <div id="program-compliance-notif" class="mt-4 transition-all duration-300 hidden"></div>
+
+            <!-- Console Monitor Output -->
+            <div class="mt-5 p-4 bg-slate-950 rounded-2xl border border-slate-800 shadow-inner">
+                <div class="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                    <span class="flex items-center gap-1.5">
+                        <i class="fas fa-terminal text-emerald-400"></i>
+                        <span>OUTPUT MONITOR KOMPUTER:</span>
+                    </span>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="resetExecution(true)" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-amber-300 hover:text-amber-200 text-[11px] font-bold border border-slate-700 transition flex items-center gap-1 cursor-pointer shadow-2xs" title="Reset monitor dan eksekusi program">
+                            <span>🔄</span>
+                            <span>Reset Eksekusi</span>
+                        </button>
+                        <span id="output-indicator" class="w-2.5 h-2.5 rounded-full bg-slate-600"></span>
+                    </div>
+                </div>
+                <div id="output-console" class="text-base sm:text-xl font-black text-emerald-400 font-mono min-h-[2.5rem] flex items-center justify-center text-center">
+                    - Menunggu Eksekusi -
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Test Input, Trace Explanations & Controls -->
+        <div class="lg:w-5/12 p-6 sm:p-7 flex flex-col justify-between bg-slate-50 space-y-5">
+            
+            <div class="space-y-4">
+                
+                <!-- Input Nilai Uji Siswa (2 Nilai: Nilai Terkini vs Nilai Sebelumnya) -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-2xs space-y-2.5">
+                    <div class="flex items-center justify-between">
+                        <label class="block text-xs font-black text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+                            <span>🧪</span>
+                            <span>Uji Nilai Masukan (Input Data):</span>
+                        </label>
+                        <span class="text-[10px] font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Perbandingan 2 Nilai</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="space-y-1">
+                            <span class="text-[10.5px] font-bold text-slate-600 block">Nilai Sekarang (<code>nilai</code>):</span>
+                            <div class="relative">
+                                <input type="number" id="testInputVal" value="120" min="0" max="9999" class="w-full px-3 py-1.5 bg-slate-50 border-2 border-emerald-400 rounded-xl text-emerald-950 font-black text-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 font-mono">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <span class="text-[10.5px] font-bold text-slate-600 block">Nilai Sebelumnya:</span>
+                            <div class="relative">
+                                <input type="number" id="testInputPrevVal" value="95" min="0" max="9999" class="w-full px-3 py-1.5 bg-slate-50 border-2 border-indigo-400 rounded-xl text-indigo-950 font-black text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 font-mono">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shortcut Preset Nilai Uji Sesuai LKPD -->
+                    <div class="flex flex-wrap items-center gap-1.5 pt-1 text-xs border-t border-slate-100">
+                        <span class="text-slate-400 text-[11px] font-bold">Preset LKPD:</span>
+                        <button type="button" onclick="setPresetValues(120, 95)" class="px-2.5 py-1 rounded-lg font-bold transition bg-emerald-100 hover:bg-emerald-200 text-emerald-800 border border-emerald-300 text-[11px]">
+                            Uji A: 120 vs 95 (Naik 🏆)
+                        </button>
+                        <button type="button" onclick="setPresetValues(80, 90)" class="px-2.5 py-1 rounded-lg font-bold transition bg-amber-100 hover:bg-amber-200 text-amber-800 border border-amber-300 text-[11px]">
+                            Uji B: 80 vs 90 (Turun ⬇️)
+                        </button>
+                        <button type="button" onclick="setPresetValues(100, 100)" class="px-2.5 py-1 rounded-lg font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 text-[11px]">
+                            100 vs 100 (Sama)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Box Status Eksekusi CPU / Tracing -->
+                <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs min-h-[10.5rem] flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-extrabold text-slate-900 text-xs sm:text-sm mb-2 uppercase tracking-wider flex items-center gap-1.5">
+                            <i class="fas fa-microchip text-indigo-600"></i>
+                            <span>Status Eksekusi CPU</span>
+                        </h3>
+                        <div id="status-text" class="text-slate-700 text-xs sm:text-sm font-medium leading-relaxed">
+                            Tuliskan 6 baris pseudocode kalian di sebelah kiri, lalu klik tombol <b class="text-emerald-700">▶️ Jalankan Program</b> di bawah untuk langsung mengeksekusi semuanya, atau tombol <b class="text-indigo-700">🔍 Penjelasan Per Langkah</b> untuk menelusuri penjelasan alurnya langkah demi langkah!
+                        </div>
+                    </div>
+
+                    <div id="trace-step-badge" class="mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 w-fit">
+                        <span>Langkah: 0 / 6</span>
+                    </div>
+                </div>
+
+                <!-- Panduan Notasi Baku Pseudocode -->
+                <div class="bg-slate-100 p-3.5 rounded-2xl border border-slate-200 text-[11px] text-slate-700 space-y-1.5">
+                    <div class="font-black text-slate-900 flex items-center gap-1.5 mb-1">
+                        <span>💡</span>
+                        <span>Format Standar 3 Bagian Pseudocode:</span>
+                    </div>
+                    <div>• <b>1. Judul:</b> <code>PROGRAM nama_program</code> (tanpa spasi)</div>
+                    <div>• <b>2. Deklarasi:</b> <code>nama_variabel : tipe_data</code></div>
+                    <div>• <b>3. Algoritma:</b> Blok instruksi utama menggunakan kata kunci baku (INPUT, IF-THEN, ELSE, OUTPUT, END IF).</div>
+                    <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-200">
+                        * Atur kerapian baris aksi yang menjorok secara mandiri menggunakan spasi atau tombol <kbd class="px-1 py-0.5 bg-white border border-slate-300 rounded text-[9px] font-mono">Tab</kbd>.
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col gap-2 pt-3 border-t border-slate-200">
+                <!-- 1. Tombol Utama: Jalankan Program & Reset Eksekusi Berdampingan -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="runFullProgramInstant()" id="btn-run-instant" class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-black py-3 px-3 rounded-xl shadow-md text-xs sm:text-sm transition hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer">
+                        <span class="text-base sm:text-lg">▶️</span>
+                        <span>Jalankan Program</span>
+                    </button>
+                    <button onclick="resetExecution(true)" id="btn-reset-exec" type="button" class="w-full bg-slate-800 hover:bg-slate-900 active:bg-black text-amber-300 hover:text-amber-200 font-black py-3 px-3 rounded-xl border border-slate-700 text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+                        <span class="text-base">🔄</span>
+                        <span>Reset Eksekusi</span>
+                    </button>
+                </div>
+
+                <!-- 2. Tombol Penjelasan Per Langkah & Animasi Otomatis -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    <button onclick="runLineStep()" id="btn-run-step" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2.5 px-3 rounded-xl shadow-xs text-xs sm:text-sm transition hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-1.5 cursor-pointer">
+                        <span>🔍</span>
+                        <span>Penjelasan Per Langkah</span>
+                        <span>&rarr;</span>
+                    </button>
+                    <button onclick="autoRunSimulation()" id="btn-autorun" class="w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-2.5 px-3 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-1.5 shadow-xs cursor-pointer">
+                        <span>⚡</span>
+                        <span>Animasi Otomatis</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- MODAL POP-UP NOTIFIKASI KESESUAIAN PROGRAM               -->
+    <!-- ======================================================== -->
+    <div id="compliance-modal-overlay" class="fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden opacity-0 transition-opacity duration-200" onclick="handleModalBackdropClick(event)">
+        <div id="compliance-modal-card" class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-200 overflow-hidden transform scale-95 transition-transform duration-200 flex flex-col max-h-[92vh]" onclick="event.stopPropagation()">
+            <!-- Konten Pop-up Dinamis -->
+            <div id="compliance-modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const statusText = document.getElementById('status-text');
+        const outputConsole = document.getElementById('output-console');
+        const outputIndicator = document.getElementById('output-indicator');
+        const stepBadge = document.getElementById('trace-step-badge');
+        const btnRunStep = document.getElementById('btn-run-step');
+        const btnRunInstant = document.getElementById('btn-run-instant');
+
+        let currentStep = 0;
+        let autoTimer = null;
+        let executionPlan = [];
+
+        // Template LKPD standard reference
+        const TEMPLATE_LKPD = [
+            'INPUT nilai, nilai_sebelumnya',
+            'IF nilai > nilai_sebelumnya THEN',
+            '  OUTPUT "Peringkat Lebih Tinggi 🏆"',
+            'ELSE',
+            '  OUTPUT "Peringkat Tetap / Turun ⬇️"',
+            'END IF'
+        ];
+
+        let currentLines = ['', '', '', '', '', ''];
+
+        const KEYWORDS = new Set([
+            'input', 'read', 'masukkan', 'baca',
+            'output', 'print', 'cetak', 'tampilkan', 'write', 'echo',
+            'if', 'jika', 'then', 'maka',
+            'else', 'selain', 'itu', 'lainnya',
+            'end', 'endif', 'selesai',
+            'program', 'deklarasi', 'algoritma',
+            'and', 'or', 'not', 'dan', 'atau',
+            'true', 'false', 'benar', 'salah',
+            'integer', 'real', 'string', 'boolean', 'char'
+        ]);
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // ==========================================
+        // DYNAMIC LINES RENDERER & MANAGEMENT
+        // ==========================================
+        function renderCodeRows(linesArray) {
+            if (!Array.isArray(linesArray) || linesArray.length === 0) {
+                linesArray = [''];
+            }
+            currentLines = linesArray;
+            const container = document.getElementById('container-code-rows');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const badge = document.getElementById('line-count-badge');
+            if (badge) badge.innerText = `${linesArray.length} Baris`;
+
+            linesArray.forEach((val, idx) => {
+                const lineNum = idx + 1;
+                const row = document.createElement('div');
+                row.id = 'row-line-' + lineNum;
+
+                // Indentasi dan kerapian diatur 100% mandiri oleh murid (tanpa paksaan auto-indent dari sistem)
+                row.className = 'code-row flex items-center gap-2 group transition-all duration-200';
+
+                const trimmed = (val || '').trim();
+                const isSuccessBranch = (idx === 2 || /tinggi|juara|naik/i.test(trimmed));
+
+                let textColor = 'text-slate-100';
+                if (/^(input|read|masukkan|baca)\b/i.test(trimmed)) textColor = 'text-yellow-300 font-bold';
+                else if (/^(if|jika)\b/i.test(trimmed)) textColor = 'text-indigo-300 font-bold';
+                else if (/^(else|selain)\b/i.test(trimmed)) textColor = 'text-amber-300 font-bold';
+                else if (/^(output|print|cetak|tampilkan)\b/i.test(trimmed)) textColor = isSuccessBranch ? 'text-emerald-300 font-bold' : 'text-amber-300 font-bold';
+                else if (/^(end\s*if|endif|selesai)\b/i.test(trimmed)) textColor = 'text-pink-300 font-bold';
+
+                row.innerHTML = `
+                    <span class="w-6 text-slate-500 text-xs text-right select-none font-bold shrink-0">${lineNum}:</span>
+                    <input type="text" id="line-${lineNum}" data-line-index="${idx}"
+                        class="w-full bg-slate-900/90 ${textColor} font-mono text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 placeholder:text-slate-600 transition"
+                        value="${escapeHtml(val)}" placeholder="" autocomplete="off" spellcheck="false">
+                    <button type="button" onclick="hapusBarisIndex(${idx})" class="opacity-0 group-hover:opacity-100 text-slate-500 hover:text-red-400 px-1.5 py-1 text-xs transition cursor-pointer" title="Hapus baris ini">✕</button>
+                `;
+
+                container.appendChild(row);
+            });
+
+            // Attach event listeners
+            linesArray.forEach((_, idx) => {
+                const lineNum = idx + 1;
+                const input = document.getElementById('line-' + lineNum);
+                if (input) {
+                    input.addEventListener('input', (e) => {
+                        currentLines[idx] = e.target.value;
+                        saveCodeToStorage();
+                        clearErrorState();
+
+                        // Dynamic syntax color
+                        const trimmedVal = e.target.value.trim();
+                        let colorClass = 'text-slate-100';
+                        if (/^(input|read|masukkan|baca)\b/i.test(trimmedVal)) colorClass = 'text-yellow-300 font-bold';
+                        else if (/^(if|jika)\b/i.test(trimmedVal)) colorClass = 'text-indigo-300 font-bold';
+                        else if (/^(else|selain)\b/i.test(trimmedVal)) colorClass = 'text-amber-300 font-bold';
+                        else if (/^(output|print|cetak|tampilkan)\b/i.test(trimmedVal)) {
+                            colorClass = (idx === 2 || /tinggi|juara|naik/i.test(trimmedVal)) ? 'text-emerald-300 font-bold' : 'text-amber-300 font-bold';
+                        } else if (/^(end\s*if|endif|selesai)\b/i.test(trimmedVal)) colorClass = 'text-pink-300 font-bold';
+
+                        input.className = `w-full bg-slate-900/90 ${colorClass} font-mono text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400 placeholder:text-slate-600 transition`;
+                    });
+
+                    // Dukungan tombol Tab untuk membuat indentasi (2 spasi) manual oleh murid
+                    input.addEventListener('keydown', (e) => {
+                        if (e.key === 'Tab') {
+                            e.preventDefault();
+                            const start = input.selectionStart;
+                            const end = input.selectionEnd;
+                            input.value = input.value.substring(0, start) + '  ' + input.value.substring(end);
+                            input.selectionStart = input.selectionEnd = start + 2;
+                            currentLines[idx] = input.value;
+                            saveCodeToStorage();
+                        } else if (e.key === 'Enter') {
+                            e.preventDefault();
+                            if (idx === currentLines.length - 1) {
+                                tambahBaris();
+                            } else {
+                                const next = document.getElementById('line-' + (lineNum + 1));
+                                if (next) next.focus();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function tambahBaris() {
+            clearErrorState();
+            currentLines.push('');
+            saveCodeToStorage();
+            renderCodeRows(currentLines);
+            resetExecution();
+            const newInp = document.getElementById('line-' + currentLines.length);
+            if (newInp) newInp.focus();
+        }
+
+        function hapusBarisTerakhir() {
+            if (currentLines.length > 1) {
+                clearErrorState();
+                currentLines.pop();
+                saveCodeToStorage();
+                renderCodeRows(currentLines);
+                resetExecution();
+            }
+        }
+
+        function hapusBarisIndex(idx) {
+            if (currentLines.length > 1) {
+                clearErrorState();
+                currentLines.splice(idx, 1);
+                saveCodeToStorage();
+                renderCodeRows(currentLines);
+                resetExecution();
+            }
+        }
+
+        function getLines() {
+            const inputs = document.querySelectorAll('#container-code-rows input[id^="line-"]');
+            const lines = [];
+            inputs.forEach(inp => {
+                lines.push(inp.value);
+            });
+            return lines;
+        }
+
+        // Attach listeners to static inputs
+        ['prog-name', 'prog-desc', 'prog-decl'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', () => {
+                    saveCodeToStorage();
+                    clearErrorState();
+                });
+            }
+        });
+
+        const testInputEl = document.getElementById('testInputVal');
+        if (testInputEl) {
+            testInputEl.addEventListener('input', () => {
+                resetExecution();
+            });
+        }
+        const testInputPrevEl = document.getElementById('testInputPrevVal');
+        if (testInputPrevEl) {
+            testInputPrevEl.addEventListener('input', () => {
+                resetExecution();
+            });
+        }
+
+        // Load / Save from LocalStorage
+        function saveCodeToStorage() {
+            const progData = {
+                name: document.getElementById('prog-name')?.value || '',
+                desc: document.getElementById('prog-desc')?.value || '',
+                decl: document.getElementById('prog-decl')?.value || '',
+                lines: getLines()
+            };
+            try {
+                localStorage.setItem('student_simulasi_data', JSON.stringify(progData));
+            } catch (e) {}
+        }
+
+        function loadSavedCode() {
+            try {
+                const saved = localStorage.getItem('student_simulasi_data');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data.name && document.getElementById('prog-name')) document.getElementById('prog-name').value = data.name;
+                    if (data.desc && document.getElementById('prog-desc')) document.getElementById('prog-desc').value = data.desc;
+                    if (data.decl && document.getElementById('prog-decl')) document.getElementById('prog-decl').value = data.decl;
+                    if (Array.isArray(data.lines) && data.lines.length > 0) {
+                        renderCodeRows(data.lines);
+                        return;
+                    }
+                }
+            } catch (e) {}
+            renderCodeRows(['', '', '', '', '', '']);
+        }
+
+        function loadTemplateLKPD() {
+            clearErrorState();
+            if (document.getElementById('prog-name')) document.getElementById('prog-name').value = 'Tentukan_Peringkat_Kelas';
+            if (document.getElementById('prog-desc')) document.getElementById('prog-desc').value = '{ Program menentukan kenaikan peringkat kelas jika nilai lebih besar dari nilai sebelumnya }';
+            if (document.getElementById('prog-decl')) document.getElementById('prog-decl').value = 'nilai, nilai_sebelumnya : integer';
+
+            currentLines = TEMPLATE_LKPD.slice();
+            saveCodeToStorage();
+            renderCodeRows(currentLines);
+            resetExecution();
+            checkProgramComplianceManual();
+        }
+
+        function clearCodeInputs() {
+            clearErrorState();
+            if (document.getElementById('prog-name')) document.getElementById('prog-name').value = '';
+            if (document.getElementById('prog-desc')) document.getElementById('prog-desc').value = '';
+            if (document.getElementById('prog-decl')) document.getElementById('prog-decl').value = '';
+
+            currentLines = ['', '', '', '', '', ''];
+            saveCodeToStorage();
+            renderCodeRows(currentLines);
+            resetExecution();
+            displayProgramComplianceNotif(null);
+            statusText.innerHTML = "🗑️ <b>Semua baris dikosongkan.</b> Silakan tentukan sendiri jumlah baris dan tulis pseudocode kalian!";
+            document.getElementById('prog-name')?.focus();
+        }
+
+        function setPresetValues(curVal, prevVal) {
+            if (document.getElementById('testInputVal')) document.getElementById('testInputVal').value = curVal;
+            if (document.getElementById('testInputPrevVal')) document.getElementById('testInputPrevVal').value = prevVal;
+            resetExecution();
+            statusText.innerHTML = `Nilai masukan diatur: <code>nilai = ${curVal}</code> dan <code>nilai_sebelumnya = ${prevVal}</code>. Klik <b>▶️ Jalankan Program</b> untuk langsung melihat hasilnya, atau <b>🔍 Penjelasan Per Langkah</b> untuk melihat alurnya langkah demi langkah!`;
+        }
+
+        function setPresetVal(val) {
+            setPresetValues(val, 95);
+        }
+
+        function resetHighlight() {
+            const boxHeader = document.getElementById('box-prog-header');
+            const boxDecl = document.getElementById('box-prog-decl');
+            if (boxHeader) boxHeader.className = "mb-2.5 p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-2 font-mono text-xs transition-all duration-300";
+            if (boxDecl) boxDecl.className = "mb-2.5 p-3 bg-slate-950/80 rounded-xl border border-slate-800 space-y-2 font-mono text-xs transition-all duration-300";
+
+            const rows = document.querySelectorAll('#container-code-rows .code-row');
+            rows.forEach(r => {
+                r.classList.remove('active-code', 'active-success', 'active-amber', 'row-error');
+            });
+        }
+
+        function resetExecution(userTriggered = false) {
+            closeComplianceModal();
+            if (autoTimer) clearTimeout(autoTimer);
+            autoTimer = null;
+            currentStep = 0;
+            executionPlan = [];
+            resetHighlight();
+            clearErrorState();
+            outputConsole.innerText = "- Menunggu Eksekusi -";
+            outputConsole.className = "text-base sm:text-xl font-black text-slate-500 font-mono min-h-[2.5rem] flex items-center justify-center text-center";
+            outputIndicator.className = "w-2.5 h-2.5 rounded-full bg-slate-600";
+            stepBadge.innerText = "Langkah: 0 / " + (getLines().length || 6);
+            stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 w-fit";
+
+            if (btnRunInstant) {
+                btnRunInstant.innerHTML = "<span class='text-base sm:text-lg'>▶️</span><span>Jalankan Program</span>";
+                btnRunInstant.className = "w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-black py-3 px-3 rounded-xl shadow-md text-xs sm:text-sm transition hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer";
+            }
+            if (btnRunStep) {
+                btnRunStep.innerHTML = "<span>🔍</span><span>Penjelasan Per Langkah</span><span>&rarr;</span>";
+                btnRunStep.className = "w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2.5 px-3 rounded-xl shadow-xs text-xs sm:text-sm transition hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-1.5 cursor-pointer";
+            }
+
+            if (userTriggered) {
+                // Kosongkan seluruh isian baris kode & header program
+                if (document.getElementById('prog-name')) document.getElementById('prog-name').value = '';
+                if (document.getElementById('prog-desc')) document.getElementById('prog-desc').value = '';
+                if (document.getElementById('prog-decl')) document.getElementById('prog-decl').value = '';
+
+                currentLines = ['', '', '', '', '', ''];
+                try {
+                    localStorage.removeItem('student_simulasi_data');
+                } catch (e) {}
+
+                renderCodeRows(currentLines);
+                displayProgramComplianceNotif(null);
+
+                const selMurid = document.getElementById('select-murid-submission');
+                if (selMurid) selMurid.value = '';
+
+                statusText.innerHTML = "🔄 <b>Eksekusi & Seluruh Baris Berhasil Direset!</b> Semua isian kode dan layar monitor telah dikosongkan bersih ke kondisi awal. Silakan tulis pseudocode baru atau panggil kode kelompok lain.";
+            }
+        }
+
+        function clearErrorState() {
+            const boxHeader = document.getElementById('box-prog-header');
+            const boxDecl = document.getElementById('box-prog-decl');
+            if (boxHeader) boxHeader.classList.remove('row-error');
+            if (boxDecl) boxDecl.classList.remove('row-error');
+
+            const rows = document.querySelectorAll('#container-code-rows .code-row');
+            rows.forEach(r => r.classList.remove('row-error'));
+
+            if (btnRunInstant && btnRunInstant.innerText.includes('Perbaiki')) {
+                btnRunInstant.innerHTML = "<span class='text-base sm:text-lg'>▶️</span><span>Jalankan Program</span>";
+                btnRunInstant.className = "w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-black py-3 px-3 rounded-xl shadow-md text-xs sm:text-sm transition hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer";
+            }
+            if (btnRunStep && btnRunStep.innerText.includes('Error')) {
+                btnRunStep.innerHTML = "<span>🔍</span><span>Penjelasan Per Langkah</span><span>&rarr;</span>";
+                btnRunStep.className = "w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-2.5 px-3 rounded-xl shadow-xs text-xs sm:text-sm transition hover:scale-[1.01] active:scale-[0.99] flex items-center justify-center gap-1.5 cursor-pointer";
+            }
+        }
+
+        function triggerError(targetInput, rowContainer, title, message, hint, locationLabel) {
+            if (autoTimer) {
+                clearTimeout(autoTimer);
+                autoTimer = null;
+            }
+            currentStep = 0;
+            executionPlan = [];
+            resetHighlight();
+
+            if (rowContainer) {
+                rowContainer.classList.add('row-error');
+            }
+            if (targetInput) {
+                targetInput.focus();
+            }
+
+            statusText.innerHTML = `
+                <div class="p-3.5 bg-red-50 border-2 border-red-300 rounded-xl text-red-950 text-xs sm:text-sm space-y-2 shadow-xs">
+                    <div class="flex items-center gap-2 font-black text-red-700 text-sm">
+                        <span class="text-lg">⛔</span>
+                        <span>${title}</span>
+                    </div>
+                    <p class="font-bold text-red-900 leading-snug">${message}</p>
+                    <div class="text-[11px] bg-white p-2.5 rounded-lg border border-red-200 text-slate-700 leading-relaxed shadow-xs">
+                        💡 <b>Petunjuk Perbaikan:</b> ${hint}
+                    </div>
+                </div>
+            `;
+
+            outputConsole.innerText = "❌ ERROR: PROGRAM TERHENTI";
+            outputConsole.className = "text-base font-bold text-red-400 font-mono min-h-[2.5rem] flex items-center justify-center text-center";
+            outputIndicator.className = "w-2.5 h-2.5 rounded-full bg-red-500";
+
+            stepBadge.innerHTML = `<span>❌ Terhenti di ${locationLabel || 'Kode'}</span>`;
+            stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-red-100 text-red-700 border border-red-200 w-fit";
+
+            if (btnRunInstant) {
+                btnRunInstant.innerHTML = "<span>✍️ Perbaiki Kesalahan Kode</span>";
+                btnRunInstant.className = "w-full bg-red-600 hover:bg-red-700 text-white font-black py-3 px-3 rounded-xl shadow-md text-xs sm:text-sm transition flex items-center justify-center gap-2 cursor-pointer";
+            }
+            if (btnRunStep) {
+                btnRunStep.innerHTML = "<span>⚠️ Error Terdeteksi</span>";
+                btnRunStep.className = "w-full bg-slate-300 text-slate-600 font-bold py-2.5 px-3 rounded-xl text-xs sm:text-sm cursor-not-allowed";
+            }
+
+            return null;
+        }
+
+        // ==========================================
+        // VARIABLE PARSER & VALIDATOR
+        // ==========================================
+        function extractDeclaredVariables(declStr) {
+            if (!declStr) return [];
+            let clean = declStr.replace(/^DEKLARASI\s*:?\s*/i, '').trim();
+            if (!clean) return [];
+
+            const declaredVars = [];
+            const parts = clean.split(/[;\n]/);
+            for (const part of parts) {
+                const trimmed = part.trim();
+                if (!trimmed) continue;
+                const colonIdx = trimmed.indexOf(':');
+                const varPart = colonIdx !== -1 ? trimmed.substring(0, colonIdx) : trimmed;
+                const names = varPart.split(',');
+                for (let name of names) {
+                    name = name.trim().toLowerCase();
+                    name = name.replace(/[^a-z0-9_]/g, '');
+                    if (name && !declaredVars.includes(name)) {
+                        declaredVars.push(name);
+                    }
+                }
+            }
+            return declaredVars;
+        }
+
+        function extractVariablesFromLine(line) {
+            if (!line) return [];
+            let clean = line.trim();
+            if (!clean) return [];
+
+            // Strip strings inside quotes
+            clean = clean.replace(/["'“‘].*?["'”’]/g, ' ');
+
+            const tokens = clean.match(/\b[a-zA-Z_][a-zA-Z0-9_]*\b/g) || [];
+            const usedVars = [];
+
+            for (const tok of tokens) {
+                const lower = tok.toLowerCase();
+                if (KEYWORDS.has(lower)) continue;
+                if (/^[0-9]+$/.test(tok)) continue;
+                if (!usedVars.includes(lower)) {
+                    usedVars.push(lower);
+                }
+            }
+            return usedVars;
+        }
+
+        function extractVariableName(str, fallback = 'nilai') {
+            if (!str || typeof str !== 'string') return fallback;
+            const clean = str.trim();
+            if (!clean) return fallback;
+            let v = clean.replace(/^(INPUT|READ|MASUKKAN|BACA)\s*:?\s*/i, '').trim();
+            v = v.split('=')[0].trim();
+            v = v.replace(/[^a-zA-Z0-9_,]/g, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
+            return v || fallback;
+        }
+
+        function extractOutputMessage(str, fallback = '') {
+            if (!str || typeof str !== 'string') return fallback;
+            const clean = str.trim();
+            if (!clean) return fallback;
+
+            const q = clean.match(/["'“‘](.*?)["'”’]/);
+            if (q && q[1] && q[1].trim()) return q[1].trim();
+
+            const stripped = clean.replace(/^(OUTPUT|PRINT|CETAK|TAMPILKAN|WRITE|ECHO)\s*:?\s*/i, '').trim();
+            if (stripped) {
+                return stripped.replace(/^["'“‘]+|["'”’]+$/g, '').trim();
+            }
+
+            return clean || fallback;
+        }
+
+        function parseCondition(condStr, inputVal, prevVal = 95) {
+            if (!condStr || typeof condStr !== 'string') return null;
+            const clean = condStr.trim();
+            if (!clean) return null;
+
+            let body = clean.replace(/^(IF|JIKA)\s+/i, '').replace(/\s+(THEN|MAKA)\s*$/i, '').trim();
+
+            let op = null;
+            let leftVal = inputVal;
+            let rightVal = prevVal;
+            let leftExpr = 'nilai';
+            let rightExpr = 'nilai_sebelumnya';
+
+            const m = body.match(/(=>|>=|=<|<=|!=|<>|==|=|(?<![<>=!])>(?!=)|(?<![<>=!])<(?!=))/);
+            if (m) {
+                const rawOp = m[1];
+                const parts = body.split(rawOp);
+                const leftStr = (parts[0] || '').trim();
+                const rightStr = (parts.slice(1).join(rawOp) || '').trim();
+
+                if (rawOp === '=>' || rawOp === '>=') op = '>=';
+                else if (rawOp === '=<' || rawOp === '<=') op = '<=';
+                else if (rawOp === '!=' || rawOp === '<>') op = '!=';
+                else if (rawOp === '==' || rawOp === '=') op = '==';
+                else if (rawOp === '>') op = '>';
+                else if (rawOp === '<') op = '<';
+
+                leftExpr = leftStr || 'nilai';
+                rightExpr = rightStr || 'nilai_sebelumnya';
+
+                const rightNum = rightStr.match(/^[0-9]+(?:\.[0-9]+)?$/);
+                if (rightNum) {
+                    rightVal = parseFloat(rightNum[0]);
+                } else {
+                    rightVal = prevVal;
+                }
+
+                const leftNum = leftStr.match(/^[0-9]+(?:\.[0-9]+)?$/);
+                if (leftNum) {
+                    leftVal = parseFloat(leftNum[0]);
+                } else {
+                    leftVal = inputVal;
+                }
+            } else {
+                if (/lebih\s*(?:besar|tinggi)\s*(?:dari|pada)?\s*(?:nilai|poin)?\s*sebelum/i.test(body)) {
+                    op = '>';
+                    leftVal = inputVal;
+                    rightVal = prevVal;
+                } else if (/lebih\s*(?:kecil|rendah)\s*(?:dari|pada)?\s*(?:nilai|poin)?\s*sebelum/i.test(body)) {
+                    op = '<';
+                    leftVal = inputVal;
+                    rightVal = prevVal;
+                } else if (/sama\s*(?:dengan)?\s*(?:nilai|poin)?\s*sebelum/i.test(body)) {
+                    op = '==';
+                    leftVal = inputVal;
+                    rightVal = prevVal;
+                }
+            }
+
+            if (op !== null && !isNaN(leftVal) && !isNaN(rightVal)) {
+                let isTrue = false;
+                if (op === '>') isTrue = (leftVal > rightVal);
+                else if (op === '>=') isTrue = (leftVal >= rightVal);
+                else if (op === '<') isTrue = (leftVal < rightVal);
+                else if (op === '<=') isTrue = (leftVal <= rightVal);
+                else if (op === '==' || op === '=') isTrue = (leftVal === rightVal);
+                else if (op === '!=') isTrue = (leftVal !== rightVal);
+
+                return {
+                    isTrue: isTrue,
+                    op: op,
+                    leftVal: leftVal,
+                    rightVal: rightVal,
+                    leftExpr: leftExpr,
+                    rightExpr: rightExpr,
+                    threshold: rightVal,
+                    rawText: clean
+                };
+            }
+            return null;
+        }
+
+        // ==========================================
+        // PROGRAM VALIDATION & EXTRACTOR
+        // ==========================================
+        function validateAndExtractCode() {
+            clearErrorState();
+
+            // 1. Program Header
+            const progNameInput = document.getElementById('prog-name');
+            const progDescInput = document.getElementById('prog-desc');
+            let rawProgName = progNameInput ? progNameInput.value.trim() : '';
+            let rawProgDesc = progDescInput ? progDescInput.value.trim() : '';
+
+            let progIdent = rawProgName || rawProgDesc || 'Program_Tentukan_Peringkat';
+            progIdent = progIdent.replace(/^PROGRAM\s*:?\s*/i, '').replace(/[{}]/g, '').trim();
+            if (!progIdent) progIdent = 'Program_Patbhe_Green';
+
+            // 2. Deklarasi Variabel (Wajib Diisi dan Sesuai Format)
+            const progDeclInput = document.getElementById('prog-decl');
+            const boxDecl = document.getElementById('box-prog-decl');
+            let rawProgDecl = progDeclInput ? progDeclInput.value.trim() : '';
+
+            if (!rawProgDecl) {
+                return triggerError(
+                    progDeclInput, boxDecl,
+                    'Bagian Deklarasi Belum Diisi!',
+                    'Setiap program pseudocode wajib mendaftarkan variabel dan tipe datanya pada Bagian Deklarasi (Kamus Variabel) sebelum digunakan dalam Algoritma.',
+                    'Daftarkan variabel yang kalian gunakan, contoh: <code>nilai, nilai_sebelumnya : integer</code>',
+                    'Bagian 2 (Deklarasi)'
+                );
+            }
+
+            const declaredVars = extractDeclaredVariables(rawProgDecl);
+            if (declaredVars.length === 0) {
+                return triggerError(
+                    progDeclInput, boxDecl,
+                    'Format Deklarasi Tidak Valid!',
+                    'Komputer tidak dapat membaca nama variabel pada Bagian Deklarasi. Pastikan menggunakan format baku: <code>nama_variabel : tipe_data</code>.',
+                    'Contoh: <code>nilai, nilai_sebelumnya : integer</code> atau <code>total_poin : real</code>',
+                    'Bagian 2 (Deklarasi)'
+                );
+            }
+
+            const lines = getLines();
+            if (lines.length === 0) {
+                return triggerError(
+                    null, null,
+                    'Baris Algoritma Masih Kosong!',
+                    'Kalian belum menuliskan baris instruksi logika algoritma.',
+                    'Klik tombol <b>➕ Tambah Baris</b> atau <b>💡 Contoh LKPD</b> untuk mulai mengisi.',
+                    'Bagian 3 (Algoritma)'
+                );
+            }
+
+            // Check for empty lines
+            for (let i = 0; i < lines.length; i++) {
+                if (!lines[i]) {
+                    const lNum = i + 1;
+                    return triggerError(
+                        document.getElementById('line-' + lNum),
+                        document.getElementById('row-line-' + lNum),
+                        `Baris ${lNum} Masih Kosong!`,
+                        `Baris ${lNum} belum diisi instruksi pseudocode. Hapus baris ini jika tidak diperlukan atau ketikkan instruksi logika kalian.`,
+                        'Isi baris instruksi atau klik tombol ✕ di sebelah kanan untuk menghapusnya.',
+                        `Baris ${lNum}`
+                    );
+                }
+            }
+
+            // 3. VALIDASI KECOCOKAN VARIABEL: Setiap variabel yang dipakai di algoritma HARUS ada di Deklarasi!
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const lNum = i + 1;
+                const usedInLine = extractVariablesFromLine(line);
+
+                for (const v of usedInLine) {
+                    if (!declaredVars.includes(v)) {
+                        boxDecl.classList.add('row-error');
+                        return triggerError(
+                            document.getElementById('line-' + lNum),
+                            document.getElementById('row-line-' + lNum),
+                            `Variabel '${v}' Belum Dideklarasikan!`,
+                            `Variabel <code>${v}</code> digunakan pada Baris ${lNum}, tetapi <b>tidak terdaftar</b> pada Bagian Deklarasi.<br>Kamus variabel yang terdaftar saat ini: [<b>${declaredVars.join(', ')}</b>].`,
+                            `Tambahkan variabel <code>${v}</code> pada Bagian Deklarasi (misal: <code>${v} : integer</code>), atau ubah nama variabel di Baris ${lNum} agar sama persis dengan yang telah dideklarasikan.`,
+                            `Baris ${lNum}`
+                        );
+                    }
+                }
+            }
+
+            // 4. Periksa Keberadaan Struktur IF dan OUTPUT
+            let ifIdx = -1;
+            let elseIdx = -1;
+            let endIfIdx = -1;
+
+            for (let i = 0; i < lines.length; i++) {
+                const l = lines[i];
+                const trimmedL = (l || '').trim(); if (/^(if|jika)\b/i.test(trimmedL) && ifIdx === -1) ifIdx = i;
+                else if (/^(else|selain)\b/i.test(trimmedL) && elseIdx === -1) elseIdx = i;
+                else if (/^(end\s*if|endif|selesai)\b/i.test(trimmedL)) endIfIdx = i;
+            }
+
+            if (ifIdx === -1) {
+                return triggerError(
+                    document.getElementById('line-1'),
+                    document.getElementById('row-line-1'),
+                    'Struktur Percabangan IF Tidak Ditemukan!',
+                    'Program percabangan wajib memuat instruksi pengujian kondisi dengan kata kunci <code>IF ... THEN</code>.',
+                    'Tuliskan baris kondisi percabangan, contoh: <code>IF nilai > nilai_sebelumnya THEN</code>',
+                    'Algoritma Percabangan'
+                );
+            }
+
+            const inputVal = parseFloat(document.getElementById('testInputVal')?.value) || 120;
+            const prevVal = parseFloat(document.getElementById('testInputPrevVal')?.value) || 95;
+            const cond = parseCondition(lines[ifIdx], inputVal, prevVal);
+
+            if (!cond) {
+                const lNum = ifIdx + 1;
+                return triggerError(
+                    document.getElementById('line-' + lNum),
+                    document.getElementById('row-line-' + lNum),
+                    `Kondisi Logika Tidak Dikenali pada Baris ${lNum}!`,
+                    `Komputer tidak menemukan operator perbandingan (seperti <code>></code>, <code>>=</code>, <code><</code>, <code><=</code>, <code>==</code>) atau nama variabel pembanding pada baris: <code>"${lines[ifIdx]}"</code>.`,
+                    'Tuliskan kondisi perbandingan, contoh: <code>IF nilai > nilai_sebelumnya THEN</code>',
+                    `Baris ${lNum}`
+                );
+            }
+
+            return {
+                progName: progIdent,
+                progDecl: rawProgDecl,
+                declaredVars: declaredVars,
+                lines: lines,
+                ifIdx: ifIdx,
+                elseIdx: elseIdx,
+                endIfIdx: endIfIdx,
+                cond: cond
+            };
+        }
+
+        // ==========================================
+        // DYNAMIC EXECUTION PLAN ENGINE
+        // ==========================================
+        function buildExecutionPlan() {
+            const validCode = validateAndExtractCode();
+            if (!validCode) {
+                return null;
+            }
+
+            const progName = validCode.progName;
+            const progDecl = validCode.progDecl;
+            const lines = validCode.lines;
+            const declaredVars = validCode.declaredVars;
+            const ifIdx = validCode.ifIdx;
+            const elseIdx = validCode.elseIdx;
+            const endIfIdx = validCode.endIfIdx;
+            const cond = validCode.cond;
+
+            const inputVal = parseFloat(document.getElementById('testInputVal')?.value) || 120;
+            const prevVal = parseFloat(document.getElementById('testInputPrevVal')?.value) || 95;
+
+            // Evaluasi kesesuaian program dengan studi kasus Patbhe Green & tampilkan notifikasi
+            const compliance = evaluateProgramCompliance();
+            displayProgramComplianceNotif(compliance);
+
+            const plan = [];
+
+            // Step 0: Judul & Deklarasi
+            plan.push({
+                lineNum: 0,
+                status: `<b>Langkah 1 (Inisialisasi Header & Deklarasi):</b><br>Sistem memuat <code>PROGRAM ${progName}</code> dan mengalokasikan ruang memori untuk variabel yang dideklarasikan: <code>${declaredVars.join(', ')}</code>.`,
+                action: () => {
+                    outputConsole.innerText = "Program siap...";
+                    outputConsole.className = "text-base font-bold text-blue-400 font-mono min-h-[2.5rem] flex items-center justify-center text-center";
+                    outputIndicator.className = "w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse";
+                }
+            });
+
+            // Execute lines before IF
+            for (let i = 0; i < ifIdx; i++) {
+                const lNum = i + 1;
+                const line = lines[i];
+                const isInput = /^(input|read|masukkan|baca)\b/i.test((line || '').trim());
+
+                plan.push({
+                    lineNum: lNum,
+                    styleClass: 'active-code',
+                    status: isInput 
+                        ? `<b>Baris ${lNum} (INPUT):</b> Komputer membaca nilai masukan. Variabel memori terisi: <code>nilai = ${inputVal}</code> dan <code>nilai_sebelumnya = ${prevVal}</code>.`
+                        : `<b>Baris ${lNum}:</b> Mengeksekusi instruksi: <code>${escapeHtml(line)}</code>.`,
+                    action: () => {
+                        if (isInput) {
+                            outputConsole.innerText = `Input: ${inputVal} vs ${prevVal}...`;
+                            outputConsole.className = "text-base font-bold text-yellow-400 font-mono min-h-[2.5rem] flex items-center justify-center text-center animate-pulse";
+                            outputIndicator.className = "w-2.5 h-2.5 rounded-full bg-yellow-400 animate-ping";
+                        }
+                    }
+                });
+            }
+
+            // Step at IF line: Condition evaluation
+            const ifLineNum = ifIdx + 1;
+            const opDisplay = (cond.op || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const condResultBadge = cond.isTrue
+                ? '<span class="text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-black border border-emerald-300">BENAR (TRUE)</span>'
+                : '<span class="text-amber-700 bg-amber-100 px-2 py-0.5 rounded font-black border border-amber-300">SALAH (FALSE)</span>';
+
+            plan.push({
+                lineNum: ifLineNum,
+                styleClass: 'active-code',
+                status: `<b>Baris ${ifLineNum} (Uji Logika IF):</b> Evaluasi kondisi: Apakah <code>${cond.leftExpr || 'nilai'} (${inputVal}) ${opDisplay} ${cond.rightExpr || 'nilai_sebelumnya'} (${prevVal})</code>?<br>&rarr; Karena ${inputVal} ${cond.isTrue ? 'lebih besar dari' : 'tidak lebih besar dari'} ${prevVal}, hasil evaluasi: <b>${condResultBadge}</b>!`,
+                action: () => {}
+            });
+
+            // Branching execution
+            let finalOutput = '';
+
+            if (cond.isTrue) {
+                // Execute lines in IF block (between ifIdx and elseIdx/endIfIdx)
+                const endBlock = elseIdx !== -1 ? elseIdx : (endIfIdx !== -1 ? endIfIdx : lines.length);
+                for (let i = ifIdx + 1; i < endBlock; i++) {
+                    const lNum = i + 1;
+                    const line = lines[i];
+                    const msg = extractOutputMessage(line, 'Peringkat Lebih Tinggi 🏆');
+                    finalOutput = msg;
+
+                    plan.push({
+                        lineNum: lNum,
+                        styleClass: 'active-success',
+                        status: `<b>Baris ${lNum} (Aksi Cabang TRUE):</b> Karena kondisi IF bernilai <code>TRUE</code> (nilai lebih besar), instruksi Baris ${lNum} dijalankan. Layar monitor mencetak: <b>"${msg}"</b>.`,
+                        action: () => {
+                            outputConsole.innerText = msg;
+                            outputConsole.className = "text-lg sm:text-2xl font-black text-emerald-400 font-mono min-h-[2.5rem] flex items-center justify-center text-center";
+                            outputIndicator.className = "w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse";
+                        }
+                    });
+                }
+
+                // If ELSE exists, explain that ELSE block is skipped!
+                if (elseIdx !== -1) {
+                    const elseLineNum = elseIdx + 1;
+                    plan.push({
+                        lineNum: endIfIdx !== -1 ? endIfIdx + 1 : lines.length,
+                        styleClass: 'active-code',
+                        status: `<b>Penyelesaian:</b> Blok ELSE (Baris ${elseLineNum}) dilewati karena cabang IF sudah tuntas dieksekusi. Program selesai! 🎉`,
+                        action: () => {
+                            btnRunStep.innerHTML = "<span>🔄 Ulangi Simulasi</span>";
+                            markSimulasiDone();
+                        }
+                    });
+                }
+            } else {
+                // Condition FALSE: Skip IF block, jump to ELSE
+                if (elseIdx !== -1) {
+                    const elseLineNum = elseIdx + 1;
+                    plan.push({
+                        lineNum: elseLineNum,
+                        styleClass: 'active-amber',
+                        status: `<b>Baris ${elseLineNum} (ELSE):</b> Karena kondisi IF bernilai <code>FALSE</code> (nilai tidak lebih besar), komputer melompati blok IF dan beralih ke blok alternatif <b>ELSE</b>.`,
+                        action: () => {}
+                    });
+
+                    // Execute lines in ELSE block
+                    const endBlock = endIfIdx !== -1 ? endIfIdx : lines.length;
+                    for (let i = elseIdx + 1; i < endBlock; i++) {
+                        const lNum = i + 1;
+                        const line = lines[i];
+                        const msg = extractOutputMessage(line, 'Peringkat Tetap / Turun ⬇️');
+                        finalOutput = msg;
+
+                        plan.push({
+                            lineNum: lNum,
+                            styleClass: 'active-amber',
+                            status: `<b>Baris ${lNum} (Aksi Cabang FALSE):</b> Blok ELSE dieksekusi. Layar monitor mencetak: <b>"${msg}"</b>.`,
+                            action: () => {
+                                outputConsole.innerText = msg;
+                                outputConsole.className = "text-lg sm:text-2xl font-black text-amber-400 font-mono min-h-[2.5rem] flex items-center justify-center text-center";
+                                outputIndicator.className = "w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse";
+                            }
+                        });
+                    }
+                }
+
+                // End IF
+                if (endIfIdx !== -1) {
+                    const endLineNum = endIfIdx + 1;
+                    plan.push({
+                        lineNum: endLineNum,
+                        styleClass: 'active-code',
+                        status: `<b>Baris ${endLineNum} (END IF):</b> Struktur percabangan ditutup. Program selesai dieksekusi! 🎉`,
+                        action: () => {
+                            btnRunStep.innerHTML = "<span>🔄 Ulangi Simulasi</span>";
+                            markSimulasiDone();
+                        }
+                    });
+                }
+            }
+
+            return plan;
+        }
+
+        // ==========================================
+        // COMPLIANCE EVALUATION (LKPD KASUS PATBHE GREEN)
+        // ==========================================
+        function evaluateProgramCompliance() {
+            const lines = getLines();
+            if (lines.length === 0) return null;
+
+            const emptyLines = [];
+            for (let i = 0; i < lines.length; i++) {
+                if (!lines[i]) emptyLines.push(i + 1);
+            }
+            if (emptyLines.length > 0) {
+                return {
+                    status: 'incomplete',
+                    isSesuai: false,
+                    title: 'Program Belum Lengkap',
+                    message: `Masih ada ${emptyLines.length} baris yang belum diisi (Baris: ${emptyLines.join(', ')}). Lengkapi seluruh baris pseudocode untuk menguji kesesuaian studi kasus.`,
+                    issues: [`Baris ${emptyLines.join(', ')} masih kosong.`]
+                };
+            }
+
+            const rawProgDecl = document.getElementById('prog-decl')?.value.trim() || '';
+            const declaredVars = extractDeclaredVariables(rawProgDecl);
+            if (declaredVars.length === 0) {
+                return {
+                    status: 'error_syntax',
+                    isSesuai: false,
+                    title: 'Bagian Deklarasi Belum Valid',
+                    message: 'Variabel belum dideklarasikan dengan format baku (nama_variabel : tipe_data).',
+                    issues: ['Bagian Deklarasi belum diisi variabel yang sesuai.']
+                };
+            }
+
+            // Find IF line
+            let ifIdx = -1;
+            let ifTrueMsg = '';
+            let ifFalseMsg = '';
+
+            for (let i = 0; i < lines.length; i++) {
+                if (/^(if|jika)\b/i.test((lines[i] || '').trim()) && ifIdx === -1) {
+                    ifIdx = i;
+                    break;
+                }
+            }
+
+            if (ifIdx === -1) {
+                return {
+                    status: 'error_syntax',
+                    isSesuai: false,
+                    title: 'Kondisi IF Tidak Ditemukan',
+                    message: 'Belum ada baris logika IF pada rancangan algoritma.',
+                    issues: ['Belum memuat struktur percabangan IF.']
+                };
+            }
+
+            const curVal = parseFloat(document.getElementById('testInputVal')?.value) || 120;
+            const prevVal = parseFloat(document.getElementById('testInputPrevVal')?.value) || 95;
+            const cond = parseCondition(lines[ifIdx], curVal, prevVal);
+
+            if (!cond) {
+                return {
+                    status: 'error_syntax',
+                    isSesuai: false,
+                    title: 'Kondisi Logika Tidak Dikenali',
+                    message: `Baris ${ifIdx + 1} tidak memiliki operator perbandingan atau variabel pembanding yang valid.`,
+                    issues: [`Kondisi perbandingan pada Baris ${ifIdx + 1} tidak valid.`]
+                };
+            }
+
+            // Find messages
+            lines.forEach((l, idx) => {
+                if (/^(output|print|cetak|tampilkan)\b/i.test((l || '').trim())) {
+                    if (!ifTrueMsg && (idx > ifIdx)) ifTrueMsg = extractOutputMessage(l, '');
+                    else if (!ifFalseMsg) ifFalseMsg = extractOutputMessage(l, '');
+                }
+            });
+
+            const issues = [];
+            const passes = [];
+
+            // 1. Variable check in algorithm vs Deklarasi
+            for (let i = 0; i < lines.length; i++) {
+                const used = extractVariablesFromLine(lines[i]);
+                for (const v of used) {
+                    if (!declaredVars.includes(v)) {
+                        issues.push(`Variabel <b>'${v}'</b> pada Baris ${i+1} belum dideklarasikan di Deklarasi [<b>${declaredVars.join(', ')}</b>].`);
+                    }
+                }
+            }
+            if (issues.length === 0) {
+                passes.push(`Seluruh variabel yang digunakan di algoritma telah dideklarasikan: <code>${declaredVars.join(', ')}</code>`);
+            }
+
+            // 2. Operator Perbandingan (> atau >=)
+            if (cond.op === '>' || cond.op === '>=') {
+                passes.push(`Operator perbandingan tepat: <code>${cond.op}</code> (menguji apakah nilai lebih besar dari nilai sebelumnya)`);
+            } else {
+                issues.push(`Operator perbandingan tertulis <b>'${cond.op}'</b> (seharusnya <b>'&gt;'</b> agar menguji kondisi jika nilai lebih besar dari nilai sebelumnya).`);
+            }
+
+            // 3. Output Cabang IF (Peringkat Lebih Tinggi / Naik)
+            const hasPeringkatNaik = /peringkat|tinggi|naik|juara|unggul|atas/i.test(ifTrueMsg) || ifTrueMsg.includes('🏆') || ifTrueMsg.includes('⬆');
+            if (hasPeringkatNaik) {
+                passes.push(`Pernyataan peringkat lebih tinggi cabang IF tepat: <b>"${ifTrueMsg}"</b>`);
+            } else {
+                issues.push(`Teks keluaran cabang IF tertulis <b>"${ifTrueMsg || '(belum ada output)'}"</b> (seharusnya memuat status <b>"Peringkat Lebih Tinggi 🏆"</b>).`);
+            }
+
+            // 4. Output Cabang ELSE (Peringkat Tetap / Turun)
+            const hasPeringkatTurun = /peringkat|tetap|turun|belum|tidak|rendah|sama|tingkatkan/i.test(ifFalseMsg) || ifFalseMsg.includes('⬇') || ifFalseMsg.includes('🌱');
+            if (hasPeringkatTurun) {
+                passes.push(`Pernyataan peringkat alternatif cabang ELSE tepat: <b>"${ifFalseMsg}"</b>`);
+            } else {
+                issues.push(`Teks keluaran cabang ELSE tertulis <b>"${ifFalseMsg || '(belum ada output)'}"</b> (seharusnya memuat status <b>"Peringkat Tetap / Turun ⬇️"</b>).`);
+            }
+
+            const isSesuai = issues.length === 0;
+
+            return {
+                status: isSesuai ? 'sesuai' : 'tidak_sesuai',
+                isSesuai: isSesuai,
+                cond: cond,
+                msgTrue: ifTrueMsg,
+                msgFalse: ifFalseMsg,
+                passes: passes,
+                issues: issues
+            };
+        }
+
+        function displayProgramComplianceNotif(compliance) {
+            const box = document.getElementById('program-compliance-notif');
+            if (!box) return;
+
+            if (!compliance) {
+                box.classList.add('hidden');
+                box.innerHTML = '';
+                return;
+            }
+
+            box.classList.remove('hidden');
+
+            if (compliance.status === 'sesuai') {
+                box.innerHTML = `
+                    <div class="p-4 rounded-2xl bg-emerald-950/95 border-2 border-emerald-400 text-emerald-100 shadow-lg space-y-2.5 transition-all">
+                        <div class="flex items-center justify-between border-b border-emerald-500/40 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">🎉</span>
+                                <span class="font-black text-emerald-300 text-xs sm:text-sm uppercase tracking-wide">
+                                    NOTIFIKASI: PROGRAM SESUAI (LOGIKA TEPAT)
+                                </span>
+                            </div>
+                            <span class="text-[10px] font-black bg-emerald-400 text-slate-950 px-2.5 py-0.5 rounded-full uppercase shadow-xs">
+                                ✅ 100% Sesuai Soal
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-200 font-semibold leading-relaxed">
+                            Luar biasa! Seluruh rancangan pseudocode kalian telah <b>SESUAI</b> dengan kriteria studi kasus sistem <i>"Patbhe Green"</i> di LKPD.
+                        </p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1 font-mono">
+                            <div class="bg-emerald-900/70 p-2 rounded-xl border border-emerald-500/40 text-emerald-200 flex items-center gap-1.5">
+                                <span>🎯</span>
+                                <span><b>Kondisi:</b> nilai &gt; nilai_sebelumnya</span>
+                            </div>
+                            <div class="bg-emerald-900/70 p-2 rounded-xl border border-emerald-500/40 text-emerald-200 flex items-center gap-1.5">
+                                <span>🏆</span>
+                                <span><b>Peringkat:</b> Lebih Tinggi &amp; Tetap / Turun</span>
+                            </div>
+                        </div>
+                        <div class="pt-1 flex items-center justify-between">
+                            <span class="text-[11px] text-emerald-300 font-medium">✨ Siap disalin ke lembar LKPD</span>
+                            <button type="button" onclick="openComplianceModal(evaluateProgramCompliance())" class="px-2.5 py-1 rounded-lg bg-emerald-500/30 hover:bg-emerald-500/40 text-emerald-200 border border-emerald-400/50 text-[11px] font-bold flex items-center gap-1.5 transition cursor-pointer">
+                                <span>🔍 Buka Pop-up Rincian</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else if (compliance.status === 'tidak_sesuai') {
+                const issuesHtml = compliance.issues.map(iss => `<li class="leading-snug">${iss}</li>`).join('');
+                box.innerHTML = `
+                    <div class="p-4 rounded-2xl bg-amber-950/95 border-2 border-amber-400 text-amber-100 shadow-lg space-y-2.5 transition-all">
+                        <div class="flex items-center justify-between border-b border-amber-500/40 pb-2">
+                            <div class="flex items-center gap-2">
+                                <span class="text-xl">⚠️</span>
+                                <span class="font-black text-amber-300 text-xs sm:text-sm uppercase tracking-wide">
+                                    NOTIFIKASI: PERLU PENYESUAIAN
+                                </span>
+                            </div>
+                            <span class="text-[10px] font-black bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full uppercase shadow-xs">
+                                ⚠️ Periksa Deklarasi & Logika
+                            </span>
+                        </div>
+                        <p class="text-xs text-slate-200 font-medium leading-relaxed">
+                            Ada bagian program yang <b>belum sesuai</b> dengan kaidah pseudocode atau studi kasus <i>"Patbhe Green"</i> di LKPD.
+                        </p>
+                        <div class="bg-slate-900/90 p-3 rounded-xl border border-amber-500/40 text-[11px] space-y-1.5">
+                            <div class="font-bold text-amber-300 flex items-center gap-1.5">
+                                <span>📋</span>
+                                <span>Rincian Bagian yang Belum Sesuai:</span>
+                            </div>
+                            <ul class="list-disc list-inside space-y-1 text-slate-200 pl-1">
+                                ${issuesHtml}
+                            </ul>
+                        </div>
+                        <div class="pt-1 flex items-center justify-between">
+                            <div class="text-[10.5px] text-amber-300">💡 Kriteria: <b>nilai &gt; nilai_sebelumnya</b></div>
+                            <button type="button" onclick="openComplianceModal(evaluateProgramCompliance())" class="px-2.5 py-1 rounded-lg bg-amber-500/30 hover:bg-amber-500/40 text-amber-200 border border-amber-400/50 text-[11px] font-bold flex items-center gap-1.5 transition cursor-pointer">
+                                <span>🔍 Buka Pop-up Rincian</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            } else if (compliance.status === 'incomplete' || compliance.status === 'error_syntax') {
+                box.innerHTML = `
+                    <div class="p-3.5 rounded-2xl bg-slate-950 border-2 border-slate-700 text-slate-300 space-y-1.5">
+                        <div class="flex items-center gap-2 font-bold text-slate-200 text-xs sm:text-sm">
+                            <span>✍️</span>
+                            <span>${compliance.title}</span>
+                        </div>
+                        <p class="text-xs text-slate-400">${compliance.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function checkProgramComplianceManual() {
+            clearErrorState();
+            const compliance = evaluateProgramCompliance();
+            displayProgramComplianceNotif(compliance);
+
+            if (!compliance) return;
+
+            if (compliance.status === 'incomplete' || compliance.status === 'error_syntax') {
+                statusText.innerHTML = `⚠️ <b>${compliance.title}:</b> ${compliance.message}`;
+                stepBadge.innerHTML = "<span>✍️ Program Belum Lengkap</span>";
+                stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-300 w-fit";
+                openComplianceModal(compliance);
+                return;
+            }
+
+            if (compliance.isSesuai) {
+                statusText.innerHTML = `
+                    <div class="p-3.5 bg-emerald-50 border-2 border-emerald-400 rounded-xl text-emerald-950 text-xs sm:text-sm space-y-1.5 shadow-2xs">
+                        <div class="flex items-center gap-2 text-emerald-800 font-black">
+                            <span class="text-lg">🎉</span>
+                            <span>NOTIFIKASI: PROGRAM SESUAI (100% TEPAT)</span>
+                        </div>
+                        <p class="font-medium text-emerald-900 leading-relaxed text-xs">
+                            Luar biasa! Seluruh rancangan pseudocode kalian telah <b>SESUAI</b> dengan kriteria studi kasus Patbhe Green. Klik tombol <b>▶️ Jalankan Program</b> untuk langsung melihat hasilnya!
+                        </p>
+                    </div>
+                `;
+                stepBadge.innerHTML = "<span>✅ Program Sesuai Studi Kasus</span>";
+                stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 w-fit";
+            } else {
+                const issuesSummary = compliance.issues.join('<br>• ');
+                statusText.innerHTML = `
+                    <div class="p-3.5 bg-amber-50 border-2 border-amber-400 rounded-xl text-amber-950 text-xs space-y-1.5 shadow-2xs">
+                        <div class="flex items-center gap-2 text-amber-900 font-black">
+                            <span class="text-lg">⚠️</span>
+                            <span>NOTIFIKASI: PERLU PENYESUAIAN</span>
+                        </div>
+                        <p class="font-medium text-slate-800 leading-snug text-xs">
+                            Ada bagian program yang <b>belum sesuai</b> dengan studi kasus Patbhe Green:<br>• ${issuesSummary}
+                        </p>
+                    </div>
+                `;
+                stepBadge.innerHTML = "<span>⚠️ Program Belum Sesuai</span>";
+                stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 w-fit";
+            }
+
+            openComplianceModal(compliance);
+        }
+
+        // ==========================================
+        // POP-UP MODAL ENGINE
+        // ==========================================
+        function renderComplianceModalHtml(compliance, runtimeInfo) {
+            if (!compliance) return '';
+
+            if (compliance.status === 'sesuai') {
+                const inputVal = runtimeInfo ? runtimeInfo.inputVal : (document.getElementById('testInputVal')?.value || 120);
+                const prevVal = runtimeInfo ? runtimeInfo.prevVal : (document.getElementById('testInputPrevVal')?.value || 95);
+                const activeMsg = runtimeInfo ? runtimeInfo.activeMsg : compliance.msgTrue;
+                const isBranchIf = runtimeInfo ? runtimeInfo.isTrue : true;
+                const passesList = compliance.passes && compliance.passes.length > 0 
+                    ? compliance.passes.map(p => `
+                        <li class="flex items-start gap-2 text-xs text-emerald-900">
+                            <span class="text-emerald-600 mt-0.5 font-bold">✓</span>
+                            <span>${p}</span>
+                        </li>
+                      `).join('')
+                    : `
+                        <li class="flex items-start gap-2 text-xs text-emerald-900">
+                            <span class="text-emerald-600 mt-0.5 font-bold">✓</span>
+                            <span>Kondisi nilai &gt; nilai_sebelumnya tepat untuk menguji kenaikan peringkat.</span>
+                        </li>
+                    `;
+
+                return `
+                    <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-5 sm:p-6 relative">
+                        <button type="button" onclick="closeComplianceModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition text-base font-bold cursor-pointer" title="Tutup">✕</button>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-emerald-100 text-[11px] font-black uppercase tracking-wider mb-2">
+                            <span>🎉</span>
+                            <span>NOTIFIKASI: PROGRAM SESUAI</span>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-black text-white leading-tight">
+                            Luar Biasa! Logika Pseudocode Sesuai 100%!
+                        </h3>
+                        <p class="text-xs text-emerald-100 mt-1 leading-relaxed">
+                            Seluruh rancangan algoritma kalian berhasil memenuhi spesifikasi studi kasus perankingan <b>Patbhe Green</b> di LKPD.
+                        </p>
+                    </div>
+
+                    <div class="p-5 sm:p-6 space-y-4 overflow-y-auto max-h-[60vh]">
+                        <div class="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 text-center space-y-1">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Hasil Eksekusi di Monitor:</div>
+                            <div class="text-lg sm:text-xl font-black text-emerald-400 font-mono">
+                                "${activeMsg}"
+                            </div>
+                            <div class="text-[11px] text-slate-400 font-mono">
+                                Nilai Masukan: <code>nilai = ${inputVal}</code> &bull; <code>nilai_sebelumnya = ${prevVal}</code> &bull; Jalur: <b>${isBranchIf ? 'Cabang IF' : 'Cabang ELSE'}</b>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4 space-y-2">
+                            <div class="text-xs font-black text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
+                                <span>🎯</span>
+                                <span>Kriteria Studi Kasus yang Terpenuhi:</span>
+                            </div>
+                            <ul class="space-y-1.5 pt-1">
+                                ${passesList}
+                            </ul>
+                        </div>
+
+                        <div class="p-3 bg-blue-50 border border-blue-200 rounded-xl text-blue-900 text-xs flex items-center gap-2">
+                            <span class="text-lg">💡</span>
+                            <span><b>Langkah Berikutnya:</b> Salin pseudocode ini ke lembar <b>LKPD Aktivitas 3</b> kalian atau presentasikan di depan kelas!</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-2.5 justify-end">
+                        <button type="button" onclick="closeComplianceModal(); resetExecution(true);" class="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>🔄</span>
+                            <span>Reset Eksekusi</span>
+                        </button>
+                        <button type="button" onclick="closeComplianceModal(); runLineStep();" class="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>🔍</span>
+                            <span>Lihat Penjelasan Per Langkah</span>
+                        </button>
+                        <button type="button" onclick="closeComplianceModal()" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black transition flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/30 cursor-pointer">
+                            <span>🚀</span>
+                            <span>Mantap, Lanjutkan!</span>
+                        </button>
+                    </div>
+                `;
+            } else if (compliance.status === 'tidak_sesuai') {
+                const inputVal = runtimeInfo ? runtimeInfo.inputVal : (document.getElementById('testInputVal')?.value || 120);
+                const prevVal = runtimeInfo ? runtimeInfo.prevVal : (document.getElementById('testInputPrevVal')?.value || 95);
+                const currentMsg = runtimeInfo ? runtimeInfo.activeMsg : (compliance.msgTrue || '-');
+                const issuesList = compliance.issues && compliance.issues.length > 0
+                    ? compliance.issues.map(iss => `
+                        <li class="flex items-start gap-2 text-xs text-amber-950 font-medium">
+                            <span class="text-amber-600 mt-0.5 font-black text-sm">⚠️</span>
+                            <span>${iss}</span>
+                        </li>
+                      `).join('')
+                    : '';
+
+                return `
+                    <div class="bg-gradient-to-r from-amber-600 to-orange-600 text-white p-5 sm:p-6 relative">
+                        <button type="button" onclick="closeComplianceModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition text-base font-bold cursor-pointer" title="Tutup">✕</button>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-amber-100 text-[11px] font-black uppercase tracking-wider mb-2">
+                            <span>⚠️</span>
+                            <span>NOTIFIKASI: PERLU PENYESUAIAN</span>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-black text-white leading-tight">
+                            Program Perlu Penyesuaian!
+                        </h3>
+                        <p class="text-xs text-amber-100 mt-1 leading-relaxed">
+                            Pastikan variabel yang digunakan di algoritma sudah didaftarkan pada Bagian Deklarasi dan logikanya sesuai dengan studi kasus <b>Patbhe Green</b>.
+                        </p>
+                    </div>
+
+                    <div class="p-5 sm:p-6 space-y-4 overflow-y-auto max-h-[60vh]">
+                        <div class="p-3.5 bg-slate-950 rounded-2xl border border-slate-800 text-center space-y-1">
+                            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Hasil Yang Dihasilkan Komputer Saat Ini:</div>
+                            <div class="text-lg sm:text-xl font-black text-amber-400 font-mono">
+                                "${currentMsg}"
+                            </div>
+                            <div class="text-[11px] text-slate-400 font-mono">
+                                Nilai Masukan: <code>nilai = ${inputVal}</code> &bull; <code>nilai_sebelumnya = ${prevVal}</code>
+                            </div>
+                        </div>
+
+                        <div class="bg-amber-50 border-2 border-amber-400 rounded-2xl p-4 space-y-2">
+                            <div class="text-xs font-black text-amber-950 uppercase tracking-wider flex items-center gap-1.5">
+                                <span>📋</span>
+                                <span>Bagian yang Perlu Disesuaikan:</span>
+                            </div>
+                            <ul class="space-y-2 pt-1">
+                                ${issuesList}
+                            </ul>
+                        </div>
+
+                        <div class="bg-slate-900 text-slate-200 p-3.5 rounded-2xl border border-slate-800 text-xs space-y-1.5 font-mono">
+                            <div class="text-emerald-400 font-bold flex items-center gap-1.5 text-[11px] uppercase tracking-wide">
+                                <span>💡</span>
+                                <span>Target Acuan Soal LKPD:</span>
+                            </div>
+                            <div>&bull; Deklarasi: <code>nilai, nilai_sebelumnya : integer</code></div>
+                            <div>&bull; Kondisi: <code>IF nilai > nilai_sebelumnya THEN</code></div>
+                            <div>&bull; Cabang IF: <code>OUTPUT "Peringkat Lebih Tinggi 🏆"</code></div>
+                            <div>&bull; Cabang ELSE: <code>OUTPUT "Peringkat Tetap / Turun ⬇️"</code></div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row gap-2.5 justify-end">
+                        <button type="button" onclick="closeComplianceModal(); resetExecution(true);" class="w-full sm:w-auto px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>🔄</span>
+                            <span>Reset Eksekusi</span>
+                        </button>
+                        <button type="button" onclick="closeComplianceModal()" class="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition flex items-center justify-center gap-1.5 cursor-pointer">
+                            <span>Tutup &amp; Perbaiki</span>
+                        </button>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="bg-gradient-to-r from-red-600 to-rose-700 text-white p-5 sm:p-6 relative">
+                        <button type="button" onclick="closeComplianceModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 text-white flex items-center justify-center transition text-base font-bold cursor-pointer" title="Tutup">✕</button>
+                        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-red-100 text-[11px] font-black uppercase tracking-wider mb-2">
+                            <span>❌</span>
+                            <span>${compliance.title || 'Sintaks Perlu Diperiksa'}</span>
+                        </div>
+                        <h3 class="text-lg sm:text-xl font-black text-white leading-tight">
+                            Pemeriksaan Program
+                        </h3>
+                    </div>
+
+                    <div class="p-5 sm:p-6 space-y-4">
+                        <div class="p-3.5 bg-red-50 border-2 border-red-300 rounded-2xl text-red-950 text-xs flex items-start gap-3">
+                            <span class="text-xl">⚠️</span>
+                            <p class="text-xs text-red-900 leading-relaxed">${compliance.message || 'Periksa kembali variabel di Deklarasi dan baris algoritma.'}</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 sm:p-5 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
+                        <button type="button" onclick="closeComplianceModal()" class="px-4 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition cursor-pointer">
+                            <span>Tutup</span>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function openComplianceModal(compliance, runtimeInfo = null) {
+            const modal = document.getElementById('compliance-modal');
+            const overlay = document.getElementById('compliance-modal-overlay');
+            const card = document.getElementById('compliance-modal-card');
+            const content = document.getElementById('compliance-modal-content');
+
+            if (!modal || !overlay || !card || !content || !compliance) return;
+
+            content.innerHTML = renderComplianceModalHtml(compliance, runtimeInfo);
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+                card.classList.remove('scale-95');
+                card.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeComplianceModal() {
+            const modal = document.getElementById('compliance-modal');
+            const overlay = document.getElementById('compliance-modal-overlay');
+            const card = document.getElementById('compliance-modal-card');
+
+            if (!modal || !overlay || !card) return;
+
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+            card.classList.remove('scale-100');
+            card.classList.add('scale-95');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        function handleModalBackdropClick(event) {
+            if (event.target.id === 'compliance-modal-overlay') {
+                closeComplianceModal();
+            }
+        }
+
+        function markSimulasiDone() {
+            try {
+                localStorage.setItem('simulasi_completed', 'true');
+                const opened = JSON.parse(localStorage.getItem('student_opened_materials') || '{}');
+                opened['simulasi'] = Date.now();
+                localStorage.setItem('student_opened_materials', JSON.stringify(opened));
+            } catch(e) {}
+        }
+
+        // ==========================================
+        // RUN PROGRAM INSTANT (LANGSUNG SEMUANYA)
+        // ==========================================
+        function runFullProgramInstant() {
+            if (autoTimer) {
+                clearTimeout(autoTimer);
+                autoTimer = null;
+            }
+            resetHighlight();
+            clearErrorState();
+
+            const plan = buildExecutionPlan();
+            if (!plan) return;
+
+            executionPlan = plan;
+
+            // Execute all planned actions
+            for (let i = 0; i < plan.length; i++) {
+                if (plan[i].action) plan[i].action();
+            }
+            currentStep = plan.length;
+
+            const validCode = validateAndExtractCode();
+            const inputVal = parseFloat(document.getElementById('testInputVal')?.value) || 120;
+            const prevVal = parseFloat(document.getElementById('testInputPrevVal')?.value) || 95;
+            const cond = validCode.cond;
+
+            // Highlight executed rows
+            resetHighlight();
+            const boxHeader = document.getElementById('box-prog-header');
+            const boxDecl = document.getElementById('box-prog-decl');
+            if (boxHeader) boxHeader.className = "mb-2.5 p-3 bg-blue-950/70 rounded-xl border-2 border-blue-400 shadow-md space-y-2 font-mono text-xs transition-all duration-300";
+            if (boxDecl) boxDecl.className = "mb-2.5 p-3 bg-amber-950/70 rounded-xl border-2 border-amber-400 shadow-md space-y-2 font-mono text-xs transition-all duration-300";
+
+            plan.forEach(step => {
+                if (step.lineNum > 0) {
+                    const r = document.getElementById('row-line-' + step.lineNum);
+                    if (r && step.styleClass) {
+                        r.classList.add(step.styleClass);
+                    }
+                }
+            });
+
+            // Compliance card display
+            const compliance = evaluateProgramCompliance();
+            displayProgramComplianceNotif(compliance);
+
+            const opDisplay = (cond.op || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            const condResultBadge = cond.isTrue
+                ? '<span class="text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-black border border-emerald-300">BENAR (TRUE)</span>'
+                : '<span class="text-amber-700 bg-amber-100 px-2 py-0.5 rounded font-black border border-amber-300">SALAH (FALSE)</span>';
+
+            statusText.innerHTML = `
+                <div class="space-y-2.5">
+                    <div class="font-black text-slate-900 text-xs sm:text-sm flex items-center justify-between pb-1 border-b border-slate-200">
+                        <span class="flex items-center gap-1.5 text-emerald-700">
+                            <span>⚡</span>
+                            <span>Program Selesai Dijalankan Langsung!</span>
+                        </span>
+                        <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold border border-emerald-300">Hasil Akhir</span>
+                    </div>
+                    <div class="p-2.5 bg-slate-100/90 rounded-xl border border-slate-200 text-xs text-slate-800 space-y-1 font-mono">
+                        <div>• Deklarasi: <code>${validCode.progDecl}</code></div>
+                        <div>• Nilai Masukan: <code>nilai = ${inputVal}</code>, <code>nilai_sebelumnya = ${prevVal}</code></div>
+                        <div>• Uji Logika: <code>${cond.leftExpr || 'nilai'} (${inputVal}) ${opDisplay} ${cond.rightExpr || 'nilai_sebelumnya'} (${prevVal})</code> &rarr; ${condResultBadge}</div>
+                        <div>• Output Monitor: <b class="${cond.isTrue ? 'text-emerald-700' : 'text-amber-700'}">"${outputConsole.innerText}"</b></div>
+                    </div>
+                </div>
+            `;
+
+            if (compliance.isSesuai) {
+                stepBadge.innerHTML = "<span>🎉 Program Selesai & Sesuai Kasus</span>";
+                stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 w-fit";
+            } else {
+                stepBadge.innerHTML = "<span>⚠️ Program Selesai (Perlu Penyesuaian)</span>";
+                stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 w-fit";
+            }
+
+            if (btnRunInstant) {
+                btnRunInstant.innerHTML = "<span class='text-base sm:text-lg'>🔄</span><span>Jalankan Ulang Program</span>";
+            }
+            if (btnRunStep) {
+                btnRunStep.innerHTML = "<span>🔍</span><span>Lihat Penjelasan Per Langkah</span><span>&rarr;</span>";
+            }
+
+            markSimulasiDone();
+
+            const runtimeInfo = {
+                inputVal: inputVal,
+                prevVal: prevVal,
+                opDisplay: opDisplay,
+                threshold: cond.threshold,
+                isTrue: cond.isTrue,
+                activeMsg: outputConsole.innerText
+            };
+            openComplianceModal(compliance, runtimeInfo);
+        }
+
+        // ==========================================
+        // RUN LINE STEP (PENJELASAN PER LANGKAH)
+        // ==========================================
+        function runLineStep() {
+            if (executionPlan.length === 0 || currentStep >= executionPlan.length) {
+                const plan = buildExecutionPlan();
+                if (!plan) return;
+                executionPlan = plan;
+                currentStep = 0;
+            }
+
+            const step = executionPlan[currentStep];
+            resetHighlight();
+
+            if (step.lineNum === 0) {
+                const boxHeader = document.getElementById('box-prog-header');
+                const boxDecl = document.getElementById('box-prog-decl');
+                if (boxHeader) boxHeader.className = "mb-2.5 p-3 bg-blue-950/70 rounded-xl border-2 border-blue-400 shadow-md space-y-2 font-mono text-xs transition-all duration-300";
+                if (boxDecl) boxDecl.className = "mb-2.5 p-3 bg-amber-950/70 rounded-xl border-2 border-amber-400 shadow-md space-y-2 font-mono text-xs transition-all duration-300";
+                stepBadge.innerText = `Langkah: 1 / ${executionPlan.length} (Penjelasan: Inisialisasi Header & Deklarasi)`;
+            } else {
+                const row = document.getElementById('row-line-' + step.lineNum);
+                if (row && step.styleClass) {
+                    row.classList.add(step.styleClass);
+                }
+                stepBadge.innerText = `Langkah: ${currentStep + 1} / ${executionPlan.length} (Penjelasan Baris ${step.lineNum})`;
+            }
+
+            statusText.innerHTML = step.status;
+            if (step.action) step.action();
+
+            currentStep++;
+
+            if (currentStep >= executionPlan.length) {
+                btnRunStep.innerHTML = "<span>🔄 Ulangi Penjelasan</span>";
+                const comp = evaluateProgramCompliance();
+                if (comp && comp.isSesuai) {
+                    stepBadge.innerHTML = "<span>🎉 Penjelasan Tuntas & Sesuai Kasus</span>";
+                    stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 w-fit";
+                } else {
+                    stepBadge.innerHTML = "<span>⚠️ Penjelasan Tuntas (Perlu Penyesuaian)</span>";
+                    stepBadge.className = "mt-3 inline-flex items-center gap-1 text-[11px] font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 w-fit";
+                }
+                setTimeout(() => {
+                    openComplianceModal(comp);
+                }, 350);
+            } else {
+                btnRunStep.innerHTML = "<span>Lanjut ke Langkah Berikutnya &rarr;</span>";
+            }
+        }
+
+        function autoRunSimulation() {
+            if (autoTimer) clearTimeout(autoTimer);
+            resetExecution();
+            const plan = buildExecutionPlan();
+            if (!plan) return;
+            executionPlan = plan;
+
+            const next = () => {
+                if (currentStep < executionPlan.length) {
+                    runLineStep();
+                    autoTimer = setTimeout(next, 1200);
+                }
+            };
+            next();
+        }
+
+        // ==========================================
+        // FITUR GURU: PANGGIL KODE HASIL KIRIMAN KELOMPOK (1 - 9)
+        // ==========================================
+        const DEFAULT_GROUPS = [
+            { id: 1, nama: 'Kelompok 1' },
+            { id: 2, nama: 'Kelompok 2' },
+            { id: 3, nama: 'Kelompok 3' },
+            { id: 4, nama: 'Kelompok 4' },
+            { id: 5, nama: 'Kelompok 5' },
+            { id: 6, nama: 'Kelompok 6' },
+            { id: 7, nama: 'Kelompok 7' },
+            { id: 8, nama: 'Kelompok 8' },
+            { id: 9, nama: 'Kelompok 9' }
+        ];
+
+        function populateGroupDropdown(showAlert = false) {
+            const sel = document.getElementById('select-murid-submission');
+            if (!sel) return;
+
+            let subs = {};
+            try {
+                subs = JSON.parse(localStorage.getItem('eduassess_student_submissions_v2') || '{}');
+            } catch(e) {}
+
+            let recs = [];
+            try {
+                recs = JSON.parse(localStorage.getItem('eduassess_teacher_records_v2') || '[]');
+            } catch(e) {}
+
+            const curVal = sel.value;
+            sel.innerHTML = '<option value="">-- Pilih Kelompok untuk Memuat Kodenya --</option>';
+
+            DEFAULT_GROUPS.forEach(g => {
+                const sub = subs[g.id] || subs['kelompok_' + g.id] || (recs.find(item => Number(item.absen) === Number(g.id))?.pseudocode);
+                const hasSub = Boolean(sub && (sub.lines?.length || sub.progName));
+                const opt = document.createElement('option');
+                opt.value = g.id;
+                const memberNote = sub?.memberStr ? ' (' + sub.memberStr + ')' : '';
+                opt.textContent = `${g.nama} ${hasSub ? '✓ [Terkirim ' + (sub.submittedAt || '') + ']' + memberNote : '(Belum kirim)'}`;
+                sel.appendChild(opt);
+            });
+
+            if (curVal) sel.value = curVal;
+
+            if (showAlert) {
+                statusText.innerHTML = "🔄 <b>Daftar kiriman Kelompok 1 - 9 berhasil dimuat ulang!</b> Silakan pilih nama kelompok dari dropdown untuk menguji kodenya.";
+            }
+        }
+        window.populateStudentDropdown = populateGroupDropdown;
+
+        function loadGroupSubmissionToSimulator(groupId) {
+            if (!groupId) return;
+            const id = parseInt(groupId, 10);
+            const groupName = 'Kelompok ' + id;
+
+            let subs = {};
+            try {
+                subs = JSON.parse(localStorage.getItem('eduassess_student_submissions_v2') || '{}');
+            } catch(e) {}
+
+            let recs = [];
+            try {
+                recs = JSON.parse(localStorage.getItem('eduassess_teacher_records_v2') || '[]');
+            } catch(e) {}
+
+            const sub = subs[id] || subs['kelompok_' + id] || (recs.find(item => Number(item.absen) === Number(id))?.pseudocode);
+
+            clearErrorState();
+            resetExecution(false);
+
+            if (sub && sub.lines && sub.lines.length > 0) {
+                if (document.getElementById('prog-name')) document.getElementById('prog-name').value = sub.progName || ('Program_Kelompok_' + id);
+                if (document.getElementById('prog-desc')) document.getElementById('prog-desc').value = sub.progDesc || ('{ Rancangan: ' + groupName + (sub.memberStr ? ' - ' + sub.memberStr : '') + ' }');
+                if (document.getElementById('prog-decl')) document.getElementById('prog-decl').value = sub.progDecl || '';
+
+                currentLines = sub.lines.slice();
+                renderCodeRows(currentLines);
+                saveCodeToStorage();
+
+                statusText.innerHTML = `✅ <b>Kode ${groupName} Berhasil Dimuat:</b> Menampilkan rancangan dari <b>${groupName}</b> ${sub.memberStr ? '(' + sub.memberStr + ')' : ''} [Waktu kirim: ${sub.submittedAt || 'Tersimpan'}]. Klik <b>▶️ Jalankan Program</b> untuk menguji kodenya!`;
+            } else {
+                if (document.getElementById('prog-name')) document.getElementById('prog-name').value = '';
+                if (document.getElementById('prog-desc')) document.getElementById('prog-desc').value = '{ Rancangan: ' + groupName + ' }';
+                if (document.getElementById('prog-decl')) document.getElementById('prog-decl').value = '';
+
+                currentLines = ['', '', '', '', '', ''];
+                renderCodeRows(currentLines);
+                saveCodeToStorage();
+
+                statusText.innerHTML = `ℹ️ <b>${groupName} belum mengirim kode kustom.</b> Baris algoritma masih kosong.`;
+            }
+        }
+        window.loadStudentSubmissionToSimulator = loadGroupSubmissionToSimulator;
+
+        
+        // ==========================================
+        // PENGIRIMAN RANCANGAN KELOMPOK KE GURU & GAS
+        // ==========================================
+        function kirimRancanganKelompokKeGuru() {
+            const groupSel = document.getElementById('studentGroupSelect');
+            const groupNum = parseInt(groupSel ? groupSel.value : '1', 10);
+            const namaKelompok = 'Kelompok ' + groupNum;
+
+            const membersInput = document.getElementById('studentGroupMembersInput');
+            const memberStr = membersInput ? membersInput.value.trim() : '';
+
+            const progName = document.getElementById('prog-name')?.value.trim() || ('Program_' + namaKelompok);
+            const progDesc = document.getElementById('prog-desc')?.value.trim() || ('{ Rancangan: ' + namaKelompok + (memberStr ? ' - ' + memberStr : '') + ' }');
+            const progDecl = document.getElementById('prog-decl')?.value.trim() || '';
+            const lines = getLines();
+
+            // Pastikan baris algoritma tidak kosong
+            const filledLines = lines.filter(l => (l || '').trim() !== '');
+            if (filledLines.length === 0) {
+                statusText.innerHTML = "⚠️ <b>Baris algoritma masih kosong!</b> Ketikkan baris pseudocode hasil rancangan kelompokmu terlebih dahulu sebelum mengirim ke guru.";
+                alert("Baris algoritma masih kosong! Silakan tuliskan baris pseudocode kelompokmu terlebih dahulu.");
+                return;
+            }
+
+            const now = new Date();
+            const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ' WIB';
+
+            const submission = {
+                groupId: groupNum,
+                absen: groupNum,
+                nama: namaKelompok,
+                namaKelompok: namaKelompok,
+                memberStr: memberStr || ('Anggota ' + namaKelompok),
+                submittedAt: timeStr,
+                progName: progName,
+                progDesc: progDesc,
+                progDecl: progDecl,
+                lines: lines
+            };
+
+            // 1. Simpan ke localStorage untuk dipanggil guru di proyektor
+            let allSubs = {};
+            try {
+                allSubs = JSON.parse(localStorage.getItem('eduassess_student_submissions_v2') || '{}');
+            } catch(e) {}
+            allSubs[groupNum] = submission;
+            allSubs['kelompok_' + groupNum] = submission;
+            localStorage.setItem('eduassess_student_submissions_v2', JSON.stringify(allSubs));
+
+            // Tandai modul simulasi selesai di portal siswa
+            try {
+                const sessRaw = localStorage.getItem('eduassess_active_student_session_v2');
+                if (sessRaw) {
+                    const sess = JSON.parse(sessRaw);
+                    sess.openedMaterials = sess.openedMaterials || {};
+                    sess.openedMaterials['simulasi'] = true;
+                    localStorage.setItem('eduassess_active_student_session_v2', JSON.stringify(sess));
+                }
+            } catch(e) {}
+
+            // Perbarui dropdown pemanggilan guru
+            if (typeof populateGroupDropdown === 'function') {
+                populateGroupDropdown(false);
+            }
+
+            // 2. Kirim ke Google Apps Script (GAS) jika URL sudah terkonfigurasi
+            const gasUrl = localStorage.getItem('eduassess_gas_url_v2') || '';
+            let gasSent = false;
+            if (gasUrl) {
+                fetch(gasUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({
+                        action: 'saveLKPD',
+                        submission: submission
+                    })
+                }).then(function() {
+                    console.log('Tersinkron ke Google Apps Script!');
+                }).catch(function() {});
+                gasSent = true;
+            }
+
+            // 3. Tampilkan Pop-up Sukses
+            showStudentSubmissionSuccessModal(submission, gasSent);
+        }
+
+        function showStudentSubmissionSuccessModal(sub, gasSent) {
+            let modal = document.getElementById('modal-student-sent-sukses');
+            if (!modal) {
+                modal = document.createElement('div');
+                modal.id = 'modal-student-sent-sukses';
+                modal.className = 'fixed inset-0 bg-slate-950/80 backdrop-blur-xs z-50 flex items-center justify-center p-4';
+                document.body.appendChild(modal);
+            }
+            modal.innerHTML = `
+                <div class="bg-white text-slate-900 rounded-3xl shadow-2xl border-2 border-emerald-400 max-w-md w-full p-6 text-center space-y-4 animate-in fade-in zoom-in duration-200">
+                    <div class="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto shadow-inner">
+                        🎉
+                    </div>
+                    <div>
+                        <span class="text-[10px] font-black uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                            Berhasil Dikirim ke Guru
+                        </span>
+                        <h3 class="text-lg font-black text-slate-900 mt-2">Rancangan ${escapeHtml(sub.namaKelompok)} Siap!</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed mt-1">
+                            Rancangan pseudocode kelompokmu telah berhasil tersimpan dan siap dipanggil untuk disimulasikan di proyektor depan kelas.
+                        </p>
+                    </div>
+                    <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200 text-left font-mono text-xs space-y-1.5">
+                        <div><b>Kelompok:</b> <span class="text-purple-700 font-bold">${escapeHtml(sub.namaKelompok)}</span></div>
+                        <div><b>Anggota:</b> <span class="text-slate-600 font-sans">${escapeHtml(sub.memberStr || '-')}</span></div>
+                        <div><b>Program:</b> <code class="text-blue-700">${escapeHtml(sub.progName)}</code></div>
+                        <div><b>Baris Algoritma:</b> ${sub.lines.length} Baris Logika</div>
+                        <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-200">
+                            ${gasSent ? '🟢 Tersinkron ke Google Sheets Guru (GAS)' : '💾 Tersimpan di Dasbor Guru Lokal'} • ${sub.submittedAt}
+                        </div>
+                    </div>
+                    <button type="button" onclick="document.getElementById('modal-student-sent-sukses').remove()" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-black text-xs transition cursor-pointer shadow-md">
+                        Siap, Lanjut Simulasi ▶️
+                    </button>
+                </div>
+            `;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedCode();
+            populateGroupDropdown(false);
+
+            // Periksa URL query params (misal: ?kelompok=3 atau ?absen=3)
+            const urlParams = new URLSearchParams(window.location.search);
+            const queryGroup = urlParams.get('kelompok') || urlParams.get('absen') || urlParams.get('group');
+            if (queryGroup) {
+                const sel = document.getElementById('select-murid-submission');
+                if (sel) sel.value = queryGroup;
+                const studSel = document.getElementById('studentGroupSelect');
+                if (studSel) studSel.value = queryGroup;
+                loadGroupSubmissionToSimulator(queryGroup);
+            }
+
+            // Hubungkan pergantian Kelompok ke rekomendasi nama anggota
+            const studGroupSel = document.getElementById('studentGroupSelect');
+            if (studGroupSel) {
+                studGroupSel.addEventListener('change', function() {
+                    const gId = parseInt(this.value, 10);
+                    const membersInput = document.getElementById('studentGroupMembersInput');
+                    if (membersInput && (!membersInput.value.trim() || membersInput.dataset.autoFilled === 'true')) {
+                        let roster = [];
+                        try {
+                            roster = JSON.parse(localStorage.getItem('eduassess_gas_roster_v3')) || (typeof DEFAULT_ROSTER !== 'undefined' ? DEFAULT_ROSTER : []);
+                        } catch(e) {
+                            roster = typeof DEFAULT_ROSTER !== 'undefined' ? DEFAULT_ROSTER : [];
+                        }
+                        const groupMembers = roster.filter(m => m.kelompok === 'Kelompok ' + gId || (Math.floor((m.absen - 1) / 4) + 1) === gId);
+                        if (groupMembers.length > 0) {
+                            membersInput.value = groupMembers.map(m => m.nama).join(', ');
+                            membersInput.dataset.autoFilled = 'true';
+                        }
+                    }
+                });
+                // Inisialisasi saran nama anggota awal jika masih kosong
+                studGroupSel.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+</body>
+</html>
