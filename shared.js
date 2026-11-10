@@ -7,6 +7,7 @@ const STORAGE_KEY_SESSION = 'eduassess_active_student_session_v2';
 const STORAGE_KEY_RECORDS = 'eduassess_teacher_records_v3';
 const STORAGE_KEY_QUESTIONS = 'eduassess_question_bank_v3';
 const STORAGE_KEY_ROSTER = 'eduassess_gas_roster_v3';
+const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbwuYVpatjOrEPwjaSQMWy79qvKoy2dygctQMZM3YP8XOYXV9vsRK_yDDP-XKWeECSGc/exec';
 const QUESTION_TIME_LIMIT = 30;
 
 // Safe localStorage helpers

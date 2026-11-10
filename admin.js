@@ -977,13 +977,13 @@
     }
 
     // Restore saved GAS URL
-    const savedGasUrl = localStorage.getItem('eduassess_gas_url_v2') || '';
+    const savedGasUrl = localStorage.getItem('eduassess_gas_url_v2') || (typeof DEFAULT_GAS_URL !== 'undefined' ? DEFAULT_GAS_URL : 'https://script.google.com/macros/s/AKfycbwuYVpatjOrEPwjaSQMWy79qvKoy2dygctQMZM3YP8XOYXV9vsRK_yDDP-XKWeECSGc/exec');
     const gasUrlInput = document.getElementById('gasUrlInput');
-    if (gasUrlInput && savedGasUrl) {
+    if (gasUrlInput) {
       gasUrlInput.value = savedGasUrl;
       const statusBadge = document.getElementById('gasLiveStatusBadge');
       if (statusBadge) {
-        statusBadge.textContent = '🟢 URL Tersimpan';
+        statusBadge.textContent = '🟢 GAS Terhubung';
         statusBadge.className = 'px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-50 text-emerald-800 border border-emerald-300 shrink-0';
       }
     }
