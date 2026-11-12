@@ -1019,13 +1019,23 @@ function createDefaultSession() {
   };
 }
 
-// Cari Murid berdasarkan Absen
+// Cari Murid berdasarkan Absen (Mendukung 1 s/d 36 Siswa Kelas X E7)
 function lookupStudentByAbsen(roster, absenVal) {
   const num = parseInt(absenVal, 10);
   if (isNaN(num)) return null;
-  return roster.find(function (item) {
+  // Cari di roster aktif
+  let found = Array.isArray(roster) ? roster.find(function (item) {
     return Number(item.absen) === num;
-  }) || null;
+  }) : null;
+  if (found) return found;
+  // Fallback ke DEFAULT_ROSTER (memastikan selalu menemukan siswa 1 s.d. 36)
+  if (Array.isArray(DEFAULT_ROSTER)) {
+    found = DEFAULT_ROSTER.find(function (item) {
+      return Number(item.absen) === num;
+    });
+    if (found) return found;
+  }
+  return null;
 }
 
 // Klasifikasi Kelompok TaRL

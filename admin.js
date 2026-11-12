@@ -6,6 +6,10 @@
 
 (function () {
   let roster = safeGetStorage(STORAGE_KEY_ROSTER, DEFAULT_ROSTER);
+  if (!Array.isArray(roster) || roster.length < DEFAULT_ROSTER.length) {
+    roster = DEFAULT_ROSTER;
+    safeSetStorage(STORAGE_KEY_ROSTER, roster);
+  }
   roster.forEach(function (r) {
     if (!r.kelas || r.kelas === 'X - Informatika') {
       r.kelas = 'Informatika - X E7';

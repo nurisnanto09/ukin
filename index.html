@@ -249,7 +249,7 @@
           </div>
           <div class="flex items-center gap-2 text-slate-500">
             <span class="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1 rounded-full">
-              5 Modul Pembelajaran
+              6 Modul &amp; Portofolio Belajar
             </span>
             <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center transition text-slate-600" title="Lipat / Bentangkan">
               <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>
@@ -262,28 +262,31 @@
 
         <!-- ==================== SKILLSET STYLE TOPIC CARDS ==================== -->
 
-        <!-- CARD 1: MATERI (Gold/Yellow Squircle with 'M') -->
+        <!-- CARD 1: PRETEST (Coral/Red Squircle with 'P', Page Sendiri) -->
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="flex items-center gap-4 min-w-0">
-            <!-- Squircle with initial letter M -->
-            <div class="w-12 h-12 rounded-2xl bg-[#f5b041] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
-              M
+            <!-- Squircle with initial letter P (Coral/Red) -->
+            <div class="w-12 h-12 rounded-2xl bg-[#ff5a5f] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
+              P
             </div>
             <div class="min-w-0">
-              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
-                Materi Pseudocode
-              </h4>
+              <div class="flex items-center gap-2">
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                  Pretest Pseudocode
+                </h4>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-50 text-rose-700 border border-rose-200">Halaman Khusus</span>
+              </div>
               <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
-                Struktur Judul, Deklarasi &amp; Isi Algoritma
+                10 Soal Diagnostik • 30 Detik per Soal • Auto-Sync Nilai
               </p>
             </div>
           </div>
           <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
-            <span id="materiStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
-              Belum Dibuka
+            <span id="pretestStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+              Belum Dikerjakan
             </span>
-            <a href="materi_pseudocode.html" target="_blank" data-track-material="materi" class="px-5 py-2.5 rounded-full bg-[#f5b041] hover:bg-[#e09e30] text-slate-900 font-black text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
-              <span>Buka Materi</span>
+            <a id="cardStartPretestBtn" href="pretest.html" class="px-5 py-2.5 rounded-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Buka Pretest</span>
               <span>↗</span>
             </a>
             <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
@@ -292,37 +295,40 @@
           </div>
         </div>
 
-        <!-- CARD 2: PRETEST (Coral/Red Squircle with 'P', Sesuai Hover State 'Marketing' Gambar) -->
+        <!-- CARD 2: MATERI SIMULASI TERPADU (Gold/Yellow Squircle with 'M', Page Sendiri) -->
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="flex items-center gap-4 min-w-0">
-            <!-- Squircle with initial letter P (Coral/Red) -->
-            <div class="w-12 h-12 rounded-2xl bg-[#ff5a5f] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
-              P
+            <!-- Squircle with initial letter M -->
+            <div class="w-12 h-12 rounded-2xl bg-[#f5b041] text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
+              M
             </div>
             <div class="min-w-0">
-              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
-                Pretest Pseudocode
-              </h4>
+              <div class="flex items-center gap-2">
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                  Materi &amp; Simulasi Terpadu (Pseudocode &amp; Variabel)
+                </h4>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Halaman Khusus</span>
+              </div>
               <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
-                10 Soal • 30 Detik per Soal (Otomatis Kirim)
+                Struktur Notasi Pseudocode, Simulasi Wadah Variabel, Overwrite &amp; Praktikum Swap
               </p>
             </div>
           </div>
           <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
-            <span id="pretestStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
-              Belum Dikerjakan
+            <span id="materiStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600">
+              Belum Dibuka
             </span>
-            <button id="cardStartPretestBtn" type="button" class="px-5 py-2.5 rounded-full bg-[#ff5a5f] hover:bg-[#e0484d] text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
-              <span>Buka Pretest</span>
+            <a href="materi_pseudocode.html" target="_blank" data-track-material="materi" class="px-5 py-2.5 rounded-full bg-[#f5b041] hover:bg-[#e09e30] text-slate-900 font-black text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Buka Materi &amp; Simulasi</span>
               <span>↗</span>
-            </button>
+            </a>
             <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
               &#8942;
             </button>
           </div>
         </div>
 
-        <!-- CARD 3: LKM (Violet/Purple Squircle with 'L') -->
+        <!-- CARD 3: LKM (Violet/Purple Squircle with 'L', Page Sendiri) -->
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="flex items-center gap-4 min-w-0">
             <!-- Squircle with initial letter L (Purple) -->
@@ -330,9 +336,12 @@
               L
             </div>
             <div class="min-w-0">
-              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
-                LKM Pseudocode
-              </h4>
+              <div class="flex items-center gap-2">
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                  LKM Pseudocode
+                </h4>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">Halaman Khusus</span>
+              </div>
               <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
                 Lembar Kerja Murid Fisik (Cetak &amp; Unduh Berkas PDF 4 Halaman)
               </p>
@@ -355,7 +364,7 @@
           </div>
         </div>
 
-        <!-- CARD 4: SIMULASI & KIRIM KE GURU (GAS) (Emerald Squircle with 'S') -->
+        <!-- CARD 4: SIMULASI & KIRIM KE GURU (GAS) (Emerald Squircle with 'S', Page Sendiri) -->
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="flex items-center gap-4 min-w-0">
             <!-- Squircle with initial letter S (Emerald) -->
@@ -363,9 +372,12 @@
               S
             </div>
             <div class="min-w-0">
-              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
-                Simulasi &amp; Kirim ke Guru (GAS)
-              </h4>
+              <div class="flex items-center gap-2">
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                  Simulasi &amp; Kirim ke Guru (GAS)
+                </h4>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200">Halaman Khusus</span>
+              </div>
               <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
                 Uji Logika Hasil LKPD Cetak &amp; Kirim ke Google Spreadsheet Guru
               </p>
@@ -385,7 +397,7 @@
           </div>
         </div>
 
-        <!-- CARD 5: POSTTEST (Teal Squircle with 'P') -->
+        <!-- CARD 5: POSTTEST (Teal Squircle with 'P', Page Sendiri) -->
         <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="flex items-center gap-4 min-w-0">
             <!-- Squircle with initial letter P (Teal) -->
@@ -393,9 +405,12 @@
               P
             </div>
             <div class="min-w-0">
-              <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
-                Posttest Pseudocode
-              </h4>
+              <div class="flex items-center gap-2">
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                  Posttest Pseudocode
+                </h4>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-teal-50 text-teal-800 border border-teal-200">Halaman Khusus</span>
+              </div>
               <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
                 10 Soal HOTS (C4–C6) • Evaluasi Formatif &amp; N-Gain
               </p>
@@ -405,10 +420,43 @@
             <span id="posttestStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
               Tersedia
             </span>
-            <button id="cardStartPosttestBtn" type="button" class="px-5 py-2.5 rounded-full bg-[#14b8a6] hover:bg-[#0d9488] text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+            <a id="cardStartPosttestBtn" href="posttest.html" class="px-5 py-2.5 rounded-full bg-[#14b8a6] hover:bg-[#0d9488] text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
               <span>Buka Posttest</span>
               <span>↗</span>
+            </a>
+            <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
+              &#8942;
             </button>
+          </div>
+        </div>
+
+        <!-- CARD 6: RAPOR & REKAP HASIL BELAJAR SISWA (Royal Blue Squircle with 'R', Page Sendiri) -->
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-4 min-w-0">
+            <!-- Squircle with initial letter R (Blue/Indigo) -->
+            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-xs shrink-0">
+              R
+            </div>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2">
+                <h4 class="text-base sm:text-lg font-bold text-slate-900 leading-tight truncate">
+                  Rapor &amp; Rekap Hasil Belajar Siswa
+                </h4>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200">Halaman Baru</span>
+              </div>
+              <p class="text-xs text-slate-500 font-medium mt-0.5 truncate">
+                Rekap Nilai Pretest, Posttest, Analisis N-Gain, KKM 75, Bloom C1–C6 &amp; Portofolio
+              </p>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-2.5 sm:gap-3 shrink-0">
+            <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Cetak / PDF
+            </span>
+            <a href="rapor_siswa.html" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Buka Rapor Siswa</span>
+              <span>↗</span>
+            </a>
             <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
               &#8942;
             </button>
@@ -496,9 +544,9 @@
                 Nomor Absen / NISN *
               </label>
               <div class="relative">
-                <input id="quizInputAbsen" type="number" min="1" max="50" placeholder="Contoh: 18" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs" />
+                <input id="quizInputAbsen" type="number" min="1" max="36" placeholder="Contoh: 18 (1 s.d. 36)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm font-bold text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-100 shadow-xs" />
                 <div class="text-[10px] text-blue-600 font-semibold mt-1">
-                  Ketik nomor absen (1–20) untuk mengisi nama otomatis
+                  Ketik nomor absen (1–36) untuk mengisi nama otomatis
                 </div>
               </div>
             </div>
@@ -946,13 +994,13 @@
       </div>
 
       <p class="text-xs text-slate-500">
-        Ketik nomor absenmu (1 s/d 20) untuk mengisi nama dan kelas secara otomatis dari data spreadsheet GAS.
+        Ketik nomor absenmu (1 s/d 36) untuk mengisi nama dan kelas secara otomatis dari data spreadsheet GAS.
       </p>
 
       <div class="space-y-3">
         <div>
-          <label for="inputAbsen" class="block text-xs font-bold text-slate-700 mb-1">Nomor Absen Siswa (1 - 20) *</label>
-          <input id="inputAbsen" type="number" min="1" max="50" placeholder="Contoh: 18" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-600 outline-none text-sm font-bold text-slate-900">
+          <label for="inputAbsen" class="block text-xs font-bold text-slate-700 mb-1">Nomor Absen Siswa (1 - 36) *</label>
+          <input id="inputAbsen" type="number" min="1" max="36" placeholder="Contoh: 18 (1 s.d. 36)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-indigo-600 outline-none text-sm font-bold text-slate-900">
         </div>
         <div>
           <label for="inputNama" class="block text-xs font-bold text-slate-700 mb-1">Nama Lengkap (Otomatis)</label>

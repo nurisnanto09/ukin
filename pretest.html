@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pretest Pseudocode - EduInformatika</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom LMS Styles -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-code { font-family: 'Fira Code', monospace; }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- ==================== TOP NAVIGATION BAR ==================== -->
+  <header class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo & Breadcrumb -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#ff5a5f] to-rose-600 text-white flex items-center justify-center font-black text-xl shadow-md shadow-rose-500/20 hover:scale-105 transition">
+          P
+        </a>
+        <div>
+          <div class="flex items-center gap-2 text-[11px] font-bold text-slate-400">
+            <a href="index.html" class="hover:text-indigo-600 transition">Portal Siswa</a>
+            <span>/</span>
+            <span class="text-rose-600">Pretest Pseudocode</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+            Asesmen Diagnostik Awal
+          </h1>
+        </div>
+      </div>
+
+      <!-- Quick Header Actions -->
+      <div class="flex items-center gap-2.5">
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-rose-50 text-rose-600 border border-rose-100">
+          <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+          <span>Online</span>
+        </span>
+
+        <a href="rapor_siswa.html" class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-indigo-200 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold transition">
+          <span>📊</span>
+          <span>Rapor Siswa</span>
+        </a>
+
+        <a href="index.html" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition shadow-xs">
+          <span>&larr;</span>
+          <span>Beranda Murid</span>
+        </a>
+
+        <a href="admin.html" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
+          <span>🔒</span>
+          <span class="hidden sm:inline">Guru</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== HERO WELCOME BANNER (FULL WIDTH DI ATAS) ==================== -->
+  <div id="pretestHeroBanner" class="w-full hero-gradient text-white py-8 sm:py-10 px-4 sm:px-6 md:px-8 border-b border-indigo-700/30 shadow-md relative overflow-hidden">
+    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+      <div class="space-y-3 max-w-2xl text-center lg:text-left">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-black tracking-wide uppercase">
+          <span>📝</span>
+          <span>Asesmen Diagnostik Awal • Fase E / Kelas X</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+          Pretest Notasi Pseudocode &amp; Berpikir Komputasional
+        </h2>
+        <p class="text-xs sm:text-sm text-indigo-100/95 font-medium leading-relaxed">
+          Asesmen diagnostik ini dirancang untuk memetakan pemahaman awal Anda terhadap konsep dasar algoritma, notasi kode semu, assignment variabel, percabangan IF-ELSE, dan logika komputasional sebelum memasuki materi inti.
+        </p>
+        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1 text-[11px] font-bold text-indigo-100">
+          <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">⏱️ 30 Detik / Soal</span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">🎯 10 Butir Soal Acak</span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">📊 Taksonomi Bloom C1–C6</span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">⚡ Auto-Submit Otomatis</span>
+        </div>
+      </div>
+
+      <!-- 3 Quick Badges / Stat Cards -->
+      <div class="grid grid-cols-3 gap-2.5 shrink-0 w-full lg:w-auto text-center">
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
+          <div class="text-2xl sm:text-3xl font-black text-amber-300">10</div>
+          <div class="text-[11px] font-extrabold text-white">BUTIR SOAL</div>
+          <div class="text-[9px] text-indigo-200">Bank Soal C1–C6</div>
+        </div>
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
+          <div class="text-2xl sm:text-3xl font-black text-rose-300">30s</div>
+          <div class="text-[11px] font-extrabold text-white">TIMER SOAL</div>
+          <div class="text-[9px] text-indigo-200">Hitung Mundur</div>
+        </div>
+        <div class="p-3.5 sm:p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
+          <div class="text-2xl sm:text-3xl font-black text-emerald-300">100</div>
+          <div class="text-[11px] font-extrabold text-white">SKOR MAKS</div>
+          <div class="text-[9px] text-indigo-200">Bobot 10/Soal</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT AREA ==================== -->
+  <main class="max-w-5xl mx-auto w-full p-4 sm:p-6 md:p-8 flex-1 space-y-6">
+
+    <!-- ==================== TAHAP 1: IDENTITAS & CEK-IN ==================== -->
+    <section id="stageIdentity" class="space-y-6">
+
+        <!-- Header Banner Tahap 1 -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3.5">
+            <a href="index.html" class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-700 font-bold transition shadow-xs text-base hover:scale-105 active:scale-95" title="Kembali ke Beranda">
+              &larr;
+            </a>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800">
+                  ASESMEN DIAGNOSTIK PRETEST
+                </span>
+                <span class="text-xs text-slate-500 font-medium">Informatika Fase E / Kelas X</span>
+              </div>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">
+                Pengisian Identitas Siswa &amp; Cek-in Belajar
+              </h2>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 px-3.5 py-2 rounded-2xl bg-slate-100 border border-slate-200 text-slate-600 text-xs font-bold shadow-xs">
+            <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+            <span>Waktu Belum Berjalan</span>
+          </div>
+        </div>
+
+        <!-- Petunjuk Pengerjaan -->
+        <div class="p-5 rounded-2xl bg-amber-50/90 border border-amber-200 text-xs text-amber-950 space-y-2.5 shadow-xs">
+          <div class="flex items-center gap-2 font-black text-xs sm:text-sm text-amber-950">
+            <span class="text-base text-amber-600">📋</span>
+            <span>Langkah &amp; Petunjuk Pengerjaan Pretest:</span>
+          </div>
+          <ol class="list-decimal list-inside space-y-1.5 text-slate-700 leading-relaxed font-medium pl-1 text-xs sm:text-sm">
+            <li>Ketik <strong>Nomor Absen / NISN</strong> Anda. Nama lengkap akan otomatis terisi dari buku induk siswa.</li>
+            <li>Pastikan pilihan <strong>Kelas</strong> sudah sesuai (Informatika - X E7).</li>
+            <li>Pilih salah satu <strong>Emotikon Kondisi</strong> sebagai cek-in kesiapan belajar Anda hari ini.</li>
+            <li>Klik tombol <strong>"Mulai Kerjakan Pretest 🚀"</strong> di bawah.</li>
+            <li>Akan muncul <strong>notifikasi konfirmasi</strong> untuk memastikan data identitas Anda sudah benar.</li>
+            <li>Setelah konfirmasi, Anda akan mulai mengerjakan <strong>10 butir soal asesmen diagnostik</strong> secara berurutan.</li>
+            <li><strong>Batas waktu setiap butir soal adalah 30 detik</strong>. Ada atau tidak ada jawaban, sistem langsung otomatis mengirim dan beralih ke butir soal berikutnya ketika 30 detik habis. Pada Soal 10, kuis langsung selesai terkirim.</li>
+          </ol>
+        </div>
+
+        <!-- Form Identitas -->
+        <div class="lms-card p-5 sm:p-7 rounded-2xl border border-slate-200 shadow-sm space-y-6 bg-white">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl bg-rose-600 text-white flex items-center justify-center text-lg font-black shrink-0 shadow-sm">
+                🎓
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-slate-900">Identitas Siswa</h3>
+                <p class="text-xs text-slate-500">Lengkapi data diri sebelum mengonfirmasi dan memulai asesmen pretest.</p>
+              </div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-[11px] font-bold text-emerald-700">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+              Auto-Sync Spreadsheet Guru
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label for="inputAbsen" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Nomor Absen / NISN *
+              </label>
+              <input id="inputAbsen" type="number" min="1" max="36" placeholder="Contoh: 18 (1 s.d. 36)" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:border-rose-600 focus:ring-2 focus:ring-rose-100 shadow-xs" />
+              <div class="text-[10px] text-rose-600 font-semibold mt-1">
+                Ketik nomor absen (1–36) untuk mengisi nama otomatis
+              </div>
+            </div>
+
+            <div>
+              <label for="inputNama" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Nama Lengkap *
+              </label>
+              <input id="inputNama" type="text" placeholder="Nama lengkap siswa..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none focus:border-rose-600 focus:ring-2 focus:ring-rose-100 shadow-xs" />
+              <div class="text-[10px] text-slate-400 mt-1">
+                Terisi otomatis atau ketik manual jika belum ada
+              </div>
+            </div>
+
+            <div>
+              <label for="inputKelas" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+                Kelas *
+              </label>
+              <input id="inputKelas" type="text" readonly value="Informatika - X E7" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs sm:text-sm font-bold text-slate-800 cursor-not-allowed shadow-xs" />
+              <div class="text-[10px] text-slate-500 font-semibold mt-1">
+                Informatika - X E7
+              </div>
+            </div>
+          </div>
+
+          <!-- Cek-in Emotikon -->
+          <div class="pt-4 border-t border-slate-100 space-y-2.5">
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div>
+                <div class="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  Pilihan Emotikon Kondisi (Cek-in Belajar) *
+                </div>
+                <p class="text-[11px] text-slate-500">
+                  Pilih perasaanmu hari ini sebelum mengerjakan asesmen diagnostik:
+                </p>
+              </div>
+              <span id="moodActiveLabel" class="text-xs font-bold text-rose-700 bg-rose-50 px-2.5 py-1 rounded-full border border-rose-200">
+                😊 Semangat &amp; Antusias
+              </span>
+            </div>
+
+            <div id="moodContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2.5 pt-1"></div>
+          </div>
+        </div>
+
+        <!-- Tombol Aksi Bawah -->
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+          <a href="index.html" class="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition shadow-xs flex items-center justify-center gap-2">
+            &larr; Kembali ke Beranda
+          </a>
+          <button id="btnStartConfirm" type="button" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-gradient-to-r from-[#ff5a5f] to-rose-600 hover:from-[#e0484d] hover:to-rose-700 text-white font-black text-sm sm:text-base shadow-lg shadow-rose-500/25 transition hover:scale-105 active:scale-95 flex items-center justify-center gap-2">
+            <span>Mulai Kerjakan Pretest</span>
+            <span>🚀</span>
+          </button>
+        </div>
+
+      </section>
+
+      <!-- ==================== MODAL KONFIRMASI ==================== -->
+      <div id="confirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 z-50 hidden transition-all duration-200">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 space-y-5 animate-scaleUp">
+          
+          <div class="flex items-center gap-3.5 border-b border-slate-100 pb-4">
+            <div class="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center text-2xl font-black shrink-0">
+              📋
+            </div>
+            <div>
+              <h3 class="text-base sm:text-lg font-extrabold text-slate-900">Konfirmasi Data Identitas</h3>
+              <p class="text-xs text-slate-500">Apakah data Anda sudah benar untuk pretest?</p>
+            </div>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5 text-xs sm:text-sm">
+            <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+              <span class="text-slate-500 font-medium">Nomor Absen:</span>
+              <span id="modalAbsen" class="font-bold text-slate-900">Absen #1</span>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+              <span class="text-slate-500 font-medium">Nama Lengkap:</span>
+              <span id="modalNama" class="font-extrabold text-rose-700">Nama Siswa</span>
+            </div>
+            <div class="flex items-center justify-between py-1 border-b border-slate-200/60">
+              <span class="text-slate-500 font-medium">Kelas:</span>
+              <span id="modalKelas" class="font-bold text-slate-900">Informatika - X E7</span>
+            </div>
+            <div class="flex items-center justify-between py-1">
+              <span class="text-slate-500 font-medium">Kondisi Belajar:</span>
+              <span id="modalMood" class="font-bold text-rose-700 bg-rose-50 px-2.5 py-0.5 rounded-full border border-rose-200">😊 Semangat</span>
+            </div>
+          </div>
+
+          <div class="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-xs text-rose-900 space-y-1">
+            <div class="font-extrabold flex items-center gap-1.5 text-rose-700">
+              <span>⏱️</span>
+              <span>Peringatan Waktu Pengerjaan:</span>
+            </div>
+            <p class="leading-relaxed text-slate-700 text-[11px]">
+              Setelah Anda menekan tombol <strong>"Ya, Sudah Benar &amp; Mulai"</strong>, Anda akan mulai mengerjakan <strong>10 butir soal asesmen diagnostik pretest</strong> dengan batas waktu <strong>30 detik per butir soal</strong>. Jika waktu 30 detik habis, jawaban akan langsung <strong>otomatis terkirim</strong> dan beralih ke soal berikutnya.
+            </p>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <button id="btnModalCancel" type="button" class="px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs sm:text-sm transition">
+              Periksa Kembali
+            </button>
+            <button id="btnModalStart" type="button" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-rose-500/25 transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
+              <span>Ya, Sudah Benar &amp; Mulai</span>
+              <span>🚀</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==================== TAHAP 2: PENGERJAAN SOAL (TIMER 30S) ==================== -->
+      <section id="stageQuestion" class="space-y-6 hidden max-w-5xl mx-auto">
+        
+        <!-- Top Bar: Phase Badge & Timer -->
+        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <div class="flex items-center gap-3.5">
+            <a href="index.html" class="w-10 h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-700 font-bold transition shadow-xs text-base hover:scale-105 active:scale-95" title="Kembali ke Beranda">
+              &larr;
+            </a>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-rose-100 text-rose-800">
+                  ASESMEN DIAGNOSTIK PRETEST
+                </span>
+                <span class="text-xs text-slate-500 font-medium">Informatika Fase E / Kelas X</span>
+              </div>
+              <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-0.5">
+                Berpikir Komputasional &amp; Notasi Pseudocode
+              </h2>
+            </div>
+          </div>
+
+          <!-- Timer Countdown 30 Detik -->
+          <div class="flex items-center gap-3 px-4 py-2 rounded-2xl bg-rose-50 border-2 border-rose-200 shadow-sm">
+            <span class="text-2xl animate-bounce">⏱️</span>
+            <div>
+              <div id="timerTopTitle" class="text-[10px] font-extrabold uppercase tracking-wider text-rose-800">Sisa Waktu Soal #1:</div>
+              <div class="flex items-baseline gap-1">
+                <span id="timerDisplayTop" class="font-mono text-2xl font-black text-rose-600 tabular-nums">00:30</span>
+                <span class="text-[11px] font-bold text-rose-700">Detik</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timer Progress Bar -->
+        <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden border border-slate-200">
+          <div id="timerProgressBar" class="bg-rose-500 h-2 transition-all duration-1000 ease-linear rounded-full" style="width: 100%"></div>
+        </div>
+
+        <!-- 2 Kolom: Soal (Kiri) & Grid/Timer (Kanan) -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Kolom Kiri: Kartu Soal Aktif -->
+          <div class="lg:col-span-8 space-y-4">
+            <div class="lms-card p-6 sm:p-7 rounded-2xl border border-slate-200 bg-white shadow-sm space-y-6">
+              
+              <!-- Nomor Soal & Status Tag -->
+              <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
+                <div class="flex items-center gap-2.5">
+                  <div id="questionActivePill" class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-50 border border-rose-200">
+                    <span class="w-6 h-6 rounded-full bg-rose-600 text-white flex items-center justify-center text-xs font-bold">1</span>
+                    <span class="uppercase tracking-wider text-xs font-bold text-rose-950">NOTASI PSEUDOCODE</span>
+                  </div>
+                  <span id="questionActiveBloom" class="text-xs text-slate-500 font-medium"></span>
+                </div>
+                <span id="questionActiveStatus" class="px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500">
+                  Belum dijawab
+                </span>
+              </div>
+
+              <!-- Teks Pertanyaan (Stem) dengan Terminal Code Box -->
+              <div id="questionStem" class="text-base sm:text-lg text-slate-900 leading-relaxed">
+                Memuat pertanyaan...
+              </div>
+
+              <!-- Pilihan Jawaban A, B, C, D, E -->
+              <div id="optionsContainer" class="space-y-3"></div>
+
+              <!-- Navigasi Bawah -->
+              <div class="pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
+                <span class="text-xs text-slate-400 font-medium italic">
+                  *Soal sebelumnya sudah terkunci &amp; otomatis tersimpan.
+                </span>
+                <button id="btnNextQuestion" type="button" class="px-6 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-bold shadow-xs transition flex items-center gap-1.5 hover:scale-105 active:scale-95">
+                  <span>Lanjut Soal #2</span>
+                  <span>&rarr;</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: Navigasi Soal Grid 1-10 -->
+          <div class="lg:col-span-4 sticky top-6 space-y-4">
+            <div class="lms-card p-5 sm:p-6 rounded-2xl border border-slate-200 bg-white shadow-sm space-y-4">
+              
+              <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-extrabold text-slate-900">Navigasi Soal</h3>
+                <span id="navTerjawabBadge" class="px-2.5 py-0.5 rounded-full bg-rose-50 text-rose-700 border border-rose-200 text-xs font-bold">
+                  0 / 10 Terjawab
+                </span>
+              </div>
+
+              <!-- Sisa Waktu Mini Box -->
+              <div class="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">⏱️</span>
+                  <div>
+                    <div id="timerSideTitle" class="text-[10px] font-extrabold uppercase tracking-wider text-rose-800">Sisa Waktu Soal #1:</div>
+                    <div class="text-[11px] text-rose-600 font-medium">30 detik (otomatis kirim &amp; lanjut)</div>
+                  </div>
+                </div>
+                <div id="timerDisplaySide" class="font-mono text-2xl font-black text-rose-600 tracking-tight tabular-nums">00:30</div>
+              </div>
+
+              <!-- Grid 1-10 -->
+              <div id="questionNavGrid" class="grid grid-cols-5 gap-2.5 my-2"></div>
+
+              <!-- Legend Warna -->
+              <div class="flex items-center gap-4 text-xs font-semibold text-slate-600 pt-2 border-t border-slate-100">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-3 rounded-full bg-emerald-600"></span>
+                  <span>Tersimpan</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-3 h-3 rounded-full border-2 border-slate-300 bg-white"></span>
+                  <span>Belum</span>
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <button id="btnSubmitQuestion" type="button" class="w-full py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold text-xs transition flex items-center justify-center gap-2">
+                  <span>✈</span>
+                  <span>Kirim Jawaban Sekarang</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ==================== TAHAP 3: HASIL & PEMBAHASAN LENGKAP ==================== -->
+      <section id="stageReview" class="space-y-6 hidden max-w-4xl mx-auto">
+        
+        <!-- Success Banner -->
+        <div class="text-center space-y-3">
+          <div class="w-16 h-16 rounded-3xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto text-3xl font-black shadow-inner">
+            ✓
+          </div>
+          <div>
+            <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold uppercase tracking-wider">
+              Pretest Berhasil Terkirim
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-2">
+              Hasil Asesmen Diagnostik Awal Tercatat!
+            </h2>
+            <p class="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto mt-1">
+              Data nilai telah disinkronkan ke buku nilai guru. Silakan pelajari pembahasan kunci jawaban di bawah sebelum melanjutkan ke Modul Materi &amp; Simulasi.
+            </p>
+          </div>
+        </div>
+
+        <!-- 3 Summary Metrics -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+          <div class="p-5 rounded-2xl border-2 border-rose-200 bg-rose-50/80 shadow-xs space-y-1">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-rose-800">Skor Pretest Awal</div>
+            <div class="text-3xl sm:text-4xl font-black text-rose-700 tracking-tight">
+              <span id="reviewScoreValue">0</span> <span class="text-xs font-bold text-slate-400">/ 100</span>
+            </div>
+            <div class="text-xs text-slate-500 font-medium pt-1">Skala 0 - 100 Poin</div>
+          </div>
+
+          <div class="p-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50/80 shadow-xs space-y-1">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Jawaban Benar</div>
+            <div id="reviewCorrectValue" class="text-3xl sm:text-4xl font-black text-emerald-700 tracking-tight">
+              0 / 10
+            </div>
+            <div class="text-xs text-slate-500 font-medium pt-1">Jumlah Butir Soal Terjawab Benar</div>
+          </div>
+
+          <div class="p-5 rounded-2xl border-2 border-purple-200 bg-purple-50/80 shadow-xs space-y-1 text-left">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-purple-800 text-center">Sebaran Bloom Benar</div>
+            <div id="reviewBloomGrid" class="grid grid-cols-2 gap-x-2 gap-y-1 text-xs pt-1.5"></div>
+          </div>
+        </div>
+
+        <!-- Pembahasan Jawaban Lengkap -->
+        <div class="lms-card p-5 sm:p-7 bg-white border border-slate-200 rounded-3xl text-left space-y-4 shadow-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-0.5 rounded-full bg-rose-100 text-rose-800 text-[11px] font-bold uppercase tracking-wider">
+                  Kunci &amp; Pembahasan
+                </span>
+                <span class="text-xs text-slate-500 font-medium">10 Butir Soal Diagnostik Pretest</span>
+              </div>
+              <h3 class="text-lg font-extrabold text-slate-900 mt-1">Pembahasan Jawaban yang Benar</h3>
+              <p class="text-xs text-slate-500">Pelajari penjelasan di setiap butir soal untuk memperkuat pemahaman sebelum eksplorasi LKPD &amp; Simulasi.</p>
+            </div>
+            <button id="btnToggleReview" type="button" class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition flex items-center gap-1.5 self-start sm:self-auto border border-rose-200">
+              <span>Sembunyikan / Tampilkan</span>
+              <span id="toggleReviewIcon">▲</span>
+            </button>
+          </div>
+
+          <div id="reviewQuestionsContainer" class="space-y-4 pt-1"></div>
+        </div>
+
+        <!-- Tombol Aksi Selanjutnya -->
+        <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
+          <div class="flex items-center gap-2">
+            <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition shadow-xs">
+              &larr; Kembali ke Beranda Murid
+            </a>
+            <button id="btnResetPretest" type="button" class="px-4 py-2.5 rounded-xl border border-rose-200 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition">
+              &#x21bb; Kerjakan Ulang
+            </button>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <a href="materi_pseudocode.html" class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5">
+              <span>Lanjut ke Materi Simulasi</span>
+              <span>&rarr;</span>
+            </a>
+            <a href="lkpd_pseudocode.html" class="px-5 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5">
+              <span>Buka LKM Murid</span>
+              <span>↗</span>
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="w-full border-t border-slate-200 bg-white py-4 px-4 sm:px-6 text-xs text-slate-500 mt-auto">
+      <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
+          <span>💻</span>
+          <span>Asesmen Diagnostik Pretest Pseudocode • Fase E / Kelas X</span>
+        </div>
+        <div>Portal Siswa • Bilik Komputasi &copy; 2026</div>
+      </div>
+    </footer>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- Scripts Modular -->
+  <script src="shared.js"></script>
+  <script src="pretest.js"></script>
+</body>
+</html>

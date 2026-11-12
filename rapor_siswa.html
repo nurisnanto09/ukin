@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapor &amp; Rekap Hasil Belajar Siswa - EduInformatika</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Custom LMS Styles -->
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .font-code { font-family: 'Fira Code', monospace; }
+    @media print {
+      header, #raporHeroBanner, .no-print, footer, #toastContainer {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+        color: #0f172a !important;
+        padding: 0 !important;
+      }
+      main {
+        max-width: 100% !important;
+        padding: 10px !important;
+      }
+      .lms-card {
+        box-shadow: none !important;
+        border: 1px solid #cbd5e1 !important;
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- ==================== TOP NAVIGATION BAR ==================== -->
+  <header class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200 sticky top-0 z-30 shadow-xs no-print">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Logo & Breadcrumb -->
+      <div class="flex items-center gap-3">
+        <a href="index.html" class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white flex items-center justify-center font-black text-xl shadow-md shadow-indigo-500/20 hover:scale-105 transition">
+          R
+        </a>
+        <div>
+          <div class="flex items-center gap-2 text-[11px] font-bold text-slate-400">
+            <a href="index.html" class="hover:text-indigo-600 transition">Portal Siswa</a>
+            <span>/</span>
+            <span class="text-indigo-600 font-extrabold">Rapor &amp; Rekap Belajar</span>
+          </div>
+          <h1 class="text-base sm:text-lg font-black text-slate-900 tracking-tight">
+            Hasil Asesmen &amp; Evaluasi Capaian Siswa
+          </h1>
+        </div>
+      </div>
+
+      <!-- Quick Header Actions -->
+      <div class="flex items-center gap-2.5">
+        <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700 border border-indigo-100">
+          <span class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+          <span>Online</span>
+        </span>
+
+        <a href="index.html" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition shadow-xs">
+          <span>&larr;</span>
+          <span>Beranda Murid</span>
+        </a>
+
+        <a href="materi_pseudocode.html" class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-200 bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold transition">
+          <span>💡</span>
+          <span>Materi &amp; Simulasi</span>
+        </a>
+
+        <a href="simulasi_pseudocode.html" class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-200 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold transition">
+          <span>💻</span>
+          <span>Editor Siswa</span>
+        </a>
+
+        <a href="admin.html" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
+          <span>🔒</span>
+          <span class="hidden sm:inline">Guru</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== HERO WELCOME BANNER (FULL WIDTH DI ATAS) ==================== -->
+  <div id="raporHeroBanner" class="w-full bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white py-8 sm:py-10 px-4 sm:px-6 md:px-8 border-b border-indigo-500/30 shadow-md relative overflow-hidden">
+    <div class="max-w-5xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 relative z-10">
+      
+      <!-- Sisi Kiri: Deskripsi & Judul -->
+      <div class="space-y-3 max-w-2xl text-center lg:text-left">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-xs font-black tracking-wide uppercase">
+          <span>📊</span>
+          <span>Portofolio &amp; Capaian Pembelajaran • Fase E / Kelas X</span>
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight">
+          Rapor &amp; Rekap Hasil Belajar Siswa
+        </h2>
+        <p class="text-xs sm:text-sm text-indigo-100/95 font-medium leading-relaxed">
+          Pantau perolehan skor asesmen diagnostik (Pretest), asesmen formatif HOTS (Posttest), efektivitas peningkatan pemahaman konsep (N-Gain), kriteria ketuntasan (KKM 75), dan catatan refleksi mandiri.
+        </p>
+        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 pt-1 text-[11px] font-bold text-indigo-100">
+          <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">📝 Diagnostik Pretest</span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">🎯 Formatif Posttest HOTS</span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">📈 Analisis Gain (N-Gain)</span>
+          <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">🏆 Evaluasi KKM (75)</span>
+        </div>
+      </div>
+
+      <!-- Sisi Kanan: 4 Ringkasan Angka Indikator -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-2.5 shrink-0 w-full lg:w-auto text-center">
+        <!-- Pretest Card -->
+        <div class="p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
+          <div id="cardPretestScore" class="text-2xl sm:text-3xl font-black text-rose-300">-</div>
+          <div class="text-[10px] font-extrabold text-white uppercase tracking-wider">Pretest</div>
+          <div class="text-[9px] text-indigo-200">Diagnostik Awal</div>
+        </div>
+        <!-- Posttest Card -->
+        <div class="p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
+          <div id="cardPosttestScore" class="text-2xl sm:text-3xl font-black text-teal-300">-</div>
+          <div class="text-[10px] font-extrabold text-white uppercase tracking-wider">Posttest</div>
+          <div class="text-[9px] text-indigo-200">Formatif HOTS</div>
+        </div>
+        <!-- N-Gain Card -->
+        <div class="p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
+          <div id="cardNGainScore" class="text-2xl sm:text-3xl font-black text-amber-300">-</div>
+          <div class="text-[10px] font-extrabold text-white uppercase tracking-wider">N-Gain</div>
+          <div class="text-[9px] text-indigo-200">Efektivitas</div>
+        </div>
+        <!-- KKM Card -->
+        <div class="p-3 sm:p-3.5 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
+          <div id="cardKKMStatus" class="text-xl sm:text-2xl font-black text-emerald-300 mt-1">-</div>
+          <div class="text-[10px] font-extrabold text-white uppercase tracking-wider">Status KKM</div>
+          <div class="text-[9px] text-indigo-200">Kriteria 75</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== MAIN CONTENT AREA ==================== -->
+  <main class="max-w-5xl mx-auto w-full p-4 sm:p-6 md:p-8 flex-1 space-y-6">
+
+    <!-- ==================== BAR PENCARIAN SISWA (ABSEN 1 - 36) ==================== -->
+    <div class="lms-card p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-xs bg-white space-y-3 no-print">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-8 h-8 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-600 flex items-center justify-center text-sm font-black">
+            🔍
+          </span>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Pilih Siswa untuk Melihat Rapor</h3>
+            <p class="text-[11px] text-slate-500">Ketik nomor absen (1–36) atau pilih dari daftar siswa Kelas X E7</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnSyncReport" type="button" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 shadow-xs">
+            <span>🔄</span>
+            <span>Muat Ulang Data</span>
+          </button>
+          <button id="btnPrintReport" type="button" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition shadow-md shadow-indigo-500/20 flex items-center gap-1.5">
+            <span>🖨️</span>
+            <span>Cetak Rapor Belajar</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+        <div>
+          <label for="inputAbsen" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            Nomor Absen (1 - 36)
+          </label>
+          <input id="inputAbsen" type="number" min="1" max="36" value="1" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 shadow-xs" />
+        </div>
+        <div class="sm:col-span-2">
+          <label for="selectAbsen" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+            Cari Nama Lengkap Siswa
+          </label>
+          <select id="selectAbsen" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-bold text-slate-800 focus:outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-100 shadow-xs bg-white">
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== KARTU PROFIL SISWA ==================== -->
+    <div class="lms-card p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs bg-white">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        
+        <div class="flex items-center gap-3.5">
+          <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 text-white flex items-center justify-center font-black text-2xl shadow-md shrink-0">
+            👤
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="studentAbsenDisplay" class="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-indigo-50 text-indigo-700 border border-indigo-200">
+                Absen #1
+              </span>
+              <span id="studentKelompokDisplay" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Kelompok 1
+              </span>
+            </div>
+            <h2 id="studentNameDisplay" class="text-lg sm:text-xl font-black text-slate-900 mt-1">
+              ADITYA ALLAY NUGRAHA
+            </h2>
+            <p id="studentKelasDisplay" class="text-xs text-slate-500 font-medium">
+              Informatika - X E7 • TP: Notasi Pseudocode &amp; Berpikir Komputasional
+            </p>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:items-end justify-center border-t sm:border-t-0 sm:border-l border-slate-100 pt-3 sm:pt-0 sm:pl-5">
+          <span class="text-[11px] font-semibold text-slate-400">Tahun Ajaran / Semester:</span>
+          <span class="text-xs font-bold text-slate-800">2026/2027 • Gasal</span>
+          <span class="inline-flex items-center gap-1.5 mt-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            Terhubung Google Sheets
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==================== DUA KARTU ASESMEN UTAMA: PRETEST VS POSTTEST ==================== -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+      
+      <!-- Kartu Pretest -->
+      <div class="lms-card p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs bg-white space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 flex items-center justify-center font-black text-sm">
+              📝
+            </span>
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900">Asesmen Diagnostik Awal</h3>
+              <p class="text-[10px] text-slate-400 font-medium">Pretest Notasi Pseudocode</p>
+            </div>
+          </div>
+          <span id="pretestDetailBadge" class="text-xs font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded-full border border-rose-200">
+            -
+          </span>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div class="flex items-center justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">Bentuk Instrumen:</span>
+            <span class="font-bold text-slate-800">10 Pilihan Ganda (C1–C6)</span>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">Aturan Pengerjaan:</span>
+            <span class="font-bold text-slate-800">30 Detik per Soal (Hitung Mundur)</span>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">Tujuan Pedagogis:</span>
+            <span class="font-bold text-slate-800">Pemetaan Awal &amp; Baseline</span>
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end no-print">
+          <a href="pretest.html" class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition flex items-center gap-1.5 border border-rose-200">
+            <span>Buka Halaman Pretest</span>
+            <span>↗</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Kartu Posttest -->
+      <div class="lms-card p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs bg-white space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-9 h-9 rounded-xl bg-teal-50 border border-teal-200 text-teal-700 flex items-center justify-center font-black text-sm">
+              🎯
+            </span>
+            <div>
+              <h3 class="text-sm font-extrabold text-slate-900">Asesmen Formatif Akhir</h3>
+              <p class="text-[10px] text-slate-400 font-medium">Posttest Penalaran HOTS</p>
+            </div>
+          </div>
+          <span id="posttestDetailBadge" class="text-xs font-bold text-teal-700 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
+            -
+          </span>
+        </div>
+
+        <div class="space-y-2 text-xs">
+          <div class="flex items-center justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">Bentuk Instrumen:</span>
+            <span class="font-bold text-slate-800">10 Soal Logika HOTS (C4–C6)</span>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">Standar Ketuntasan (KKM):</span>
+            <span class="font-bold text-teal-700">Skor Minimal 75</span>
+          </div>
+          <div class="flex items-center justify-between py-1 border-b border-slate-100">
+            <span class="text-slate-500 font-medium">Status Ketuntasan:</span>
+            <span id="kkmBadge" class="text-xs font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-full">
+              -
+            </span>
+          </div>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end no-print">
+          <a href="posttest.html" class="px-4 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-bold transition flex items-center gap-1.5 border border-teal-200">
+            <span>Buka Halaman Posttest</span>
+            <span>↗</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ==================== ANALISIS N-GAIN & EFEKTIVITAS PEMBELAJARAN ==================== -->
+    <div class="lms-card p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs bg-white space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center font-black text-sm">
+            📈
+          </span>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Analisis Peningkatan Gain Ternormalisasi (N-Gain)</h3>
+            <p class="text-[11px] text-slate-500">Metode Hake (1998): g = (Skor Posttest - Skor Pretest) / (100 - Skor Pretest)</p>
+          </div>
+        </div>
+        <span id="nGainCategoryBadge" class="text-xs font-bold px-2.5 py-0.5 rounded-full border bg-slate-100 text-slate-600 border-slate-200 self-start sm:self-auto">
+          Belum Lengkap
+        </span>
+      </div>
+
+      <!-- Deskripsi N-Gain -->
+      <div class="space-y-3">
+        <p id="nGainDescText" class="text-xs sm:text-sm text-slate-700 font-medium leading-relaxed">
+          Penyelesaian kedua instrumen asesmen diperlukan untuk mengalkulasi efektivitas peningkatan pemahaman konsep materi pseudocode siswa.
+        </p>
+
+        <!-- Progress Bar N-Gain -->
+        <div class="space-y-1">
+          <div class="flex items-center justify-between text-[11px] font-bold text-slate-500">
+            <span>Rendah (&lt; 0.30)</span>
+            <span>Sedang (0.30 – 0.69)</span>
+            <span>Tinggi (&ge; 0.70)</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden border border-slate-200/80">
+            <div id="nGainProgressBar" class="h-2.5 rounded-full bg-indigo-500 transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CAPAIAN TAKSONOMI BLOOM (C1 - C6) ==================== -->
+    <div class="lms-card p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs bg-white space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center font-black text-sm">
+            🧠
+          </span>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Distribusi Penguasaan Ranah Kognitif (Taksonomi Bloom)</h3>
+            <p class="text-[11px] text-slate-500">Capaian penguasaan siswa dari C1 (Mengingat) hingga C6 (Mencipta)</p>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+          Bloom C1–C6
+        </span>
+      </div>
+
+      <!-- Container Progress Bar per Level -->
+      <div id="bloomProgressContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+      </div>
+    </div>
+
+    <!-- ==================== JURNAL REFLEKSI SISWA (CEK-IN & CEK-OUT) ==================== -->
+    <div class="lms-card p-5 sm:p-6 rounded-2xl border border-slate-200 shadow-xs bg-white space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center font-black text-sm">
+            🌱
+          </span>
+          <div>
+            <h3 class="text-sm font-extrabold text-slate-900">Jurnal Refleksi &amp; Cek Kesiapan Belajar</h3>
+            <p class="text-[11px] text-slate-500">Evaluasi afektif, kesiapan mental di awal, dan evaluasi diri di akhir sesi</p>
+          </div>
+        </div>
+        <span class="text-xs font-bold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">
+          Refleksi Mandiri
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Cek-in Awal -->
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+          <div class="font-extrabold text-slate-900 flex items-center gap-2">
+            <span>🏁</span>
+            <span>Cek-in Kesiapan Awal Belajar</span>
+          </div>
+          <div class="space-y-1 text-slate-600">
+            <div class="flex justify-between py-1 border-b border-slate-200/60">
+              <span class="font-medium text-slate-500">Kondisi Emosi:</span>
+              <span id="checkinMoodDisplay" class="font-bold text-slate-800">Semangat &amp; Antusias</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-200/60">
+              <span class="font-medium text-slate-500">Tingkat Energi:</span>
+              <span id="checkinEnergyDisplay" class="font-bold text-slate-800">Energi Penuh (100%)</span>
+            </div>
+            <div class="flex justify-between py-1">
+              <span class="font-medium text-slate-500">Gaya Belajar:</span>
+              <span id="checkinStyleDisplay" class="font-bold text-slate-800">Praktik Langsung</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cek-out Akhir -->
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs">
+          <div class="font-extrabold text-slate-900 flex items-center gap-2">
+            <span>🏁</span>
+            <span>Cek-out Refleksi Pemahaman Akhir</span>
+          </div>
+          <div class="space-y-1 text-slate-600">
+            <div class="flex justify-between py-1 border-b border-slate-200/60">
+              <span class="font-medium text-slate-500">Tingkat Paham:</span>
+              <span id="checkoutUnderstandingDisplay" class="font-bold text-slate-800">Sangat Paham</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-slate-200/60">
+              <span class="font-medium text-slate-500">Perasaan Akhir:</span>
+              <span id="checkoutEmotionDisplay" class="font-bold text-slate-800">Lega &amp; Percaya Diri</span>
+            </div>
+            <div class="py-1">
+              <span class="font-medium text-slate-500 block mb-0.5">Catatan Siswa:</span>
+              <span id="checkoutNoteDisplay" class="font-semibold text-slate-700 italic block">"Materi seru dan mudah dipahami."</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== PINTASAN NAVIGASI KE MODUL LAIN ==================== -->
+    <div class="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200 no-print">
+      <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition shadow-xs flex items-center gap-1.5">
+        <span>&larr;</span>
+        <span>Kembali ke Beranda Murid</span>
+      </a>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <a href="pretest.html" class="px-4 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition border border-rose-200">
+          📝 Pretest
+        </a>
+        <a href="materi_pseudocode.html" class="px-4 py-2 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 text-xs font-bold transition border border-amber-200">
+          💡 Materi Simulasi
+        </a>
+        <a href="lkpd_pseudocode.html" class="px-4 py-2 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs font-bold transition border border-purple-200">
+          📖 LKM Murid
+        </a>
+        <a href="simulasi_pseudocode.html" class="px-4 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition border border-emerald-200">
+          💻 Simulasi
+        </a>
+        <a href="posttest.html" class="px-4 py-2 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 text-xs font-bold transition border border-teal-200">
+          🎯 Posttest
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="w-full border-t border-slate-200 bg-white py-4 px-4 sm:px-6 text-xs text-slate-500 mt-auto no-print">
+    <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span>📊</span>
+        <span>Rapor &amp; Rekap Hasil Belajar Notasi Pseudocode • Fase E / Kelas X</span>
+      </div>
+      <div>Portal Siswa • Bilik Komputasi &copy; 2026</div>
+    </div>
+  </footer>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
+
+  <!-- Scripts Modular -->
+  <script src="shared.js"></script>
+  <script src="rapor_siswa.js"></script>
+</body>
+</html>

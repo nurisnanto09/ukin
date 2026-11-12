@@ -8,6 +8,10 @@
 
 (function () {
   let roster = safeGetStorage(STORAGE_KEY_ROSTER, DEFAULT_ROSTER);
+  if (!Array.isArray(roster) || roster.length < DEFAULT_ROSTER.length) {
+    roster = DEFAULT_ROSTER;
+    safeSetStorage(STORAGE_KEY_ROSTER, roster);
+  }
   let questionBank = safeGetStorage(STORAGE_KEY_QUESTIONS, DEFAULT_QUESTION_BANK);
   let teacherRecords = safeGetStorage(STORAGE_KEY_RECORDS, INITIAL_SAMPLE_RECORDS);
   let session = safeGetStorage(STORAGE_KEY_SESSION, createDefaultSession());
@@ -106,38 +110,61 @@
     const rec = getStudentRecord(session.absen);
     const accStatus = rec ? (rec.accStatus || 'PENDING') : 'PENDING';
 
-    // Badge Pretest
+    // Badge & Link Pretest
     const preBadge = document.getElementById('pretestStatusBadge');
+    const preBtn = document.getElementById('cardStartPretestBtn');
     if (preBadge) {
-      if (rec || session.step > 2) {
+      if (rec || session.step > 2 || (session.pretestScore !== undefined && session.pretestScore !== null)) {
         const score = rec ? rec.pretestScore : evalPre.score;
         preBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200';
         preBadge.textContent = '✓ Selesai (' + score + ' Poin)';
+        if (preBtn) {
+          preBtn.innerHTML = '<span>Tinjau Pretest</span><span>↗</span>';
+        }
       } else if (hasPretest) {
         preBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200';
         preBadge.textContent = 'Sedang Berjalan';
+        if (preBtn) {
+          preBtn.innerHTML = '<span>Lanjutkan Pretest</span><span>↗</span>';
+        }
       } else {
         preBadge.className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600';
         preBadge.textContent = 'Belum Dikerjakan';
+        if (preBtn) {
+          preBtn.innerHTML = '<span>Buka Pretest</span><span>↗</span>';
+        }
       }
     }
 
-    // Badge Posttest
+    // Badge & Link Posttest
     const postBadge = document.getElementById('posttestStatusBadge');
+    const postBtn = document.getElementById('cardStartPosttestBtn');
     if (postBadge) {
-      if (rec || session.completed) {
+      if (rec || session.completed || (session.posttestScore !== undefined && session.posttestScore !== null)) {
         const score = rec ? rec.posttestScore : evalPost.score;
         postBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200';
         postBadge.textContent = '✓ Selesai (' + score + ' Poin)';
+        if (postBtn) {
+          postBtn.innerHTML = '<span>Lihat Hasil Posttest</span><span>↗</span>';
+        }
       } else if (hasPosttest) {
         postBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-700 border border-amber-200';
         postBadge.textContent = 'Sedang Berjalan';
+        if (postBtn) {
+          postBtn.innerHTML = '<span>Lanjutkan Posttest</span><span>↗</span>';
+        }
       } else if (session.step >= 3) {
-        postBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200';
+        postBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-teal-50 text-teal-700 border border-teal-200';
         postBadge.textContent = 'Siap Dikerjakan';
+        if (postBtn) {
+          postBtn.innerHTML = '<span>Buka Posttest</span><span>↗</span>';
+        }
       } else {
         postBadge.className = 'px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500';
         postBadge.textContent = 'Tersedia';
+        if (postBtn) {
+          postBtn.innerHTML = '<span>Buka Posttest</span><span>↗</span>';
+        }
       }
     }
 
@@ -1321,16 +1348,17 @@
       });
     }
 
-    // Tombol 4 Isi Topik (Buka Pretest & Buka Posttest)
+    // Tombol 4 Isi Topik (Buka Pretest & Buka Posttest menggunakan link ke Halaman Sendiri)
+    // Jika tombol berupa button lama (bukan link dengan href), panggil openQuiz internal
     const cardStartPretestBtn = document.getElementById('cardStartPretestBtn');
-    if (cardStartPretestBtn) {
+    if (cardStartPretestBtn && cardStartPretestBtn.tagName === 'BUTTON') {
       cardStartPretestBtn.addEventListener('click', function () {
         openQuiz('pretest');
       });
     }
 
     const cardStartPosttestBtn = document.getElementById('cardStartPosttestBtn');
-    if (cardStartPosttestBtn) {
+    if (cardStartPosttestBtn && cardStartPosttestBtn.tagName === 'BUTTON') {
       cardStartPosttestBtn.addEventListener('click', function () {
         openQuiz('posttest');
       });
