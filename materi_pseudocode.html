@@ -706,7 +706,7 @@
               1. Hitung Luas &amp; Kategori (IF-ELSE)
             </button>
             <button id="btnSkenario2" onclick="pilihSkenario(2)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
-              2. Percabangan (IF-ELSE)
+              2. Sampah Daur Ulang (IF-ELSE)
             </button>
             <button id="btnSkenario3" onclick="pilihSkenario(3)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
               3. Pertukaran Variabel (Temp)
@@ -1985,7 +1985,7 @@
               📐 1. Luas Persegi
             </button>
             <button id="btnCase2" type="button" onclick="loadGameCase(2)" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
-              🔀 2. Cek Kelulusan (IF-ELSE)
+              🔀 2. Sampah Daur Ulang (IF-ELSE)
             </button>
             <button id="btnCase3" type="button" onclick="loadGameCase(3)" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
               🛒 3. Kasir Toko
@@ -3882,25 +3882,25 @@
         initVars: { panjang: '-', lebar: '-', luas: '-', kategori: '-' }
       },
       2: {
-        title: 'Kasus 2: Percabangan (Penentuan Kelulusan Nilai)',
+        title: 'Kasus 2: Percabangan (Setoran Sampah Daur Ulang)',
         lines: [
-          { num: 1, type: 'judul', text: 'PROGRAM Cek_Kelulusan_Siswa', exp: 'Mencatat identitas program cek kelulusan.' },
-          { num: 2, type: 'judul', text: '{ Menentukan status lulus jika nilai >= 75 }', exp: 'Spesifikasi kriteria kelulusan KKM.' },
-          { num: 3, type: 'deklarasi', text: 'DEKLARASI:', exp: 'Mempersiapkan wadah nilai dan status.' },
-          { num: 4, type: 'deklarasi', text: '  nama : string', exp: 'Wadah teks nama siswa.' },
-          { num: 5, type: 'deklarasi', text: '  nilai_ujian : real', exp: 'Wadah angka desimal nilai ujian.' },
-          { num: 6, type: 'deklarasi', text: '  status : string', exp: 'Wadah hasil keputusan status.' },
-          { num: 7, type: 'algoritma', text: 'ALGORITMA:', exp: 'Mulai urutan aksi logika.' },
-          { num: 8, type: 'algoritma', text: '  INPUT(nama)', exp: 'Membaca input nama siswa: "Budi"', vars: { nama: '"Budi"' } },
-          { num: 9, type: 'algoritma', text: '  INPUT(nilai_ujian)', exp: 'Membaca input nilai ujian: 82.5', vars: { nilai_ujian: 82.5 } },
-          { num: 10, type: 'algoritma', text: '  IF (nilai_ujian >= 75) THEN', exp: 'Evaluasi kondisi: Apakah 82.5 >= 75? Jawabannya BENAR (TRUE)!', branch: 'then' },
-          { num: 11, type: 'algoritma', text: '    status <- "LULUS"', exp: 'Cabang TRUE dijalankan: status diisi "LULUS".', vars: { status: '"LULUS"' } },
-          { num: 12, type: 'algoritma', text: '  ELSE', exp: 'Cabang ELSE dilewati karena kondisi sudah benar.', branch: 'skip' },
-          { num: 13, type: 'algoritma', text: '    status <- "REMIDIAL"', exp: 'Baris ini dilewati.', branch: 'skip' },
-          { num: 14, type: 'algoritma', text: '  ENDIF', exp: 'Blok percabangan selesai.' },
-          { num: 15, type: 'algoritma', text: '  OUTPUT(nama, " dinyatakan: ", status)', exp: 'Mencetak output akhir ke layar monitor.', out: 'Budi dinyatakan: LULUS' }
+          { num: 1, type: 'judul', text: 'PROGRAM Hitung_Poin_Sampah_Daur_Ulang', exp: 'Mencatat identitas program hitung poin sampah daur ulang sekolah.' },
+          { num: 2, type: 'judul', text: '{ Botol plastik 10 poin/kg, kardus memperoleh 20 poin/kg }', exp: 'Spesifikasi ketentuan tarif poin sampah daur ulang.' },
+          { num: 3, type: 'deklarasi', text: 'DEKLARASI:', exp: 'Mempersiapkan wadah penyimpanan di memori.' },
+          { num: 4, type: 'deklarasi', text: '  jenis_sampah : string', exp: 'Wadah teks jenis sampah ("botol plastik" / "kardus").' },
+          { num: 5, type: 'deklarasi', text: '  berat_kg, tarif, total_poin : real', exp: 'Wadah berat timbangan, tarif per kg, dan total poin.' },
+          { num: 6, type: 'algoritma', text: 'ALGORITMA:', exp: 'Mulai urutan aksi komputasi.' },
+          { num: 7, type: 'algoritma', text: '  INPUT(jenis_sampah)', exp: 'Membaca input jenis sampah: "botol plastik".', vars: { jenis_sampah: '"botol plastik"' } },
+          { num: 8, type: 'algoritma', text: '  INPUT(berat_kg)', exp: 'Membaca input berat timbangan: 5 kg.', vars: { berat_kg: 5 } },
+          { num: 9, type: 'algoritma', text: '  IF (jenis_sampah = "botol plastik") THEN', exp: 'Evaluasi kondisi: Apakah jenis_sampah = "botol plastik"? Jawabannya BENAR (TRUE)!', branch: 'then' },
+          { num: 10, type: 'algoritma', text: '    tarif <- 10', exp: 'Cabang TRUE dijalankan: tarif diisi 10 poin/kg.', vars: { tarif: 10 } },
+          { num: 11, type: 'algoritma', text: '  ELSE', exp: 'Cabang ELSE dilewati karena kondisi sudah terpenuhi.', branch: 'skip' },
+          { num: 12, type: 'algoritma', text: '    tarif <- 20', exp: 'Baris ini dilewati.', branch: 'skip' },
+          { num: 13, type: 'algoritma', text: '  ENDIF', exp: 'Blok percabangan selesai.' },
+          { num: 14, type: 'algoritma', text: '  total_poin <- berat_kg * tarif', exp: 'Kalkulasi: 5 * 10 = 50. Nilai 50 disimpan ke wadah total_poin.', vars: { total_poin: 50 } },
+          { num: 15, type: 'algoritma', text: '  OUTPUT("Total Poin = ", total_poin)', exp: 'Mencetak output akhir ke layar monitor: Total Poin = 50', out: 'Total Poin = 50' }
         ],
-        initVars: { nama: '-', nilai_ujian: '-', status: '-' }
+        initVars: { jenis_sampah: '-', berat_kg: '-', tarif: '-', total_poin: '-' }
       },
       3: {
         title: 'Kasus 3: Pertukaran Nilai Variabel (Swap)',
@@ -4355,42 +4355,50 @@
       },
       2: {
         id: 2,
-        title: 'Kasus 2: Percabangan Kondisi (Cek Kelulusan Nilai Siswa)',
+        title: 'Kasus 2: Percabangan (Setoran Sampah Daur Ulang)',
         badge: 'Logika // Percabangan IF-ELSE',
-        desc: 'Komputer membaca nama siswa dan nilai ujian. Jika nilai >= 75 maka siswa dinyatakan "LULUS", jika di bawah 75 (ELSE) maka dinyatakan "REMIDIAL".',
-        programHeader: 'PROGRAM Cek_Kelulusan_Siswa;\nDEKLARASI:\n  nama, status : string;\n  nilai : integer;\nALGORITMA:',
+        desc: 'Sekolah mengumpulkan sampah daur ulang: botol plastik memperoleh 10 poin/kg, sedangkan kardus 20 poin/kg. Program menentukan tarif dan menghitung total poin setoran.',
+        programHeader: 'PROGRAM Hitung_Poin_Sampah_Daur_Ulang;\nDEKLARASI:\n  jenis_sampah : string;\n  berat_kg, tarif, total_poin : real;\nALGORITMA:',
         cards: [
           {
             id: 'c1',
-            text: 'read(nama, nilai)',
-            desc: 'Membaca data masukan nama dan nilai ujian siswa',
+            text: 'read(jenis_sampah, berat_kg)',
+            desc: 'Membaca jenis sampah dan berat timbangan dalam kg',
             category: 'input',
             correctOrder: 1,
-            hint: 'Input masukan nama dan nilai (INPUT)'
+            hint: 'Input jenis sampah dan berat timbangan (INPUT)'
           },
           {
             id: 'c2',
-            text: 'IF (nilai >= 75) THEN status <- "LULUS"',
-            desc: 'Kondisi percabangan jika nilai memenuhi KKM 75',
+            text: 'IF (jenis_sampah = "botol plastik") THEN tarif <- 10',
+            desc: 'Percabangan jika botol plastik maka tarif 10 poin/kg',
             category: 'proses',
             correctOrder: 2,
-            hint: 'Logika keputusan kondisi IF (PROSES)'
+            hint: 'Kondisi percabangan botol plastik (PROSES)'
           },
           {
             id: 'c3',
-            text: 'ELSE status <- "REMIDIAL"',
-            desc: 'Cabang alternatif bila nilai tidak memenuhi KKM',
+            text: 'ELSE tarif <- 20',
+            desc: 'Cabang alternatif jika kardus maka tarif 20 poin/kg',
             category: 'proses',
             correctOrder: 3,
-            hint: 'Cabang alternatif keputusan ELSE (PROSES)'
+            hint: 'Cabang alternatif kardus (PROSES)'
           },
           {
             id: 'c4',
-            text: 'write(nama, " dinyatakan: ", status)',
-            desc: 'Mencetak hasil keputusan kelulusan ke layar',
-            category: 'output',
+            text: 'total_poin <- berat_kg * tarif',
+            desc: 'Menghitung total poin setoran sampah',
+            category: 'proses',
             correctOrder: 4,
-            hint: 'Mencetak hasil akhir ke monitor (OUTPUT)'
+            hint: 'Kalkulasi perkalian berat dan tarif (PROSES)'
+          },
+          {
+            id: 'c5',
+            text: 'write("Total Poin: ", total_poin)',
+            desc: 'Mencetak total perolehan poin ke monitor',
+            category: 'output',
+            correctOrder: 5,
+            hint: 'Mencetak hasil akhir poin ke layar (OUTPUT)'
           }
         ]
       },

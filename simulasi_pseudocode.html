@@ -232,23 +232,31 @@
                     </div>
                 </div>
 
-                <!-- Kartu Studi Kasus Kontekstual Patbhe Green -->
+                <!-- Kartu Studi Kasus Kontekstual Sampah Daur Ulang -->
                 <div class="mb-3.5 p-3.5 bg-gradient-to-r from-emerald-950/90 via-slate-950 to-slate-950 border border-emerald-500/40 rounded-xl space-y-2">
                     <div class="flex items-center justify-between">
                         <div class="flex items-center gap-1.5 text-emerald-400 font-extrabold text-xs">
-                            <span class="text-sm">🏆</span>
-                            <span>STUDI KASUS: OTOMATISASI PERANKINGAN KELAS PATBHE GREEN</span>
+                            <span class="text-sm">♻️</span>
+                            <span>STUDI KASUS: PENGUMPULAN SAMPAH DAUR ULANG SEKOLAH</span>
                         </div>
                         <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
                             Kasus LKPD Aktivitas 3
                         </span>
                     </div>
-                    <div class="text-[11px] text-slate-300 leading-relaxed font-sans space-y-1">
+                    <div class="text-[11px] text-slate-300 leading-relaxed font-sans space-y-1.5">
                         <p>
-                            Dalam program <b>Sekolah Adiwiyata Mandiri di SMA Negeri 4 Yogyakarta</b>, panitia <i>Patbhe Green</i> menyelenggarakan kompetisi kebersihan dan pengumpulan sampah daur ulang antarkelas setiap bulannya. Untuk mengatasi rekap manual yang lambat dan rawan keliru, panitia membutuhkan program komputer otomatis:
+                            Sekolah mengadakan kegiatan pengumpulan sampah daur ulang: botol plastik memperoleh <b>10 poin/kg</b> dan kardus memperoleh <b>20 poin/kg</b>. Pada sistem manual sebelumnya di Aktivitas 2, petugas masih harus memasukkan tarif sendiri sehingga berisiko tinggi terjadi <b>salah input (<i>human error</i>)</b>.
                         </p>
-                        <div class="p-2 bg-slate-900/90 rounded-lg border border-emerald-500/30 text-emerald-200 text-[10.5px]">
-                            💡 <b>Aturan Percabangan:</b> Masukkan <code>nilai</code> terkini dan <code>nilai_sebelumnya</code>. <b>Jika nilai sekarang lebih besar dari nilai sebelumnya (<code>nilai &gt; nilai_sebelumnya</code>), maka peringkat kelas naik (<code>"Peringkat Lebih Tinggi 🏆"</code>)</b>. Jika tidak, cetak: <code>"Peringkat Tetap / Turun ⬇️"</code>.
+                        <div class="p-2 bg-slate-900/90 rounded-lg border border-emerald-500/30 text-emerald-200 text-[10.5px] space-y-0.5">
+                            <div class="font-bold text-emerald-300 flex items-center gap-1">
+                                <span>💡</span> <span>Otomatisasi dengan Percabangan IF-ELSE:</span>
+                            </div>
+                            <p class="leading-relaxed">
+                                Rancanglah logika program agar komputer otomatis menentukan tarif berdasarkan jenis sampah yang disetorkan (botol plastik = 10 poin/kg, kardus = 20 poin/kg) dan menghitung total poin secara akurat tanpa perlu input tarif manual lagi.
+                            </p>
+                            <p class="text-[10px] text-emerald-400 font-bold border-t border-emerald-500/20 pt-1">
+                                👉 Pertanyaan: Bagaimanakah rancangan notasi pseudocode yang sesuai untuk menyelesaikan permasalahan tersebut?
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -395,7 +403,7 @@
                         </div>
                         <div class="flex items-center gap-1.5 text-slate-700">
                             <span class="text-emerald-600 font-bold">✓</span>
-                            <span><b>Deklarasi:</b> <code class="font-bold text-amber-700">nilai, nilai_sebelumnya : INTEGER</code></span>
+                            <span><b>Deklarasi:</b> <code class="font-bold text-amber-700">jenis_sampah : STRING; berat_kg, total_poin : REAL</code></span>
                         </div>
                         <div class="flex items-center gap-1.5 text-slate-700">
                             <span class="text-emerald-600 font-bold">✓</span>
@@ -465,12 +473,13 @@
 
         // Template LKPD standard reference
         const TEMPLATE_LKPD = [
-            'INPUT nilai, nilai_sebelumnya',
-            'IF nilai > nilai_sebelumnya THEN',
-            '  OUTPUT "Peringkat Lebih Tinggi 🏆"',
+            'INPUT jenis_sampah, berat_kg',
+            'IF jenis_sampah = "botol plastik" THEN',
+            '  total_poin <- berat_kg * 10',
             'ELSE',
-            '  OUTPUT "Peringkat Tetap / Turun ⬇️"',
-            'END IF'
+            '  total_poin <- berat_kg * 20',
+            'END IF',
+            'OUTPUT "Total Poin = ", total_poin'
         ];
 
         let currentLines = ['', '', '', '', '', ''];
@@ -684,7 +693,7 @@
             clearErrorState();
             if (document.getElementById('prog-name')) document.getElementById('prog-name').value = 'Tentukan_Peringkat_Kelas';
             if (document.getElementById('prog-desc')) document.getElementById('prog-desc').value = '{ Program menentukan kenaikan peringkat kelas jika nilai lebih besar dari nilai sebelumnya }';
-            if (document.getElementById('prog-decl')) document.getElementById('prog-decl').value = 'nilai, nilai_sebelumnya : integer';
+            if (document.getElementById('prog-decl')) document.getElementById('prog-decl').value = 'nama_kelas, jenis_sampah : string; berat_kg, total_poin : real;';
 
             currentLines = TEMPLATE_LKPD.slice();
             saveCodeToStorage();
@@ -927,8 +936,8 @@
             let op = null;
             let leftVal = inputVal;
             let rightVal = prevVal;
-            let leftExpr = 'nilai';
-            let rightExpr = 'nilai_sebelumnya';
+            let leftExpr = 'jenis_sampah';
+            let rightExpr = '"botol plastik"';
 
             const m = body.match(/(=>|>=|=<|<=|!=|<>|==|=|(?<![<>=!])>(?!=)|(?<![<>=!])<(?!=))/);
             if (m) {
@@ -1397,7 +1406,7 @@
             if (cond.op === '>' || cond.op === '>=') {
                 passes.push(`Operator perbandingan tepat: <code>${cond.op}</code> (menguji apakah nilai lebih besar dari nilai sebelumnya)`);
             } else {
-                issues.push(`Operator perbandingan tertulis <b>'${cond.op}'</b> (seharusnya <b>'&gt;'</b> agar menguji kondisi jika nilai lebih besar dari nilai sebelumnya).`);
+                // Operator perbandingan valid untuk teks atau angka
             }
 
             // 3. Output Cabang IF (Peringkat Lebih Tinggi / Naik)
