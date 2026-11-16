@@ -693,66 +693,150 @@
             <span class="text-[10px] font-mono text-slate-400 px-2.5 py-0.5 rounded bg-slate-900 border border-slate-800">Scanner Identifier</span>
           </div>
 
-          <!-- 2. DUA AREA VISUAL -->
+          <!-- 2. DUA AREA VISUAL: ANALOGI AWAL (GULA) & PENERAPAN KODE (RUMUS LUAS) -->
           <div class="space-y-6">
 
-            <!-- AREA VISUAL ATAS: ANALOGI TOPLES DAPUR -->
+            <!-- AREA VISUAL ATAS: ANALOGI TOPLES DAPUR GULA (KIRI) & DIALOG ROBOT (KANAN) -->
             <div class="p-5 sm:p-6 rounded-2xl lab-card border border-slate-800 space-y-4">
               <div class="flex items-center justify-between flex-wrap gap-2 border-b border-slate-800 pb-2.5">
                 <span class="text-xs font-mono font-bold text-amber-400 flex items-center gap-2 uppercase tracking-wide">
                   <span>🍳</span>
-                  <span>Area Visual Atas: Analogi Stiker Wadah (Aturan Spasi, Awalan Angka, & Simbol)</span>
+                  <span>Area Visual Atas: Analogi Stiker Wadah Dapur (Toples Gula Pasir &amp; Bumbu)</span>
                 </span>
                 <span id="tab2JarVerdictTag" class="text-[10px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-bold">
-                  1 Toples Utuh Terdeteksi
+                  1 Toples Gula Utuh Terdeteksi
                 </span>
               </div>
 
-              <!-- PANGGUNG DINAMIS TOPLES DAPUR -->
-              <div class="py-6 flex flex-col items-center justify-center min-h-[220px] relative overflow-hidden">
-                <div id="tab2KitchenStage" class="w-full flex items-center justify-center gap-4 transition-all duration-300">
-                  <!-- Disediakan secara dinamis oleh evalVarScanner() -->
+              <!-- GRID DUA KOLOM: KIRI TOPLES GULA + TOMBOL UJI, KANAN DIALOG ROBOT -->
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch min-h-[240px]">
+                <!-- PANGGUNG DINAMIS TOPLES DAPUR (KOLOM KIRI) -->
+                <div class="lg:col-span-5 flex flex-col items-center justify-between p-4 rounded-2xl lab-inner-card border border-slate-800 relative min-h-[240px] overflow-hidden space-y-3">
+                  <div class="w-full flex items-center justify-between text-[11px] font-mono text-slate-400 border-b border-slate-800 pb-1.5">
+                    <span class="font-bold flex items-center gap-1.5"><span>🧂</span><span>Toples Dapur:</span></span>
+                    <span class="text-amber-300 font-bold">Bahan: Gula Pasir</span>
+                  </div>
+                  
+                  <div id="tab2KitchenStage" class="w-full flex items-center justify-center gap-4 transition-all duration-300 py-1 flex-1">
+                    <!-- Disediakan secara dinamis oleh evalKitchenSticker() -->
+                  </div>
+
+                  <!-- TOMBOL UJI COBA ANALOGI STIKER DAPUR (GULA) -->
+                  <div class="w-full pt-2 border-t border-slate-800/80">
+                    <div class="text-[10px] font-mono text-slate-400 mb-1.5 font-bold">Uji Stiker Label Toples Gula:</div>
+                    <div class="flex flex-wrap gap-1.5 justify-center">
+                      <button type="button" onclick="evalKitchenSticker('gula_pasir')" class="px-2 py-1 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Pakai Underscore: Sah">
+                        ✔ gula_pasir
+                      </button>
+                      <button type="button" onclick="evalKitchenSticker('gula2')" class="px-2 py-1 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Nomor Seri di Belakang: Sah">
+                        ✔ gula2 (Seri)
+                      </button>
+                      <button type="button" onclick="evalKitchenSticker('gula pasir')" class="px-2 py-1 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Ada Spasi: Terbelah Dua">
+                        ❌ gula pasir (spasi)
+                      </button>
+                      <button type="button" onclick="evalKitchenSticker('5gula')" class="px-2 py-1 rounded-lg bg-amber-950 text-amber-300 hover:bg-amber-900 border border-amber-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Awalan Angka: Mengira 5 toples">
+                        ❌ 5gula (awalan)
+                      </button>
+                      <button type="button" onclick="evalKitchenSticker('gula-pasir')" class="px-2 py-1 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Tanda Minus: Dikira pengurangan">
+                        ❌ gula-pasir (-)
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- KOTAK DIALOG ROBOT (KOLOM KANAN TOPLES) -->
+                <div class="lg:col-span-7 flex flex-col justify-center">
+                  <div id="tab2RobotCard" class="p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-emerald-500/60 shadow-lg flex items-start gap-4 transition-all h-full justify-center">
+                    <div id="tab2RobotAvatar" class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center justify-center text-2xl shrink-0">
+                      🤖
+                    </div>
+                    <div class="space-y-2 text-xs flex-1 min-w-0">
+                      <div class="robot-speech-header flex items-center gap-2 flex-wrap">
+                        <span id="tab2RobotMoodTitle" class="font-extrabold text-emerald-300 text-sm">Koki &amp; Komputer Tersenyum Puas:</span>
+                        <span id="tab2RobotBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold">
+                          1 TOPLES GULA UTUH
+                        </span>
+                      </div>
+                      <p id="tab2RobotExplanation" class="text-slate-300 leading-relaxed font-medium text-xs sm:text-sm">
+                        "Aha! Di dapur, stiker bertuliskan <strong>gula_pasir</strong> merekat menjadi 1 KESATUAN UTUH berkat garis bawah (<code>_</code>). Koki dan pelayan dapur tahu persis ini toples wadah gula pasir!"
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- AREA VISUAL BAWAH: PENERAPAN KODE & ANGKA NYATA -->
+            <!-- AREA VISUAL BAWAH: PENERAPAN KODE & ANGKA NYATA (RUMUS LUAS) -->
             <div class="p-5 sm:p-6 rounded-2xl lab-card border border-slate-800 space-y-4">
               <div class="flex items-center justify-between flex-wrap gap-2 border-b border-slate-800 pb-2.5">
                 <span class="text-xs font-mono font-bold text-emerald-400 flex items-center gap-2 uppercase tracking-wide">
                   <span>💻</span>
-                  <span>Area Visual Bawah: Penerapan Kode & Aturan Penulisan Identifier di Memori</span>
+                  <span>Area Visual Bawah: Penerapan Kode Pemrograman (Variabel Rumus Luas di Memori RAM)</span>
                 </span>
-                <span class="text-[10px] font-mono text-purple-300 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-800">
-                  Lexical Tokenizer
+                <span id="tab2CodeVerdictTag" class="text-[10px] font-mono text-purple-300 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-800">
+                  Lexical Tokenizer // Rumus Luas
                 </span>
               </div>
 
-              <!-- CONTROLLER INPUT & PRESET BUTTONS (LENGKAP DENGAN toples5 & luas-persegi) -->
+              <div class="text-xs text-slate-300 leading-relaxed">
+                Kaidah stiker toples gula di atas berlaku sama persis pada kode program! Uji penamaan variabel untuk program perhitungan <strong>rumus luas</strong> (misal: luas persegi):
+              </div>
+
+              <!-- CONTROLLER INPUT & PRESET BUTTONS (RUMUS LUAS) -->
               <div class="p-4 rounded-xl lab-inner-card border border-slate-800 space-y-3.5">
                 <div class="text-xs font-bold text-slate-200">
-                  Uji Ketik Nama Label Stiker Toples (Live Scanner):
+                  Uji Ketik Nama Variabel Rumus Luas (Live Lexical Scanner):
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                   <div class="sm:col-span-5">
-                    <input id="inputTab2VarName" type="text" value="luas_persegi" oninput="evalVarScanner(this.value)" placeholder="Ketik label stiker..." class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-600 text-white font-mono text-xs font-bold outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 transition">
+                    <input id="inputTab2VarName" type="text" value="luas_persegi" oninput="evalVarScanner(this.value)" placeholder="Ketik variabel rumus luas..." class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-600 text-white font-mono text-xs font-bold outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 transition">
                   </div>
                   <div class="sm:col-span-7 flex flex-wrap gap-1.5">
                     <button type="button" onclick="setVarScannerPreset('luas_persegi')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Pakai Underscore: Sah">
                       ✔ luas_persegi
                     </button>
-                    <button type="button" onclick="setVarScannerPreset('toples5')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Angka di belakang: Sah sebagai nomor seri">
-                      ✔ toples5 (Seri)
+                    <button type="button" onclick="setVarScannerPreset('luas2')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Angka di belakang: Sah sebagai nomor seri">
+                      ✔ luas2 (Seri)
                     </button>
-                    <button type="button" onclick="setVarScannerPreset('luas persegi')" class="px-2.5 py-1.5 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Ada spasi: Toples terbelah">
+                    <button type="button" onclick="setVarScannerPreset('luas persegi')" class="px-2.5 py-1.5 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Ada spasi: Syntax error">
                       ❌ luas persegi (spasi)
                     </button>
-                    <button type="button" onclick="setVarScannerPreset('5luas')" class="px-2.5 py-1.5 rounded-lg bg-amber-950 text-amber-300 hover:bg-amber-900 border border-amber-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Angka di depan: Mengira 5 wadah">
+                    <button type="button" onclick="setVarScannerPreset('5luas')" class="px-2.5 py-1.5 rounded-lg bg-amber-950 text-amber-300 hover:bg-amber-900 border border-amber-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Angka di depan: Ditolak kompilator">
                       ❌ 5luas (awalan)
                     </button>
                     <button type="button" onclick="setVarScannerPreset('luas-persegi')" class="px-2.5 py-1.5 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Tanda minus: Dikira pengurangan matematika">
                       ❌ luas-persegi (-)
                     </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PREVIEW BARIS KODE PSEUDOCODE & ALOKASI RAM -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
+                <!-- KARTU PSEUDOCODE -->
+                <div class="sm:col-span-7 p-3.5 rounded-xl lab-inner-card border border-slate-800 space-y-2 font-mono text-xs">
+                  <div class="text-[10px] text-slate-400 font-bold uppercase flex items-center justify-between">
+                    <span>Baris Deklarasi Program:</span>
+                    <span class="text-amber-400">program Hitung_Luas</span>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">
+                    <span class="text-purple-400 font-bold">deklarasi:</span><br>
+                    &nbsp;&nbsp;<span id="tab2CodeVarDisplay" class="text-emerald-400 font-bold">luas_persegi</span> : <span class="text-amber-300 font-bold">real</span>
+                  </div>
+                </div>
+
+                <!-- KARTU SLOT RAM KOMPUTER -->
+                <div class="sm:col-span-5 p-3.5 rounded-xl lab-inner-card border border-slate-800 space-y-2 text-xs flex flex-col justify-between">
+                  <div class="text-[10px] font-mono text-slate-400 font-bold uppercase flex items-center justify-between">
+                    <span>Slot Memori RAM:</span>
+                    <span class="text-emerald-400 font-mono">0x7FFF42</span>
+                  </div>
+                  <div id="tab2RamStatusBox" class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center gap-2">
+                    <span id="tab2RamIcon" class="text-lg">💾</span>
+                    <div class="text-[11px] font-mono leading-tight">
+                      <span id="tab2RamStatusTitle" class="text-emerald-400 font-bold block">1 Kamar RAM Sah Dialokasikan</span>
+                      <span id="tab2RamStatusSub" class="text-slate-400 text-[10px]">Alamat: [luas_persegi]</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -764,24 +848,6 @@
 
             </div>
 
-          </div>
-
-          <!-- 3. KOTAK DIALOG ROBOT (BAWAH) -->
-          <div id="tab2RobotCard" class="p-4 sm:p-5 rounded-2xl lab-card border-2 border-emerald-500/60 shadow-lg flex items-start gap-4 transition-all">
-            <div id="tab2RobotAvatar" class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center justify-center text-2xl shrink-0">
-              🤖
-            </div>
-            <div class="space-y-1 text-xs">
-              <div class="robot-speech-header flex items-center gap-2 flex-wrap">
-                <span id="tab2RobotMoodTitle" class="font-extrabold text-emerald-300 text-sm">Komputer Tersenyum Puas:</span>
-                <span id="tab2RobotBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold">
-                  1 WADAH SAH
-                </span>
-              </div>
-              <p id="tab2RobotExplanation" class="text-slate-300 leading-relaxed font-medium text-xs">
-                "Aha! Komputer membaca 1 KESATUAN UTUH bernama <strong>luas_persegi</strong>. Karena tidak ada spasi, toples tetap utuh dan komputer tahu persis alamat penyimpanan data ini!"
-              </p>
-            </div>
           </div>
 
         </div>
@@ -1383,8 +1449,13 @@
       }
 
       if (subTabId === 'sub-scanner-nama') {
+        if (typeof evalKitchenSticker === 'function') {
+          evalKitchenSticker('gula_pasir');
+        }
         const input = document.getElementById('inputTab2VarName');
-        evalVarScanner(input ? input.value : 'luas_persegi');
+        if (typeof evalVarScanner === 'function') {
+          evalVarScanner(input ? input.value : 'luas_persegi');
+        }
       }
     }
 
@@ -1513,13 +1584,12 @@
     }
 
     // =========================================================================
-    // MODUL 2: SCANNER NAMA VARIABEL (toples5 vs luas-persegi)
+    // MODUL 2: SCANNER NAMA VARIABEL (DAPUR: GULA vs PROGRAM: RUMUS LUAS)
     // =========================================================================
-    function evalVarScanner(raw) {
+
+    // 1. ANALOGI DAPUR (AREA VISUAL ATAS: TOPLES GULA & DIALOG ROBOT)
+    function evalKitchenSticker(raw) {
       const stage = document.getElementById('tab2KitchenStage');
-      const lexerBox = document.getElementById('tab2LexerAnalysisBox');
-      const led = document.getElementById('tab2StatusLed');
-      const ledText = document.getElementById('tab2StatusText');
       const verdictTag = document.getElementById('tab2JarVerdictTag');
       const robotCard = document.getElementById('tab2RobotCard');
       const robotAvatar = document.getElementById('tab2RobotAvatar');
@@ -1527,44 +1597,38 @@
       const robotBadge = document.getElementById('tab2RobotBadge');
       const robotExpl = document.getElementById('tab2RobotExplanation');
 
-      const text = (raw || '').trim();
+      const text = (raw || 'gula_pasir').trim();
 
-      if (!text) {
-        if (stage) stage.innerHTML = '<div class="text-slate-500 font-mono text-xs italic">[Ketikkan nama label stiker toples di bawah...]</div>';
-        return;
-      }
-
-      // KASUS 1: SPASI (TOPLES TERBELAH DUA)
-      if (/\s/.test(raw)) {
-        const parts = raw.split(/\s+/).filter(Boolean);
-        const p1 = parts[0] || 'kata1';
-        const p2 = parts[1] || 'kata2';
-
+      // KASUS 1: SPASI (gula pasir) -> toples terbelah dua
+      if (/\s/.test(text)) {
         AudioLab.playError();
+        const parts = text.split(/\s+/).filter(Boolean);
+        const p1 = parts[0] || 'gula';
+        const p2 = parts[1] || 'pasir';
 
         if (stage) {
           stage.innerHTML = 
-            '<div class="flex items-center justify-center gap-4 relative py-2">' +
+            '<div class="flex items-center justify-center gap-3 relative py-2">' +
               '<div class="flex flex-col items-center anim-split-left">' +
-                '<div class="w-24 h-4 rounded-t lid-orange border border-rose-400"></div>' +
-                '<div class="w-32 h-32 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-2 shadow-xl">' +
-                  '<div class="p-2 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs truncate max-w-[110px]">' +
+                '<div class="w-16 h-3 rounded-t lid-orange border border-rose-400"></div>' +
+                '<div class="w-24 h-28 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-1.5 shadow-xl">' +
+                  '<div class="p-1.5 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs truncate max-w-[85px]">' +
                     '🏷️ ' + escapeHtml(p1) +
                   '</div>' +
                   '<span class="text-[9px] text-rose-400 font-mono font-bold mt-2">Potongan #1</span>' +
                 '</div>' +
               '</div>' +
 
-              '<div class="flex flex-col items-center justify-center px-2 z-20 animate-pulse">' +
-                '<span class="text-2xl font-black text-rose-500">⚡</span>' +
-                '<span class="text-[10px] font-mono text-rose-400 font-black tracking-wider text-center">SPASI<br>TERBELAH</span>' +
-                '<span class="text-2xl font-black text-rose-500">⚡</span>' +
+              '<div class="flex flex-col items-center justify-center px-1 z-20 animate-pulse">' +
+                '<span class="text-xl font-black text-rose-500">⚡</span>' +
+                '<span class="text-[9px] font-mono text-rose-400 font-black tracking-wider text-center">SPASI<br>TERBELAH</span>' +
+                '<span class="text-xl font-black text-rose-500">⚡</span>' +
               '</div>' +
 
               '<div class="flex flex-col items-center anim-split-right">' +
-                '<div class="w-24 h-4 rounded-t lid-orange border border-rose-400"></div>' +
-                '<div class="w-32 h-32 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-2 shadow-xl">' +
-                  '<div class="p-2 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs truncate max-w-[110px]">' +
+                '<div class="w-16 h-3 rounded-t lid-orange border border-rose-400"></div>' +
+                '<div class="w-24 h-28 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-1.5 shadow-xl">' +
+                  '<div class="p-1.5 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs truncate max-w-[85px]">' +
                     '🏷️ ' + escapeHtml(p2) +
                   '</div>' +
                   '<span class="text-[9px] text-rose-400 font-mono font-bold mt-2">Potongan #2</span>' +
@@ -1573,174 +1637,334 @@
             '</div>';
         }
 
-        if (lexerBox) {
-          lexerBox.innerHTML = 
-            '<div class="flex items-center justify-between text-rose-400 font-bold text-[11px]">' +
-              '<span>HASIL PEMINDAI: SYNTAX ERROR (SPASI ILEGAL)</span>' +
-              '<span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-[10px]">TIDAK BOLEH SPASI</span>' +
-            '</div>' +
-            '<p class="text-slate-300 leading-relaxed font-medium">' +
-              'Komputer menemukan spasi di antara <strong>' + escapeHtml(p1) + '</strong> dan <strong>' + escapeHtml(p2) + '</strong>. Komputer mengira ini dua wadah berbeda yang bertabrakan. Gunakan garis bawah (<code>_</code>) tanpa spasi!' +
-            '</p>';
+        if (verdictTag) {
+          verdictTag.textContent = 'Toples Terbelah Dua (Spasi)';
+          verdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 font-bold';
         }
-
-        if (led) led.className = 'w-3 h-3 rounded-full bg-rose-500 animate-ping shadow-[0_0_12px_#ef4444]';
-        if (ledText) { ledText.textContent = 'ERROR SCANNER: NAMA TOPLES TERBELAH OLEH SPASI!'; ledText.className = 'font-mono text-rose-400 font-bold tracking-wider text-xs'; }
-        if (verdictTag) { verdictTag.textContent = 'Toples Terbelah Dua (Spasi)'; verdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 font-bold'; }
-        
         if (robotAvatar) robotAvatar.textContent = '🤯';
-        if (robotTitle) { robotTitle.textContent = 'Komputer Kebingungan: Toples Terbelah Dua Karena Spasi!'; robotTitle.className = 'font-extrabold text-rose-400 text-sm'; }
-        if (robotBadge) { robotBadge.textContent = 'CRASH: NAMA TERBELAH (SPASI)'; robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold'; }
-        if (robotExpl) {
-          robotExpl.innerHTML = '<strong>Ada spasi di tengah label stiker!</strong> Komputer membaca <code>' + escapeHtml(p1) + '</code> dan <code>' + escapeHtml(p2) + '</code> sebagai dua instruksi yang bertabrakan. Toplesnya jadi terbelah dua! Gunakan garis bawah <code>_</code> (underscore) agar label merekat menjadi satu wadah utuh!';
+        if (robotTitle) {
+          robotTitle.textContent = 'Koki Kebingungan: Toples Terbelah Dua Karena Spasi!';
+          robotTitle.className = 'font-extrabold text-rose-400 text-sm';
         }
-        if (robotCard) robotCard.className = 'p-4 sm:p-5 rounded-2xl lab-card border-2 border-rose-500/80 shadow-lg flex items-start gap-4 transition-all';
+        if (robotBadge) {
+          robotBadge.textContent = 'CRASH: STIKER TERBELAH (SPASI)';
+          robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold';
+        }
+        if (robotExpl) {
+          robotExpl.innerHTML = '"<strong>Waduh! Ada spasi di tengah label stiker toples!</strong> Pelayan dapur membaca <code>' + escapeHtml(p1) + '</code> dan <code>' + escapeHtml(p2) + '</code> sebagai dua wadah berbeda yang saling bertabrakan. Toplesnya jadi terbelah dua dan butiran gula tumpah berantakan! Rekatkan label menjadi satu kata menggunakan tanda garis bawah (<code>_</code> / underscore)!"';
+        }
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-rose-500/80 shadow-lg flex items-start gap-4 transition-all h-full justify-center';
 
-      // KASUS 2: DIAWALI ANGKA (5 TOPLES HANTU)
-      } else if (/^[0-9]/.test(raw)) {
+      // KASUS 2: AWALAN ANGKA (5gula) -> 5 toples hantu
+      } else if (/^[0-9]/.test(text)) {
         AudioLab.playError();
-
-        const numPrefix = raw.match(/^[0-9]+/)[0];
+        const numPrefix = text.match(/^[0-9]+/)[0];
         const count = Math.min(parseInt(numPrefix, 10) || 5, 5);
 
         let ghosts = '';
         for (let i = 1; i <= count; i++) {
           ghosts += 
-            '<div class="flex flex-col items-center anim-ghost-jar" style="animation-delay: ' + (i * 0.15) + 's">' +
-              '<div class="w-14 h-2.5 rounded-t lid-orange opacity-60"></div>' +
-              '<div class="w-20 h-24 rounded-b-xl border-2 border-dashed border-amber-400/60 bg-amber-950/20 flex flex-col items-center justify-center p-1">' +
-                '<span class="text-base opacity-70">👻</span>' +
-                '<span class="text-[9px] font-mono text-amber-300">Toples #' + i + '</span>' +
+            '<div class="flex flex-col items-center anim-ghost-jar" style="animation-delay: ' + (i * 0.12) + 's">' +
+              '<div class="w-10 h-2 rounded-t lid-orange opacity-60"></div>' +
+              '<div class="w-14 h-18 rounded-b-xl border-2 border-dashed border-amber-400/60 bg-amber-950/20 flex flex-col items-center justify-center p-1">' +
+                '<span class="text-sm opacity-80">👻</span>' +
+                '<span class="text-[8px] font-mono text-amber-300 font-bold">Toples #' + i + '</span>' +
               '</div>' +
             '</div>';
         }
 
         if (stage) {
           stage.innerHTML = 
-            '<div class="flex flex-col items-center justify-center space-y-2">' +
-              '<div class="flex items-center gap-2 flex-wrap justify-center">' +
+            '<div class="flex flex-col items-center justify-center space-y-2 py-1">' +
+              '<div class="flex items-center gap-1.5 flex-wrap justify-center">' +
                 ghosts +
               '</div>' +
-              '<div class="p-2 rounded-xl bg-amber-950/80 border border-amber-500 text-amber-300 font-mono text-xs font-bold">' +
-                '⚠️ Muncul ' + count + ' Bayangan Toples Hantu yang Membingungkan Robot!' +
+              '<div class="px-2.5 py-1 rounded-xl bg-amber-950/80 border border-amber-500 text-amber-300 font-mono text-[10px] font-bold text-center">' +
+                '⚠️ Mengira Koki Memesan ' + count + ' Buah Toples Gula Sekaligus!' +
               '</div>' +
             '</div>';
         }
 
-        if (lexerBox) {
-          lexerBox.innerHTML = 
-            '<div class="flex items-center justify-between text-amber-400 font-bold text-[11px]">' +
-              '<span>HASIL PEMINDAI: SYNTAX ERROR (DIAWALI ANGKA)</span>' +
-              '<span class="px-2 py-0.5 rounded bg-amber-950 border border-amber-700 text-[10px]">AWALAN ANGKA DITOLAK</span>' +
-            '</div>' +
-            '<p class="text-slate-300 leading-relaxed font-medium">' +
-              'Angka di awal membuat komputer mengira kamu ingin memesan ' + count + ' buah toples hantu, bukan nama toplesnya! Tapi jika angka di belakang (seperti <code>toples5</code>), itu dibolehkan karena dianggap nomor seri.' +
-            '</p>';
+        if (verdictTag) {
+          verdictTag.textContent = count + ' Toples Hantu (Awalan Angka)';
+          verdictTag.className = 'text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/30 font-bold';
         }
-
-        if (led) led.className = 'w-3 h-3 rounded-full bg-amber-500 animate-pulse shadow-[0_0_10px_#f59e0b]';
-        if (ledText) { ledText.textContent = 'PERINGATAN: NAMA DIAWALI ANGKA (BINGUNG JUMLAH VS NAMA)'; ledText.className = 'font-mono text-amber-300 font-bold tracking-wider text-xs'; }
-        if (verdictTag) { verdictTag.textContent = count + ' Toples Hantu (Awalan Angka)'; verdictTag.className = 'text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/30 font-bold'; }
-
         if (robotAvatar) robotAvatar.textContent = '😵';
-        if (robotTitle) { robotTitle.textContent = 'Komputer Kebingungan: Muncul Bayangan Toples Hantu!'; robotTitle.className = 'font-extrabold text-amber-400 text-sm'; }
-        if (robotBadge) { robotBadge.textContent = 'DITOLAK: BINGUNG JUMLAH VS NAMA'; robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/30 font-bold'; }
-        if (robotExpl) {
-          robotExpl.innerHTML = '"Aduh! Komputer mengira angka <strong>' + numPrefix + '</strong> di depan adalah JUMLAH toples (' + count + ' buah toples hantu), bukan nama toplesnya! Komputer tidak bisa membedakan jumlah vs nama jika diawali angka. Selalu awali nama dengan huruf!"';
+        if (robotTitle) {
+          robotTitle.textContent = 'Koki Pusing: Dikira Mau Memesan ' + count + ' Toples Sekaligus!';
+          robotTitle.className = 'font-extrabold text-amber-400 text-sm';
         }
-        if (robotCard) robotCard.className = 'p-4 sm:p-5 rounded-2xl lab-card border-2 border-amber-500/80 shadow-lg flex items-start gap-4 transition-all';
+        if (robotBadge) {
+          robotBadge.textContent = 'DITOLAK: BINGUNG JUMLAH VS NAMA';
+          robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/30 font-bold';
+        }
+        if (robotExpl) {
+          robotExpl.innerHTML = '"Aduh! Ketika stiker diawali angka <strong>' + numPrefix + '</strong>, pelayan dapur mengira kamu memesan <strong>' + count + ' buah toples gula</strong> (kuantitas belanjaan), bukan memberi nama toples! Dapur dan komputer bingung membedakan jumlah vs nama jika diawali angka. Selalu awali nama toples dengan huruf!"';
+        }
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-amber-500/80 shadow-lg flex items-start gap-4 transition-all h-full justify-center';
 
-      // KASUS 3: TANDA MINUS (-) SEPERTI luas-persegi
-      } else if (raw.includes('-')) {
+      // KASUS 3: TANDA MINUS (-) SEPERTI gula-pasir -> dikira pengurangan
+      } else if (text.includes('-')) {
         AudioLab.playError();
-
         if (stage) {
           stage.innerHTML = 
-            '<div class="flex flex-col items-center justify-center space-y-2">' +
-              '<div class="w-24 h-4 rounded-t lid-orange border border-rose-400"></div>' +
-              '<div class="w-44 h-32 rounded-b-3xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-3 shadow-xl">' +
+            '<div class="flex flex-col items-center justify-center space-y-1.5 py-1">' +
+              '<div class="w-20 h-3 rounded-t lid-orange border border-rose-400"></div>' +
+              '<div class="w-36 h-28 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-2 shadow-xl">' +
                 '<div class="p-2 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs">' +
-                  '✂️ ' + escapeHtml(raw) + ' (Tanda Minus)' +
+                  '✂️ ' + escapeHtml(text) +
                 '</div>' +
-                '<span class="text-[10px] text-rose-400 font-mono font-bold mt-2">Dikira Operasi Pengurangan Matematis</span>' +
+                '<span class="text-[9px] text-rose-400 font-mono font-bold mt-2 text-center">Dikira Resep Pengurangan (Gula - Pasir)</span>' +
               '</div>' +
             '</div>';
         }
 
-        if (lexerBox) {
-          lexerBox.innerHTML = 
-            '<div class="flex items-center justify-between text-rose-400 font-bold text-[11px]">' +
-              '<span>HASIL PEMINDAI: SIMBOL MINUS DILARANG DI NAMA</span>' +
-              '<span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-[10px]">DIKIRA PENGURANGAN (-)</span>' +
-            '</div>' +
-            '<p class="text-slate-300 leading-relaxed font-medium">' +
-              'Kenapa tanda minus (<code>-</code>) dilarang? Karena komputer mengira kamu menyuruhnya <strong>mengurangi</strong> (operasi matematika), bukan memberi nama! Gunakan garis bawah (<code>_</code>).' +
-            '</p>';
+        if (verdictTag) {
+          verdictTag.textContent = 'Tanda Minus Ditolak (Pengurangan)';
+          verdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 font-bold';
         }
-
-        if (led) led.className = 'w-3 h-3 rounded-full bg-rose-500 animate-pulse';
-        if (ledText) { ledText.textContent = 'ERROR SCANNER: TANDA MINUS DIKIRA PENGURANGAN MATEMATIKA'; ledText.className = 'font-mono text-rose-400 font-bold tracking-wider text-xs'; }
-        if (verdictTag) { verdictTag.textContent = 'Tanda Minus Ditolak (Pengurangan)'; verdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 font-bold'; }
-
         if (robotAvatar) robotAvatar.textContent = '🧐';
-        if (robotTitle) { robotTitle.textContent = 'Komputer Kebingungan: Tanda Minus Dikira Pengurangan!'; robotTitle.className = 'font-extrabold text-rose-400 text-sm'; }
-        if (robotBadge) { robotBadge.textContent = 'ERROR: DIKIRA PENGURANGAN (-)'; robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold'; }
-        if (robotExpl) {
-          robotExpl.innerHTML = '"Kenapa tanda minus <code>-</code> tidak boleh menggantikan garis bawah <code>_</code>? Karena komputer mengira kamu menyuruhnya <strong>mengurangi toples luas dengan toples persegi</strong> (operasi hitung matematika), bukan memberi nama wadah! Gunakan <code>_</code> (underscore) yang aman!"';
+        if (robotTitle) {
+          robotTitle.textContent = 'Koki Bingung: Tanda Minus Dikira Resep Pengurangan!';
+          robotTitle.className = 'font-extrabold text-rose-400 text-sm';
         }
-        if (robotCard) robotCard.className = 'p-4 sm:p-5 rounded-2xl lab-card border-2 border-rose-500/80 shadow-lg flex items-start gap-4 transition-all';
+        if (robotBadge) {
+          robotBadge.textContent = 'DITOLAK: DIKIRA PENGURANGAN (-)';
+          robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold';
+        }
+        if (robotExpl) {
+          robotExpl.innerHTML = '"Kenapa tanda strip (<code>-</code>) dilarang? Di resep dapur maupun kompilator komputer, tanda minus diartikan sebagai <strong>operasi matematika pengurangan</strong> (gula dikurangi pasir)! Stiker toples wadah wajib memakai tanda garis bawah (<code>_</code> / underscore) yang aman!"';
+        }
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-rose-500/80 shadow-lg flex items-start gap-4 transition-all h-full justify-center';
 
-      // KASUS 4: ANGKA DI BELAKANG (SEPERTI toples5) ATAU VALID DENGAN UNDERSCORE
+      // KASUS 4: VALID (gula_pasir atau nomor seri gula2)
       } else {
         AudioLab.playSuccess();
-        const hasNumberAtEnd = /[0-9]$/.test(raw);
+        const hasNumEnd = /[0-9]$/.test(text);
+        const numEnd = hasNumEnd ? text.match(/[0-9]+$/)[0] : '';
 
         if (stage) {
           stage.innerHTML = 
-            '<div class="flex flex-col items-center justify-center anim-item-drop">' +
-              '<div class="w-32 h-5 rounded-t-xl lid-orange border-2 border-amber-400 shadow-lg flex items-center justify-center">' +
-                '<div class="w-8 h-1.5 bg-amber-700 rounded-full"></div>' +
+            '<div class="flex flex-col items-center justify-center anim-item-drop py-1">' +
+              '<div class="w-28 h-5 rounded-t-xl lid-orange border-2 border-amber-400 shadow-md flex items-center justify-center">' +
+                '<div class="w-7 h-1.5 bg-amber-700 rounded-full"></div>' +
               '</div>' +
-              '<div class="w-28 h-2 bg-amber-900"></div>' +
-              '<div class="w-52 h-40 rounded-b-3xl glass-jar-body border-2 border-emerald-400 bg-emerald-950/30 relative flex flex-col items-center justify-center p-3 shadow-[0_0_25px_rgba(16,185,129,0.3)] transition-all duration-300">' +
+              '<div class="w-24 h-1.5 bg-amber-900"></div>' +
+              '<div class="w-44 h-36 rounded-b-3xl glass-jar-body border-2 border-emerald-400 bg-emerald-950/30 relative flex flex-col items-center justify-center p-2.5 shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-all">' +
                 '<div class="glass-jar-reflection"></div>' +
-                '<div class="p-3 rounded-xl bg-emerald-600 text-white font-mono font-bold text-sm border-2 border-emerald-300 flex items-center justify-center min-w-[150px] shadow-lg truncate max-w-[180px]">' +
-                  '🏷️ ' + escapeHtml(raw) +
+                '<div class="p-2 rounded-xl bg-emerald-600 text-white font-mono font-bold text-xs border border-emerald-300 shadow-md flex items-center gap-1.5 truncate max-w-[150px]">' +
+                  '<span>🏷️</span><span>' + escapeHtml(text) + '</span>' +
                 '</div>' +
-                '<span class="text-[10px] text-emerald-300 font-bold mt-2.5 flex items-center gap-1.5">' +
-                  '<span>●</span>' +
-                  '<span>' + (hasNumberAtEnd ? '1 Toples Seri ke-' + raw.match(/[0-9]+$/)[0] + ' (Sah)' : '1 Toples Utuh Terdeteksi (Sah)') + '</span>' +
+                '<div class="mt-2 flex items-center gap-1 text-[11px] text-amber-200 font-bold bg-amber-950/60 px-2.5 py-0.5 rounded-full border border-amber-500/30">' +
+                  '<span>🧂</span><span>Isi: Gula Pasir' + (hasNumEnd ? ' (Seri ' + numEnd + ')' : '') + '</span>' +
+                '</div>' +
+                '<span class="text-[9px] text-emerald-300 font-mono font-bold mt-1.5">' +
+                  '● ' + (hasNumEnd ? 'Toples Seri ke-' + numEnd + ' (Sah)' : '1 Toples Gula Utuh (Sah)') +
                 '</span>' +
               '</div>' +
             '</div>';
         }
 
+        if (verdictTag) {
+          verdictTag.textContent = hasNumEnd ? 'Toples Seri ke-' + numEnd + ' (Sah)' : '1 Toples Gula Utuh Terdeteksi';
+          verdictTag.className = 'text-[10px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-bold';
+        }
+        if (robotAvatar) robotAvatar.textContent = '😊';
+        if (robotTitle) {
+          robotTitle.textContent = hasNumEnd ? 'Koki & Komputer Tersenyum Puas: Nomor Seri Sah!' : 'Koki & Komputer Tersenyum Puas: Label 1 Kesatuan Sempurna!';
+          robotTitle.className = 'font-extrabold text-emerald-300 text-sm';
+        }
+        if (robotBadge) {
+          robotBadge.textContent = hasNumEnd ? 'NOMOR SERI SAH (SERI ' + numEnd + ')' : '1 TOPLES GULA UTUH';
+          robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold';
+        }
+        if (robotExpl) {
+          robotExpl.innerHTML = hasNumEnd ?
+            '"Bagus sekali! Menaruh angka di belakang seperti <code>' + escapeHtml(text) + '</code> diperbolehkan karena koki menganggapnya sebagai <strong>nomor seri wadah</strong> (toples gula cadangan seri ke-' + numEnd + '). Wadah tetap utuh dan sah!"' :
+            '"Aha! Di dapur, stiker bertuliskan <strong>' + escapeHtml(text) + '</strong> merekat menjadi <strong>1 KESATUAN UTUH</strong> berkat tanda garis bawah (<code>_</code> / underscore). Koki dan pelayan dapur tahu persis ini toples wadah gula pasir tanpa tertukar!"';
+        }
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-emerald-500/60 shadow-lg flex items-start gap-4 transition-all h-full justify-center';
+      }
+    }
+
+    // 2. PENERAPAN KODE PEMROGRAMAN: RUMUS LUAS (AREA VISUAL BAWAH)
+    function evalVarScanner(raw) {
+      const codeDisplay = document.getElementById('tab2CodeVarDisplay');
+      const codeVerdictTag = document.getElementById('tab2CodeVerdictTag');
+      const ramBox = document.getElementById('tab2RamStatusBox');
+      const ramIcon = document.getElementById('tab2RamIcon');
+      const ramTitle = document.getElementById('tab2RamStatusTitle');
+      const ramSub = document.getElementById('tab2RamStatusSub');
+      const lexerBox = document.getElementById('tab2LexerAnalysisBox');
+      const led = document.getElementById('tab2StatusLed');
+      const ledText = document.getElementById('tab2StatusText');
+
+      const text = (raw || 'luas_persegi').trim();
+
+      // KASUS 1: SPASI (luas persegi)
+      if (/\s/.test(raw)) {
+        const parts = raw.split(/\s+/).filter(Boolean);
+        const p1 = parts[0] || 'luas';
+        const p2 = parts[1] || 'persegi';
+
+        if (codeDisplay) {
+          codeDisplay.innerHTML = '<span class="text-rose-400 font-bold underline decoration-rose-500 decoration-wavy">' + escapeHtml(raw) + '</span>';
+        }
+        if (codeVerdictTag) {
+          codeVerdictTag.textContent = 'Syntax Error: Spasi Ilegal';
+          codeVerdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-950 px-2.5 py-0.5 rounded-full border border-rose-700 font-bold';
+        }
+        if (ramBox) {
+          ramBox.className = 'p-2.5 rounded-lg bg-rose-950/40 border-2 border-rose-500/70 flex items-center gap-2 transition-all';
+        }
+        if (ramIcon) ramIcon.textContent = '❌';
+        if (ramTitle) {
+          ramTitle.textContent = 'RAM Menolak: Gagal Alokasi Memori';
+          ramTitle.className = 'text-rose-400 font-bold block text-[11px] font-mono';
+        }
+        if (ramSub) {
+          ramSub.textContent = 'Spasi memecah variabel menjadi 2 nama terpisah!';
+          ramSub.className = 'text-rose-300/80 text-[10px] font-mono';
+        }
+        if (lexerBox) {
+          lexerBox.innerHTML = 
+            '<div class="flex items-center justify-between text-rose-400 font-bold text-[11px]">' +
+              '<span>LEXICAL SCANNER: SYNTAX ERROR (SPASI ILEGAL)</span>' +
+              '<span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-[10px]">TIDAK BOLEH SPASI</span>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-lg bg-slate-950 border border-rose-900/50 font-mono text-[11px] text-slate-300 space-y-1">' +
+              '<div><strong class="text-rose-400">Pecahan Token:</strong> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-rose-300">[TOKEN_ID: ' + escapeHtml(p1) + ']</span> <span class="px-1.5 py-0.5 rounded bg-rose-900 text-white">[ILLEGAL_SPACE]</span> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-rose-300">[TOKEN_ID: ' + escapeHtml(p2) + ']</span></div>' +
+              '<p class="text-slate-400 text-[10px] mt-1">Kompilator mengira Anda menulis 2 instruksi bertabrakan tanpa operator. Gunakan <code>' + escapeHtml(p1) + '_' + escapeHtml(p2) + '</code>.</p>' +
+            '</div>';
+        }
+        if (led) led.className = 'w-3 h-3 rounded-full bg-rose-500 animate-ping shadow-[0_0_12px_#ef4444]';
+        if (ledText) {
+          ledText.textContent = 'ERROR SCANNER: NAMA VARIABEL TERBELAH OLEH SPASI!';
+          ledText.className = 'font-mono text-rose-400 font-bold tracking-wider text-xs';
+        }
+
+      // KASUS 2: AWALAN ANGKA (5luas)
+      } else if (/^[0-9]/.test(raw)) {
+        const numPrefix = raw.match(/^[0-9]+/)[0];
+
+        if (codeDisplay) {
+          codeDisplay.innerHTML = '<span class="text-amber-400 font-bold underline decoration-amber-500 decoration-wavy">' + escapeHtml(raw) + '</span>';
+        }
+        if (codeVerdictTag) {
+          codeVerdictTag.textContent = 'Syntax Error: Awalan Angka';
+          codeVerdictTag.className = 'text-[10px] font-mono text-amber-400 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-700 font-bold';
+        }
+        if (ramBox) {
+          ramBox.className = 'p-2.5 rounded-lg bg-amber-950/40 border-2 border-amber-500/70 flex items-center gap-2 transition-all';
+        }
+        if (ramIcon) ramIcon.textContent = '⚠️';
+        if (ramTitle) {
+          ramTitle.textContent = 'RAM Menolak: Tokenizer Error (Awalan Angka)';
+          ramTitle.className = 'text-amber-400 font-bold block text-[11px] font-mono';
+        }
+        if (ramSub) {
+          ramSub.textContent = 'Variabel tidak boleh diawali angka literal!';
+          ramSub.className = 'text-amber-300/80 text-[10px] font-mono';
+        }
+        if (lexerBox) {
+          lexerBox.innerHTML = 
+            '<div class="flex items-center justify-between text-amber-400 font-bold text-[11px]">' +
+              '<span>LEXICAL SCANNER: SYNTAX ERROR (DIAWALI ANGKA)</span>' +
+              '<span class="px-2 py-0.5 rounded bg-amber-950 border border-amber-700 text-[10px]">AWALAN ANGKA DITOLAK</span>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-lg bg-slate-950 border border-amber-900/50 font-mono text-[11px] text-slate-300 space-y-1">' +
+              '<div><strong class="text-amber-400">Pecahan Token:</strong> <span class="px-1.5 py-0.5 rounded bg-amber-900 text-amber-200">[TOKEN_NUMBER: ' + escapeHtml(numPrefix) + ']</span> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">[TOKEN_ID: ' + escapeHtml(raw.slice(numPrefix.length)) + ']</span></div>' +
+              '<p class="text-slate-400 text-[10px] mt-1">Awalan angka membuat komputer mengira ini angka perkalian atau nilai konstan, bukan nama wadah RAM. Awali selalu dengan huruf!</p>' +
+            '</div>';
+        }
+        if (led) led.className = 'w-3 h-3 rounded-full bg-amber-500 animate-pulse shadow-[0_0_10px_#f59e0b]';
+        if (ledText) {
+          ledText.textContent = 'PERINGATAN: NAMA DIAWALI ANGKA (BINGUNG NILAI VS NAMA)';
+          ledText.className = 'font-mono text-amber-300 font-bold tracking-wider text-xs';
+        }
+
+      // KASUS 3: TANDA MINUS (-) SEPERTI luas-persegi
+      } else if (raw.includes('-')) {
+        if (codeDisplay) {
+          codeDisplay.innerHTML = '<span class="text-rose-400 font-bold underline decoration-rose-500 decoration-wavy">' + escapeHtml(raw) + '</span>';
+        }
+        if (codeVerdictTag) {
+          codeVerdictTag.textContent = 'Syntax Error: Operator Minus (-)';
+          codeVerdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-950 px-2.5 py-0.5 rounded-full border border-rose-700 font-bold';
+        }
+        if (ramBox) {
+          ramBox.className = 'p-2.5 rounded-lg bg-rose-950/40 border-2 border-rose-500/70 flex items-center gap-2 transition-all';
+        }
+        if (ramIcon) ramIcon.textContent = '✂️';
+        if (ramTitle) {
+          ramTitle.textContent = 'RAM Menolak: Operator Minus Terdeteksi';
+          ramTitle.className = 'text-rose-400 font-bold block text-[11px] font-mono';
+        }
+        if (ramSub) {
+          ramSub.textContent = "Tanda '-' terbaca sebagai rumus pengurangan matematika!";
+          ramSub.className = 'text-rose-300/80 text-[10px] font-mono';
+        }
+        if (lexerBox) {
+          lexerBox.innerHTML = 
+            '<div class="flex items-center justify-between text-rose-400 font-bold text-[11px]">' +
+              '<span>LEXICAL SCANNER: OPERATOR MINUS DILARANG PADA NAMA</span>' +
+              '<span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-[10px]">DIKIRA PENGURANGAN (-)</span>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-lg bg-slate-950 border border-rose-900/50 font-mono text-[11px] text-slate-300 space-y-1">' +
+              '<div><strong class="text-rose-400">Pecahan Token:</strong> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">[ID: luas]</span> <span class="px-1.5 py-0.5 rounded bg-rose-900 text-rose-200">[OP_MINUS: -]</span> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">[ID: persegi]</span></div>' +
+              '<p class="text-slate-400 text-[10px] mt-1">Komputer mengira Anda menulis instruksi: <code>luas DIKURANGI persegi</code>. Gunakan garis bawah (<code>_</code> / underscore)!</p>' +
+            '</div>';
+        }
+        if (led) led.className = 'w-3 h-3 rounded-full bg-rose-500 animate-pulse';
+        if (ledText) {
+          ledText.textContent = 'ERROR SCANNER: TANDA MINUS DIKIRA PENGURANGAN MATEMATIKA';
+          ledText.className = 'font-mono text-rose-400 font-bold tracking-wider text-xs';
+        }
+
+      // KASUS 4: VALID (luas_persegi atau nomor seri luas2)
+      } else {
+        const hasNumEnd = /[0-9]$/.test(raw);
+        const numEnd = hasNumEnd ? raw.match(/[0-9]+$/)[0] : '';
+
+        if (codeDisplay) {
+          codeDisplay.innerHTML = '<span class="text-emerald-300 font-bold underline decoration-emerald-500 decoration-wavy">' + escapeHtml(raw) + '</span>';
+        }
+        if (codeVerdictTag) {
+          codeVerdictTag.textContent = hasNumEnd ? 'Nomor Seri Sah (Seri ' + numEnd + ')' : '1 Kesatuan Identifier Sah';
+          codeVerdictTag.className = 'text-[10px] font-mono text-emerald-300 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-700 font-bold';
+        }
+        if (ramBox) {
+          ramBox.className = 'p-2.5 rounded-lg bg-emerald-950/40 border-2 border-emerald-500/70 flex items-center gap-2 transition-all';
+        }
+        if (ramIcon) ramIcon.textContent = '💾';
+        if (ramTitle) {
+          ramTitle.textContent = '0x7FFF42: 1 Kamar RAM Sah Dialokasikan';
+          ramTitle.className = 'text-emerald-400 font-bold block text-[11px] font-mono';
+        }
+        if (ramSub) {
+          ramSub.textContent = 'Alamat memori berhasil dipesan untuk: [' + escapeHtml(raw) + ']';
+          ramSub.className = 'text-emerald-300/80 text-[10px] font-mono';
+        }
         if (lexerBox) {
           lexerBox.innerHTML = 
             '<div class="flex items-center justify-between text-emerald-400 font-bold text-[11px]">' +
-              '<span>HASIL PEMINDAI: IDENTIFIER SAH & BAKU</span>' +
+              '<span>LEXICAL SCANNER: IDENTIFIER RESMI &amp; VALID</span>' +
               '<span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-[10px]">1 KESATUAN UTUH</span>' +
             '</div>' +
-            '<p class="text-slate-300 leading-relaxed font-medium">' +
-              (hasNumberAtEnd ?
-                'Angka di belakang (seperti pada <code>' + escapeHtml(raw) + '</code>) diizinkan karena dibaca sebagai <strong>nomor seri urutan</strong> (1 wadah bernomor seri, bukan banyak wadah).' :
-                'Label <code>' + escapeHtml(raw) + '</code> adalah satu kesatuan utuh tanpa spasi dan diawali karakter huruf yang sah.') +
-            '</p>';
+            '<div class="p-2.5 rounded-lg bg-slate-950 border border-emerald-900/50 font-mono text-[11px] text-slate-300 space-y-1">' +
+              '<div><strong class="text-emerald-400">Pecahan Token:</strong> <span class="px-1.5 py-0.5 rounded bg-emerald-900 text-emerald-200">[TOKEN_IDENTIFIER: ' + escapeHtml(raw) + ']</span> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">[TOKEN_COLON: :]</span> <span class="px-1.5 py-0.5 rounded bg-purple-900 text-purple-200">[TOKEN_TYPE: real]</span></div>' +
+              '<p class="text-slate-400 text-[10px] mt-1">' +
+                (hasNumEnd ?
+                  'Angka di belakang sah sebagai nomor seri wadah variabel rumus luas.' :
+                  'Identifier <code>' + escapeHtml(raw) + '</code> adalah satu kesatuan utuh tanpa spasi dan diawali karakter huruf yang sah.') +
+              '</p>' +
+            '</div>';
         }
-
         if (led) led.className = 'w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_#10b981]';
-        if (ledText) { ledText.textContent = 'STATUS SCANNER: 1 KESATUAN NAMA ASLI (VALID & SAH)'; ledText.className = 'font-mono text-emerald-300 font-bold tracking-wider text-xs'; }
-        if (verdictTag) { verdictTag.textContent = hasNumberAtEnd ? 'Nomor Seri Sah' : '1 Toples Utuh Sah'; verdictTag.className = 'text-[10px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-bold'; }
-
-        if (robotAvatar) robotAvatar.textContent = '😊';
-        if (robotTitle) { robotTitle.textContent = hasNumberAtEnd ? 'Komputer Tersenyum Puas: Nomor Seri Sah!' : 'Komputer Tersenyum Puas: Label 1 Kesatuan Sempurna!'; robotTitle.className = 'font-extrabold text-emerald-300 text-sm'; }
-        if (robotBadge) { robotBadge.textContent = hasNumberAtEnd ? 'NOMOR SERI SAH (1 WADAH)' : '1 TOPLES UTUH SAH'; robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold'; }
-        if (robotExpl) {
-          robotExpl.innerHTML = hasNumberAtEnd ?
-            '"Kenapa angka di belakang seperti <code>' + escapeHtml(raw) + '</code> dibolehkan? Karena komputer membacanya sebagai <strong>nomor seri urutan</strong> (1 toples bernomor seri ' + raw.match(/[0-9]+$/)[0] + ', bukan banyak wadah). Toples utuh dan sah!"' :
-            '"Aha! Komputer membaca <strong>1 KESATUAN UTUH</strong> bernama <code>' + escapeHtml(raw) + '</code>. Karena tidak ada spasi, toples tetap utuh dan komputer tahu persis nama asli wadah ini!"';
+        if (ledText) {
+          ledText.textContent = 'STATUS SCANNER: 1 KESATUAN VARIABEL RUMUS LUAS (VALID & SAH)';
+          ledText.className = 'font-mono text-emerald-300 font-bold tracking-wider text-xs';
         }
-        if (robotCard) robotCard.className = 'p-4 sm:p-5 rounded-2xl lab-card border-2 border-emerald-500/60 shadow-lg flex items-start gap-4 transition-all';
       }
     }
 
@@ -2072,6 +2296,9 @@
   
 
     function initLabToples() {
+      if (typeof evalKitchenSticker === 'function') {
+        evalKitchenSticker('gula_pasir');
+      }
       if (typeof evalVarScanner === 'function') {
         const inp = document.getElementById('inputTab2VarName');
         evalVarScanner(inp ? inp.value : 'luas_persegi');

@@ -804,7 +804,7 @@
                                         <span>Tabel Pelacakan (Trace Table) Masukan Data Admin:</span>
                                     </h4>
                                     <p class="text-[10.5px] text-slate-600 font-medium mt-0.5 mb-2">
-                                        Lakukan tracing baris kode di samping berdasarkan 3 skenario berikut:
+                                        Lakukan tracing baris kode di samping berdasarkan 4 skenario berikut (Uji #1 telah diisi sebagai contoh panduan pengerjaan):
                                     </p>
 
                                     <div class="overflow-x-auto">
@@ -818,17 +818,20 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="divide-y divide-slate-200 font-semibold text-slate-700">
-                                                <tr class="hover:bg-amber-50/30">
-                                                    <td class="p-1.5 align-top text-center font-bold text-amber-800">#1</td>
+                                                <tr class="hover:bg-amber-50/30 bg-emerald-50/20">
+                                                    <td class="p-1.5 align-top text-center font-bold text-amber-800">
+                                                        <div>#1</div>
+                                                        <span class="text-[8px] font-mono px-1 py-0.2 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 font-bold block mt-0.5">Contoh</span>
+                                                    </td>
                                                     <td class="p-1.5 align-top">
                                                         <div>Kelas: <strong>X E7</strong></div>
                                                         <div>berat_kg: <strong>5</strong> | poin_admin: <strong>20</strong></div>
                                                     </td>
-                                                    <td class="p-1.5 align-top font-mono text-slate-600">
-                                                        <textarea rows="1" class="dotted-input font-mono text-[10.5px]" data-save="akt2_uji1_rumus" placeholder=""></textarea>
+                                                    <td class="p-1.5 align-top font-mono text-slate-800 bg-emerald-50/30">
+                                                        <textarea rows="1" class="dotted-input font-mono text-[10.5px] font-bold text-slate-800" data-save="akt2_uji1_rumus" placeholder="Contoh: total_poin &lt;- 5 * 20 = 100">total_poin &lt;- 5 * 20 = 100</textarea>
                                                     </td>
-                                                    <td class="p-1.5 align-top">
-                                                        <textarea rows="1" class="dotted-input font-mono text-emerald-700 font-bold" data-save="akt2_uji1_output" placeholder=""></textarea>
+                                                    <td class="p-1.5 align-top bg-emerald-50/30">
+                                                        <textarea rows="1" class="dotted-input font-mono text-emerald-700 font-bold" data-save="akt2_uji1_output" placeholder="Contoh: Total Poin : 100">Total Poin : 100</textarea>
                                                     </td>
                                                 </tr>
                                                 <tr class="hover:bg-amber-50/30">
@@ -855,6 +858,19 @@
                                                     </td>
                                                     <td class="p-1.5 align-top">
                                                         <textarea rows="1" class="dotted-input font-mono text-emerald-700 font-bold" data-save="akt2_uji3_output" placeholder=""></textarea>
+                                                    </td>
+                                                </tr>
+                                                <tr class="hover:bg-amber-50/30">
+                                                    <td class="p-1.5 align-top text-center font-bold text-amber-800">#4</td>
+                                                    <td class="p-1.5 align-top">
+                                                        <div>Kelas: <strong>X E4</strong></div>
+                                                        <div>berat_kg: <strong>6.5</strong> | poin_admin: <strong class="text-teal-700">25 (Pilah Kering)</strong></div>
+                                                    </td>
+                                                    <td class="p-1.5 align-top font-mono">
+                                                        <textarea rows="1" class="dotted-input font-mono text-[10.5px]" data-save="akt2_uji4_rumus" placeholder=""></textarea>
+                                                    </td>
+                                                    <td class="p-1.5 align-top">
+                                                        <textarea rows="1" class="dotted-input font-mono text-emerald-700 font-bold" data-save="akt2_uji4_output" placeholder=""></textarea>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -1277,7 +1293,10 @@
 
         // Initial default state
         const defaultState = {
-            static: {},
+            static: {
+                akt2_uji1_rumus: 'total_poin <- 5 * 20 = 100',
+                akt2_uji1_output: 'Total Poin : 100'
+            },
             langkah: ['', '', '', '', ''], // Default 5 blank steps
             algoritma: ['', '', '', '', '', ''] // Default 6 blank pseudocode lines
         };
@@ -1305,6 +1324,8 @@
                 if (raw) {
                     const parsed = JSON.parse(raw);
                     if (!parsed.static) parsed.static = {};
+                    if (!parsed.static.akt2_uji1_rumus) parsed.static.akt2_uji1_rumus = defaultState.static.akt2_uji1_rumus;
+                    if (!parsed.static.akt2_uji1_output) parsed.static.akt2_uji1_output = defaultState.static.akt2_uji1_output;
                     if (!Array.isArray(parsed.langkah) || parsed.langkah.length === 0) {
                         parsed.langkah = defaultState.langkah.slice();
                     }
@@ -1317,7 +1338,7 @@
                 console.error('Error loading state:', e);
             }
             return {
-                static: {},
+                static: Object.assign({}, defaultState.static),
                 langkah: defaultState.langkah.slice(),
                 algoritma: defaultState.algoritma.slice()
             };

@@ -24,9 +24,31 @@
       border-left: 4px solid #eab308 !important;
       color: #713f12 !important;
       font-weight: 700;
+      box-shadow: 0 0 12px rgba(234, 179, 8, 0.4);
     }
     .active-code-line * {
       color: #713f12 !important;
+    }
+
+    /* Custom scrollbar untuk runner code box */
+    #runnerCodeBox::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    #runnerCodeBox::-webkit-scrollbar-track {
+      background: #090d16;
+      border-radius: 8px;
+    }
+    #runnerCodeBox::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 8px;
+    }
+    #runnerCodeBox::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    #runnerCodeBox {
+      scrollbar-width: thin;
+      scrollbar-color: #334155 #090d16;
     }
     .var-updated {
       animation: varPulse 0.8s ease-in-out;
@@ -622,7 +644,7 @@
             <span class="w-5 h-5 rounded-full bg-emerald-600 text-white text-[10px] flex items-center justify-center font-black shadow-xs shrink-0">3</span>
             <span class="text-xs sm:text-[13px] font-extrabold tracking-tight">3. Algoritma</span>
           </div>
-          <span class="tab-sub text-[10px] text-slate-500 font-medium leading-tight mt-0.5 line-clamp-1">Eksekusi Baris</span>
+          <span class="tab-sub text-[10px] text-slate-500 font-medium leading-tight mt-0.5 line-clamp-1">Game Susun I-P-O</span>
         </button>
       </nav>
     </div>
@@ -659,211 +681,182 @@
         </div>
       </div>
 
-      <!-- LEMBAR DOKUMEN PSEUDOCODE UTUH DENGAN TOMBOL SIMULASI PADA SETIAP BAGIAN -->
-      <div class="lms-card p-6 sm:p-8 bg-white border border-slate-200 rounded-2xl shadow-sm space-y-6">
+      <!-- SIMULASI TERPADU EKSEKUSI DOKUMEN PSEUDOCODE (LIVE STEPPER RUNNER) -->
+      <div class="lms-card p-6 space-y-6 bg-white border border-slate-200 rounded-3xl shadow-sm">
         
-        <div class="flex items-center justify-between border-b border-slate-200 pb-4 flex-wrap gap-2">
-          <div class="flex items-center gap-2.5">
-            <span class="w-3.5 h-3.5 rounded-full bg-emerald-500"></span>
-            <h4 class="text-base sm:text-lg font-bold text-slate-900 font-mono tracking-tight">
-              LEMBAR_PROGRAM: Kasir_Toko_Sederhana
-            </h4>
+        <!-- Top Control Header -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div>
+            <span class="px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-800 text-[11px] font-black uppercase tracking-wider inline-flex items-center gap-1.5">
+              <span>⚡</span>
+              <span>Simulasi Eksekusi Dokumen Utuh</span>
+            </span>
+            <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1">
+              Live Stepper: Jalankan Pseudocode Baris Demi Baris
+            </h3>
+            <p class="text-xs text-slate-500 font-medium">
+              Amati bagaimana 3 pilar pseudocode (Judul, Deklarasi, Algoritma) dieksekusi secara terpadu oleh komputer.
+            </p>
           </div>
-          <span class="text-[11px] font-mono text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200 font-semibold">
-            Total: 14 Baris Eksekusi
-          </span>
+
+          <!-- Skenario Selector -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-bold text-slate-600">Pilih Kasus:</span>
+            <button id="btnSkenario1" onclick="pilihSkenario(1)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-sm cursor-pointer">
+              1. Hitung Luas &amp; Kategori (IF-ELSE)
+            </button>
+            <button id="btnSkenario2" onclick="pilihSkenario(2)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+              2. Percabangan (IF-ELSE)
+            </button>
+            <button id="btnSkenario3" onclick="pilihSkenario(3)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+              3. Pertukaran Variabel (Temp)
+            </button>
+          </div>
         </div>
 
-        <!-- CODE CONTAINER BLUEPRINT WITH 3 DISTINCT COLORED SECTIONS -->
-        <div class="rounded-xl border border-slate-800 bg-slate-950 text-white overflow-hidden shadow-md font-code text-xs sm:text-sm divide-y divide-slate-800">
+        <!-- Main Simulation Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           
-          <!-- ==================== BAGIAN 1: JUDUL PROGRAM ==================== -->
-          <div class="p-4 sm:p-5 bg-blue-950/20 hover:bg-blue-950/30 transition border-l-4 border-l-blue-500 space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-sans pb-2 border-b border-blue-900/40">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-md bg-blue-600 text-white font-mono font-bold text-[11px] shadow-xs">
-                  BAGIAN 1
-                </span>
-                <span class="font-bold text-blue-300 text-xs sm:text-sm">
-                  JUDUL PROGRAM (HEADER)
-                </span>
-                <span class="text-[10px] text-slate-400 font-medium hidden md:inline">
-                  &bull; Menentukan nama &amp; spesifikasi tujuan program
-                </span>
-              </div>
-
-              <!-- BUTTON SIMULASI JUDUL (SOLID & PROFESSIONAL) -->
-              <button type="button" onclick="switchTab('tab-judul')" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto">
-                <span>🔍</span>
-                <span>Buka Simulasi &amp; Aturan Judul &rarr;</span>
-              </button>
-            </div>
-
-            <!-- Code Lines -->
-            <div class="space-y-1 font-mono text-xs sm:text-[13px] leading-relaxed">
-              <div class="flex items-center gap-3">
-                <span class="text-slate-500 select-none w-6 text-right">1.</span>
-                <span><strong class="text-blue-400 font-bold">Program</strong> <span class="text-amber-300 font-extrabold">Hitung_Total_Bayar</span></span>
-              </div>
-              <div class="flex items-center gap-3">
-                <span class="text-slate-500 select-none w-6 text-right">2.</span>
-                <span class="text-slate-400 italic">{ Menghitung total belanjaan siswa berdasarkan jumlah barang dan tarif harga satuan }</span>
+          <!-- Panel Kiri: Code Editor -->
+          <div class="lg:col-span-7 space-y-3">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                <span>📄</span>
+                <span>Kode Pseudocode Berjalan:</span>
+              </span>
+              <div class="flex items-center gap-2 text-[10px] font-bold">
+                <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800">Judul</span>
+                <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800">Deklarasi</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Algoritma</span>
               </div>
             </div>
 
-            <div class="pt-1 text-[11px] font-sans text-blue-200/90 flex items-center gap-2">
-              <span>💡</span>
-              <span><strong>Kaidah Baku:</strong> Nama program wajib <strong>1 kesatuan (tanpa spasi)</strong>, deskripsi singkat diapit tanda kurung kurawal <code>{ ... }</code> sebagai komentar yang tidak dieksekusi.</span>
+            <div id="runnerCodeBox" class="p-3 sm:p-4 rounded-2xl bg-slate-950 text-white font-code text-xs leading-relaxed shadow-xl border-2 border-slate-800 space-y-4 overflow-y-auto overflow-x-auto max-h-[500px] scroll-smooth">
+              <!-- Lines dynamically rendered via renderRunnerCode() -->
             </div>
+
           </div>
 
-          <!-- ==================== BAGIAN 2: DEKLARASI ==================== -->
-          <div class="p-4 sm:p-5 bg-purple-950/20 hover:bg-purple-950/30 transition border-l-4 border-l-purple-500 space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-sans pb-2 border-b border-purple-900/40">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-md bg-purple-600 text-white font-mono font-bold text-[11px] shadow-xs">
-                  BAGIAN 2
-                </span>
-                <span class="font-bold text-purple-300 text-xs sm:text-sm">
-                  DEKLARASI (KAMUS VARIABEL &amp; TIPE DATA)
-                </span>
-                <span class="text-[10px] text-slate-400 font-medium hidden md:inline">
-                  &bull; Menyiapkan wadah penyimpanan &amp; menentukan jenis data
-                </span>
+          <!-- Panel Kanan: Status Eksekusi, Tabel Nilai Wadah & Console Output -->
+          <div class="lg:col-span-5 space-y-4 lg:sticky lg:top-4">
+            
+              <!-- Tombol Kontrol Eksekusi -->
+              <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <button id="btnRunnerNext" type="button" onclick="runnerStepForward()" class="py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                    <span>▶ Langkah Selanjutnya</span>
+                  </button>
+                  <button id="btnRunnerAuto" type="button" onclick="runnerToggleAuto()" class="py-2.5 px-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer">
+                    <span id="autoPlayIcon">⚡</span>
+                    <span id="autoPlayText">Otomatis</span>
+                  </button>
+                </div>
+  
+                <button type="button" onclick="runnerReset()" class="py-2.5 px-3.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition cursor-pointer">
+                  ↺ Reset Eksekusi
+                </button>
               </div>
 
-              <!-- BUTTON SIMULASI DEKLARASI (SOLID & PROFESSIONAL) -->
-              <button type="button" onclick="switchTab('tab-deklarasi')" class="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto">
-                <span>📦</span>
-                <span>Buka Simulasi Deklarasi (Variabel &amp; Tipe) &rarr;</span>
-              </button>
+            <!-- Penjelasan Baris Aktif -->
+            <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-1.5 shadow-xs">
+              <div class="flex items-center justify-between text-xs font-bold text-amber-900">
+                <span>Eksekusi Komputer Saat Ini:</span>
+                <span id="runnerCurrentLineBadge" class="font-mono text-[10px] bg-amber-200 px-2 py-0.5 rounded">Baris 1</span>
+              </div>
+              <p id="runnerExplanationText" class="text-xs text-amber-950 leading-relaxed font-medium min-h-[36px]">
+                Tekan tombol <strong>"Langkah Selanjutnya"</strong> untuk mulai mengeksekusi program.
+              </p>
             </div>
 
-            <!-- Code Lines -->
-            <div class="space-y-1 font-mono text-xs sm:text-[13px] leading-relaxed">
-              <div class="flex items-center gap-3">
-                <span class="text-slate-500 select-none w-6 text-right">3.</span>
-                <span><strong class="text-purple-400 font-black">DEKLARASI:</strong></span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">4.</span>
-                <span><span class="text-amber-300 font-bold">nama_pembeli</span> : <strong class="text-emerald-400">string</strong> <span class="text-slate-500 italic hidden sm:inline">{ Wadah teks nama berpetik }</span></span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">5.</span>
-                <span><span class="text-amber-300 font-bold">jumlah_barang</span> : <strong class="text-cyan-400">integer</strong> <span class="text-slate-500 italic hidden sm:inline">{ Wadah bilangan bulat utuh }</span></span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">6.</span>
-                <span><span class="text-amber-300 font-bold">harga_satuan</span> : <strong class="text-amber-400">real</strong> <span class="text-slate-500 italic hidden sm:inline">{ Wadah angka desimal uang }</span></span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">7.</span>
-                <span><span class="text-amber-300 font-bold">total_bayar</span> : <strong class="text-amber-400">real</strong> <span class="text-slate-500 italic hidden sm:inline">{ Wadah penampung hasil perhitungan }</span></span>
-              </div>
-            </div>
-
-            <div class="pt-1 text-[11px] font-sans text-purple-200/90 flex items-center gap-2">
-              <span>💡</span>
-              <span><strong>Kaidah Baku:</strong> Komputer memesan toples penyimpanan. Tipe data (<code class="text-white">string</code>, <code class="text-white">integer</code>, <code class="text-white">real</code>) berperan sebagai penjaga pintu keamanan yang memastikan hanya data berizin yang boleh masuk.</span>
-            </div>
-          </div>
-
-          <!-- ==================== BAGIAN 3: ALGORITMA ==================== -->
-          <div class="p-4 sm:p-5 bg-emerald-950/20 hover:bg-emerald-950/30 transition border-l-4 border-l-emerald-500 space-y-3">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-sans pb-2 border-b border-emerald-900/40">
-              <div class="flex items-center gap-2">
-                <span class="px-2.5 py-0.5 rounded-md bg-emerald-600 text-white font-mono font-bold text-[11px] shadow-xs">
-                  BAGIAN 3
+            <!-- Tabel Nilai Wadah Penyimpanan -->
+            <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-2 shadow-xs">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-bold text-slate-700 flex items-center gap-1.5">
+                  <span>📦</span>
+                  <span>Nilai Wadah Variabel:</span>
                 </span>
-                <span class="font-bold text-emerald-300 text-xs sm:text-sm">
-                  ALGORITMA (LANGKAH EKSEKUSI PROSES)
-                </span>
-                <span class="text-[10px] text-slate-400 font-medium hidden md:inline">
-                  &bull; Urutan instruksi operasional yang dijalankan komputer
-                </span>
+                <span class="text-[10px] text-slate-400 font-mono">Tabel Tracing</span>
               </div>
-
-              <!-- BUTTON SIMULASI ALGORITMA (SOLID & PROFESSIONAL) -->
-              <button type="button" onclick="switchTab('tab-algoritma')" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-xs transition flex items-center justify-center gap-2 cursor-pointer self-start sm:self-auto">
-                <span>⚡</span>
-                <span>Buka Simulasi Eksekusi Algoritma &rarr;</span>
-              </button>
-            </div>
-
-            <!-- Code Lines -->
-            <div class="space-y-1 font-mono text-xs sm:text-[13px] leading-relaxed">
-              <div class="flex items-center gap-3">
-                <span class="text-slate-500 select-none w-6 text-right">8.</span>
-                <span><strong class="text-emerald-400 font-black">ALGORITMA:</strong></span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">9.</span>
-                <span><strong class="text-cyan-400">read</strong>(nama_pembeli)</span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">10.</span>
-                <span><strong class="text-cyan-400">read</strong>(jumlah_barang)</span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">11.</span>
-                <span><strong class="text-cyan-400">read</strong>(harga_satuan)</span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">12.</span>
-                <span>total_bayar <strong class="text-amber-400">&lt;-</strong> jumlah_barang * harga_satuan</span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">13.</span>
-                <span><strong class="text-emerald-400">write</strong>("Nama Pelanggan : ", nama_pembeli)</span>
-              </div>
-              <div class="flex items-center gap-3 pl-4">
-                <span class="text-slate-500 select-none w-6 text-right">14.</span>
-                <span><strong class="text-emerald-400">write</strong>("Total Tagihan Rp : ", total_bayar)</span>
+              <div id="runnerVarsTable" class="divide-y divide-slate-100 text-xs font-code">
+                <!-- Injected via renderVarsTable() -->
               </div>
             </div>
 
-            <div class="pt-1 text-[11px] font-sans text-emerald-200/90 flex items-center gap-2">
-              <span>💡</span>
-              <span><strong>Kaidah Baku:</strong> Instruksi berjalan terurut dari baris atas ke bawah: Membaca input (<code>read</code>), menugaskan/menimpa nilai baru (<code>&lt;-</code>), dan mencetak keluaran (<code>write</code>).</span>
+            <!-- Monitor Layar Output (Console) -->
+            <div class="p-4 rounded-2xl bg-slate-900 text-white space-y-2 shadow-inner border border-slate-800">
+              <div class="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800 pb-1.5">
+                <span class="font-bold flex items-center gap-1.5 text-slate-300">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span>Monitor Layar (Hasil Perintah write):</span>
+                </span>
+                <span class="font-mono text-[10px]">OUTPUT_CONSOLE</span>
+              </div>
+              <div id="runnerConsoleDisplay" class="font-code text-xs font-bold text-emerald-400 min-h-[60px] p-2 bg-slate-950 rounded-xl space-y-1 border border-slate-800">
+                <span class="text-slate-600 italic font-normal">[Layar masih kosong. Menunggu perintah write dijalankan...]</span>
+              </div>
             </div>
+
           </div>
 
         </div>
 
-        <!-- 3 PILAR PENJELASAN SINGKAT -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-          <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-1.5 text-xs">
-            <div class="flex items-center gap-2 font-black text-blue-900">
-              <span class="text-base">1️⃣</span>
-              <span>Peran Bagian Judul</span>
-            </div>
-            <p class="text-slate-600 leading-relaxed">
-              Memberi identitas dan tujuan fungsi program. Komputer dan sesama programmer tahu apa yang sedang diselesaikan algoritma.
-            </p>
-          </div>
+      </div>
 
-          <div class="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-1.5 text-xs">
-            <div class="flex items-center gap-2 font-black text-purple-900">
-              <span class="text-base">2️⃣</span>
-              <span>Peran Bagian Deklarasi</span>
+      <!-- 3 PILAR PENJELASAN SINGKAT -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+        <div class="p-4 rounded-2xl bg-blue-50/70 border border-blue-200 space-y-2 text-xs flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-2 font-black text-blue-900">
+                <span class="text-base">1️⃣</span>
+                <span>Pilar 1: Judul Program</span>
+              </span>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-blue-200 text-blue-900">HEADER</span>
             </div>
-            <p class="text-slate-600 leading-relaxed">
-              Mempersiapkan kotak toples penyimpanan (variabel) dan menentukan tipe data penjaganya sebelum nilai mulai diproses.
+            <p class="text-slate-600 leading-relaxed font-normal">
+              Memberi identitas dan tujuan fungsi algoritma. Nama program wajib satu kesatuan tanpa spasi, dilengkapi deskripsi di dalam kurung kurawal.
             </p>
           </div>
-
-          <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-1.5 text-xs">
-            <div class="flex items-center gap-2 font-black text-emerald-900">
-              <span class="text-base">3️⃣</span>
-              <span>Peran Bagian Algoritma</span>
-            </div>
-            <p class="text-slate-600 leading-relaxed">
-              Instruksi kerja nyata: membaca input, melakukan kalkulasi matematika, dan mencetak hasil keluaran (output).
-            </p>
-          </div>
+          <button type="button" onclick="switchTab('tab-judul')" class="w-full mt-2 py-1.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-[11px] transition shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>🔍</span><span>Buka Validator Judul &rarr;</span>
+          </button>
         </div>
 
+        <div class="p-4 rounded-2xl bg-purple-50/70 border border-purple-200 space-y-2 text-xs flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-2 font-black text-purple-900">
+                <span class="text-base">2️⃣</span>
+                <span>Pilar 2: Deklarasi</span>
+              </span>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-purple-200 text-purple-900">KAMUS</span>
+            </div>
+            <p class="text-slate-600 leading-relaxed font-normal">
+              Memesan kamar penyimpanan sementara (toples variabel) di memori RAM beserta tipe datanya sebelum nilai-nilai diproses.
+            </p>
+          </div>
+          <button type="button" onclick="switchTab('tab-deklarasi')" class="w-full mt-2 py-1.5 px-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-[11px] transition shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>📦</span><span>Buka Lab Toples &amp; Saringan &rarr;</span>
+          </button>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 space-y-2 text-xs flex flex-col justify-between">
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <span class="flex items-center gap-2 font-black text-emerald-900">
+                <span class="text-base">3️⃣</span>
+                <span>Pilar 3: Algoritma</span>
+              </span>
+              <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-200 text-emerald-900">AKSI I-P-O</span>
+            </div>
+            <p class="text-slate-600 leading-relaxed font-normal">
+              Rangkaian instruksi kerja nyata: membaca masukan (INPUT), mengolah rumus (PROSES), dan menampilkan hasil ke monitor (OUTPUT).
+            </p>
+          </div>
+          <button type="button" onclick="switchTab('tab-algoritma')" class="w-full mt-2 py-1.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] transition shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>🎮</span><span>Mainkan Game Susun I-P-O &rarr;</span>
+          </button>
+        </div>
       </div>
 
     </div>
@@ -1351,66 +1344,150 @@
             <span class="text-[10px] font-mono text-slate-400 px-2.5 py-0.5 rounded bg-slate-900 border border-slate-800">Scanner Identifier</span>
           </div>
 
-          <!-- 2. DUA AREA VISUAL -->
+          <!-- 2. DUA AREA VISUAL: ANALOGI AWAL (GULA) & PENERAPAN KODE (RUMUS LUAS) -->
           <div class="space-y-6">
 
-            <!-- AREA VISUAL ATAS: ANALOGI TOPLES DAPUR -->
+            <!-- AREA VISUAL ATAS: ANALOGI TOPLES DAPUR GULA (KIRI) & DIALOG ROBOT (KANAN) -->
             <div class="p-5 sm:p-6 rounded-2xl lab-card border border-slate-800 space-y-4">
               <div class="flex items-center justify-between flex-wrap gap-2 border-b border-slate-800 pb-2.5">
                 <span class="text-xs font-mono font-bold text-amber-400 flex items-center gap-2 uppercase tracking-wide">
                   <span>🍳</span>
-                  <span>Area Visual Atas: Analogi Stiker Wadah (Aturan Spasi, Awalan Angka, & Simbol)</span>
+                  <span>Area Visual Atas: Analogi Stiker Wadah Dapur (Toples Gula Pasir &amp; Bumbu)</span>
                 </span>
                 <span id="tab2JarVerdictTag" class="text-[10px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-bold">
-                  1 Toples Utuh Terdeteksi
+                  1 Toples Gula Utuh Terdeteksi
                 </span>
               </div>
 
-              <!-- PANGGUNG DINAMIS TOPLES DAPUR -->
-              <div class="py-6 flex flex-col items-center justify-center min-h-[220px] relative overflow-hidden">
-                <div id="tab2KitchenStage" class="w-full flex items-center justify-center gap-4 transition-all duration-300">
-                  <!-- Disediakan secara dinamis oleh evalVarScanner() -->
+              <!-- GRID DUA KOLOM: KIRI TOPLES GULA + TOMBOL UJI, KANAN DIALOG ROBOT -->
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch min-h-[240px]">
+                <!-- PANGGUNG DINAMIS TOPLES DAPUR (KOLOM KIRI) -->
+                <div class="lg:col-span-5 flex flex-col items-center justify-between p-4 rounded-2xl lab-inner-card border border-slate-800 relative min-h-[240px] overflow-hidden space-y-3">
+                  <div class="w-full flex items-center justify-between text-[11px] font-mono text-slate-400 border-b border-slate-800 pb-1.5">
+                    <span class="font-bold flex items-center gap-1.5"><span>🧂</span><span>Toples Dapur:</span></span>
+                    <span class="text-amber-300 font-bold">Bahan: Gula Pasir</span>
+                  </div>
+                  
+                  <div id="tab2KitchenStage" class="w-full flex items-center justify-center gap-4 transition-all duration-300 py-1 flex-1">
+                    <!-- Disediakan secara dinamis oleh evalKitchenSticker() -->
+                  </div>
+
+                  <!-- TOMBOL UJI COBA ANALOGI STIKER DAPUR (GULA) -->
+                  <div class="w-full pt-2 border-t border-slate-800/80">
+                    <div class="text-[10px] font-mono text-slate-400 mb-1.5 font-bold">Uji Stiker Label Toples Gula:</div>
+                    <div class="flex flex-wrap gap-1.5 justify-center">
+                      <button type="button" onclick="evalKitchenSticker('gula_pasir')" class="px-2 py-1 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Pakai Underscore: Sah">
+                        ✔ gula_pasir
+                      </button>
+                      <button type="button" onclick="evalKitchenSticker('gula2')" class="px-2 py-1 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Nomor Seri di Belakang: Sah">
+                        ✔ gula2 (Seri)
+                      </button>
+                      <button type="button" onclick="evalKitchenSticker('gula pasir')" class="px-2 py-1 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Ada Spasi: Terbelah Dua">
+                        ❌ gula pasir (spasi)
+                      </button>
+                      <button type="button" onclick="evalKitchenSticker('5gula')" class="px-2 py-1 rounded-lg bg-amber-950 text-amber-300 hover:bg-amber-900 border border-amber-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Awalan Angka: Mengira 5 toples">
+                        ❌ 5gula (awalan)
+                      </button>
+                      <button type="button" onclick="evalKitchenSticker('gula-pasir')" class="px-2 py-1 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[10px] font-bold transition cursor-pointer" title="Tanda Minus: Dikira pengurangan">
+                        ❌ gula-pasir (-)
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- KOTAK DIALOG ROBOT (KOLOM KANAN TOPLES) -->
+                <div class="lg:col-span-7 flex flex-col justify-center">
+                  <div id="tab2RobotCard" class="p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-emerald-500/60 shadow-lg flex items-start gap-4 transition-all h-full justify-center">
+                    <div id="tab2RobotAvatar" class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center justify-center text-2xl shrink-0">
+                      🤖
+                    </div>
+                    <div class="space-y-2 text-xs flex-1 min-w-0">
+                      <div class="robot-speech-header flex items-center gap-2 flex-wrap">
+                        <span id="tab2RobotMoodTitle" class="font-extrabold text-emerald-300 text-sm">Koki &amp; Komputer Tersenyum Puas:</span>
+                        <span id="tab2RobotBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold">
+                          1 TOPLES GULA UTUH
+                        </span>
+                      </div>
+                      <p id="tab2RobotExplanation" class="text-slate-300 leading-relaxed font-medium text-xs sm:text-sm">
+                        "Aha! Di dapur, stiker bertuliskan <strong>gula_pasir</strong> merekat menjadi 1 KESATUAN UTUH berkat garis bawah (<code>_</code>). Koki dan pelayan dapur tahu persis ini toples wadah gula pasir!"
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <!-- AREA VISUAL BAWAH: PENERAPAN KODE & ANGKA NYATA -->
+            <!-- AREA VISUAL BAWAH: PENERAPAN KODE & ANGKA NYATA (RUMUS LUAS) -->
             <div class="p-5 sm:p-6 rounded-2xl lab-card border border-slate-800 space-y-4">
               <div class="flex items-center justify-between flex-wrap gap-2 border-b border-slate-800 pb-2.5">
                 <span class="text-xs font-mono font-bold text-emerald-400 flex items-center gap-2 uppercase tracking-wide">
                   <span>💻</span>
-                  <span>Area Visual Bawah: Penerapan Kode & Aturan Penulisan Identifier di Memori</span>
+                  <span>Area Visual Bawah: Penerapan Kode Pemrograman (Variabel Rumus Luas di Memori RAM)</span>
                 </span>
-                <span class="text-[10px] font-mono text-purple-300 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-800">
-                  Lexical Tokenizer
+                <span id="tab2CodeVerdictTag" class="text-[10px] font-mono text-purple-300 bg-purple-950 px-2.5 py-0.5 rounded-full border border-purple-800">
+                  Lexical Tokenizer // Rumus Luas
                 </span>
               </div>
 
-              <!-- CONTROLLER INPUT & PRESET BUTTONS (LENGKAP DENGAN toples5 & luas-persegi) -->
+              <div class="text-xs text-slate-300 leading-relaxed">
+                Kaidah stiker toples gula di atas berlaku sama persis pada kode program! Uji penamaan variabel untuk program perhitungan <strong>rumus luas</strong> (misal: luas persegi):
+              </div>
+
+              <!-- CONTROLLER INPUT & PRESET BUTTONS (RUMUS LUAS) -->
               <div class="p-4 rounded-xl lab-inner-card border border-slate-800 space-y-3.5">
                 <div class="text-xs font-bold text-slate-200">
-                  Uji Ketik Nama Label Stiker Toples (Live Scanner):
+                  Uji Ketik Nama Variabel Rumus Luas (Live Lexical Scanner):
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
                   <div class="sm:col-span-5">
-                    <input id="inputTab2VarName" type="text" value="luas_persegi" oninput="evalVarScanner(this.value)" placeholder="Ketik label stiker..." class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-600 text-white font-mono text-xs font-bold outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 transition">
+                    <input id="inputTab2VarName" type="text" value="luas_persegi" oninput="evalVarScanner(this.value)" placeholder="Ketik variabel rumus luas..." class="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-600 text-white font-mono text-xs font-bold outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400/20 transition">
                   </div>
                   <div class="sm:col-span-7 flex flex-wrap gap-1.5">
                     <button type="button" onclick="setVarScannerPreset('luas_persegi')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Pakai Underscore: Sah">
                       ✔ luas_persegi
                     </button>
-                    <button type="button" onclick="setVarScannerPreset('toples5')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Angka di belakang: Sah sebagai nomor seri">
-                      ✔ toples5 (Seri)
+                    <button type="button" onclick="setVarScannerPreset('luas2')" class="px-2.5 py-1.5 rounded-lg bg-emerald-950 text-emerald-300 hover:bg-emerald-900 border border-emerald-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Angka di belakang: Sah sebagai nomor seri">
+                      ✔ luas2 (Seri)
                     </button>
-                    <button type="button" onclick="setVarScannerPreset('luas persegi')" class="px-2.5 py-1.5 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Ada spasi: Toples terbelah">
+                    <button type="button" onclick="setVarScannerPreset('luas persegi')" class="px-2.5 py-1.5 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Ada spasi: Syntax error">
                       ❌ luas persegi (spasi)
                     </button>
-                    <button type="button" onclick="setVarScannerPreset('5luas')" class="px-2.5 py-1.5 rounded-lg bg-amber-950 text-amber-300 hover:bg-amber-900 border border-amber-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Angka di depan: Mengira 5 wadah">
+                    <button type="button" onclick="setVarScannerPreset('5luas')" class="px-2.5 py-1.5 rounded-lg bg-amber-950 text-amber-300 hover:bg-amber-900 border border-amber-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Angka di depan: Ditolak kompilator">
                       ❌ 5luas (awalan)
                     </button>
                     <button type="button" onclick="setVarScannerPreset('luas-persegi')" class="px-2.5 py-1.5 rounded-lg bg-rose-950 text-rose-300 hover:bg-rose-900 border border-rose-700 font-mono text-[11px] font-bold transition cursor-pointer" title="Tanda minus: Dikira pengurangan matematika">
                       ❌ luas-persegi (-)
                     </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- PREVIEW BARIS KODE PSEUDOCODE & ALOKASI RAM -->
+              <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-stretch">
+                <!-- KARTU PSEUDOCODE -->
+                <div class="sm:col-span-7 p-3.5 rounded-xl lab-inner-card border border-slate-800 space-y-2 font-mono text-xs">
+                  <div class="text-[10px] text-slate-400 font-bold uppercase flex items-center justify-between">
+                    <span>Baris Deklarasi Program:</span>
+                    <span class="text-amber-400">program Hitung_Luas</span>
+                  </div>
+                  <div class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-slate-300">
+                    <span class="text-purple-400 font-bold">deklarasi:</span><br>
+                    &nbsp;&nbsp;<span id="tab2CodeVarDisplay" class="text-emerald-400 font-bold">luas_persegi</span> : <span class="text-amber-300 font-bold">real</span>
+                  </div>
+                </div>
+
+                <!-- KARTU SLOT RAM KOMPUTER -->
+                <div class="sm:col-span-5 p-3.5 rounded-xl lab-inner-card border border-slate-800 space-y-2 text-xs flex flex-col justify-between">
+                  <div class="text-[10px] font-mono text-slate-400 font-bold uppercase flex items-center justify-between">
+                    <span>Slot Memori RAM:</span>
+                    <span class="text-emerald-400 font-mono">0x7FFF42</span>
+                  </div>
+                  <div id="tab2RamStatusBox" class="p-2.5 rounded-lg bg-slate-950 border border-slate-800 flex items-center gap-2">
+                    <span id="tab2RamIcon" class="text-lg">💾</span>
+                    <div class="text-[11px] font-mono leading-tight">
+                      <span id="tab2RamStatusTitle" class="text-emerald-400 font-bold block">1 Kamar RAM Sah Dialokasikan</span>
+                      <span id="tab2RamStatusSub" class="text-slate-400 text-[10px]">Alamat: [luas_persegi]</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1422,24 +1499,6 @@
 
             </div>
 
-          </div>
-
-          <!-- 3. KOTAK DIALOG ROBOT (BAWAH) -->
-          <div id="tab2RobotCard" class="p-4 sm:p-5 rounded-2xl lab-card border-2 border-emerald-500/60 shadow-lg flex items-start gap-4 transition-all">
-            <div id="tab2RobotAvatar" class="w-12 h-12 rounded-2xl bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 flex items-center justify-center text-2xl shrink-0">
-              🤖
-            </div>
-            <div class="space-y-1 text-xs">
-              <div class="robot-speech-header flex items-center gap-2 flex-wrap">
-                <span id="tab2RobotMoodTitle" class="font-extrabold text-emerald-300 text-sm">Komputer Tersenyum Puas:</span>
-                <span id="tab2RobotBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold">
-                  1 WADAH SAH
-                </span>
-              </div>
-              <p id="tab2RobotExplanation" class="text-slate-300 leading-relaxed font-medium text-xs">
-                "Aha! Komputer membaca 1 KESATUAN UTUH bernama <strong>luas_persegi</strong>. Karena tidak ada spasi, toples tetap utuh dan komputer tahu persis alamat penyimpanan data ini!"
-              </p>
-            </div>
           </div>
 
         </div>
@@ -1882,184 +1941,285 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- TAB 4: SIMULASI BAGIAN ALGORITMA (EKSEKUSI PROSES STEP-BY-STEP)           -->
+        <!-- ========================================================================= -->
+    <!-- TAB 4: GAME INTERAKTIF ALGORITMA (KLASIFIKASI I-P-O & MENGURUTKAN BARIS)  -->
     <!-- ========================================================================= -->
     <div id="tab-algoritma" class="tab-content hidden space-y-6">
       
-      <!-- Back pill to Satu Kesatuan -->
+      <!-- Top Indicator & Quick Jump -->
       <div class="flex items-center justify-between pb-1 flex-wrap gap-2">
         <button type="button" onclick="switchTab('tab-kesatuan')" class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition flex items-center gap-2 shadow-2xs cursor-pointer">
           <span>&larr;</span>
           <span>Kembali ke Lembar Satu Kesatuan Pseudocode</span>
         </button>
-        <span class="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-          Modul Simulasi: 3. Eksekusi Algoritma (Step-by-Step)
-        </span>
-      </div>
-
-      <!-- KARTU PENJELASAN 4 PERINTAH INTI ALGORITMA (CLEAN & PROFESSIONAL) -->
-      <div class="p-6 bg-white text-slate-900 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <div class="flex items-center gap-3">
-          <span class="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-lg shadow-sm">
-            3
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-mono font-bold text-emerald-800 bg-emerald-100 px-3.5 py-1.5 rounded-full border border-emerald-300 flex items-center gap-1.5 shadow-2xs">
+            <span>🎮</span>
+            <span>Game Interaktif: Susun Logika I-P-O</span>
           </span>
-          <div>
-            <h3 class="text-lg sm:text-xl font-extrabold text-slate-900">Bagian 3: Algoritma (Aksi &amp; Alur Eksekusi)</h3>
-            <p class="text-xs text-emerald-700 font-semibold">Jantung Eksekusi: Komputer Menjalankan Instruksi Baris Demi Baris</p>
-          </div>
-        </div>
-
-        <p class="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-3xl font-normal">
-          Bagian <strong>Algoritma</strong> memuat serangkaian perintah operasional nyata. Komputer mengeksekusi instruksi secara runtun dari atas ke bawah: Membaca input, melakukan kalkulasi matematika, membuat keputusan IF-ELSE, dan menampilkan hasil keluaran (output).
-        </p>
-
-        <!-- 4 Perintah Kunci -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-2 text-xs">
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-            <div class="font-extrabold text-blue-700 flex items-center gap-1.5">
-              <span>📥</span>
-              <span>1. read(...) / INPUT</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-relaxed">Membaca masukan dari pengguna dan memasukkannya ke variabel.</p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-            <div class="font-extrabold text-amber-700 flex items-center gap-1.5">
-              <span>⚡</span>
-              <span>2. Penugasan (&lt;-)</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-relaxed">Menghitung ekspresi kanan, lalu menimpa hasilnya ke variabel kiri.</p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-            <div class="font-extrabold text-purple-700 flex items-center gap-1.5">
-              <span>🔀</span>
-              <span>3. IF - THEN - ELSE</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-relaxed">Memilih cabang instruksi berdasarkan kondisi benar/salah.</p>
-          </div>
-          <div class="p-3 rounded-xl bg-slate-50 border border-slate-200 space-y-1">
-            <div class="font-extrabold text-emerald-700 flex items-center gap-1.5">
-              <span>📤</span>
-              <span>4. write(...) / OUTPUT</span>
-            </div>
-            <p class="text-[11px] text-slate-600 leading-relaxed">Mencetak hasil komputasi ke monitor layar pengguna.</p>
-          </div>
+          <span id="gameStarScore" class="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-3 py-1 rounded-full border border-amber-300 flex items-center gap-1 shadow-2xs">
+            <span>⭐</span><span id="gameScoreText">Skor: 100</span>
+          </span>
         </div>
       </div>
 
-      <!-- LIVE ALGORITHM RUNNER INTERAKTIF -->
-      <div class="lms-card p-6 space-y-6 bg-white border border-slate-200 rounded-3xl shadow-sm">
-        
-        <!-- Top Control Header -->
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-5">
-          <div>
-            <span class="px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-black uppercase tracking-wider inline-flex items-center gap-1.5">
-              <span>⚡</span>
-              <span>Mesin Eksekusi Virtual</span>
+      <!-- HERO BANNER GAME I-P-O -->
+      <div class="p-6 sm:p-8 bg-white text-slate-900 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-bold uppercase tracking-wider inline-flex items-center gap-1.5">
+              <span>🧩</span>
+              <span>Game Logika Pemrograman</span>
             </span>
-            <h3 class="text-lg sm:text-xl font-extrabold text-slate-900 mt-1">
-              Live Stepper: Jalankan Baris Demi Baris
+            <h3 class="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2">
+              <span>Game Lab Algoritma: Klasifikasi I-P-O &amp; Susun Baris Logis</span>
             </h3>
-            <p class="text-xs text-slate-500 font-medium">
-              Pilih pola kasus algoritma dan amati bagaimana baris aktif disorot dan wadah variabel terisi otomatis.
+            <p class="text-xs sm:text-sm text-slate-600 font-normal max-w-3xl leading-relaxed">
+              Setiap algoritma komputer pasti mengikuti pola baku <strong>I-P-O</strong>: <strong class="text-blue-600">Input (Masukan)</strong> &rarr; <strong class="text-amber-600">Proses (Hitung/Olah)</strong> &rarr; <strong class="text-emerald-600">Output (Keluaran)</strong>. Selesaikan 2 misi: <strong>pilah kartunya</strong> lalu <strong>urutkan baris eksekusinya</strong>!
             </p>
           </div>
 
-          <!-- Skenario Selector -->
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-xs font-bold text-slate-600">Pilih Kasus:</span>
-            <button id="btnSkenario1" onclick="pilihSkenario(1)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-sm cursor-pointer">
-              1. Runtunan (Luas)
+          <!-- Quick Case Selector -->
+          <div class="shrink-0 flex flex-wrap gap-2 w-full md:w-auto">
+            <button id="btnCase1" type="button" onclick="loadGameCase(1)" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-sm cursor-pointer">
+              📐 1. Luas Persegi
             </button>
-            <button id="btnSkenario2" onclick="pilihSkenario(2)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
-              2. Percabangan (IF-ELSE)
+            <button id="btnCase2" type="button" onclick="loadGameCase(2)" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+              🔀 2. Cek Kelulusan (IF-ELSE)
             </button>
-            <button id="btnSkenario3" onclick="pilihSkenario(3)" class="px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
-              3. Pertukaran Variabel (Temp)
+            <button id="btnCase3" type="button" onclick="loadGameCase(3)" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+              🛒 3. Kasir Toko
+            </button>
+            <button id="btnCase4" type="button" onclick="loadGameCase(4)" class="px-3 py-1.5 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
+              🌡️ 4. Konversi Suhu
             </button>
           </div>
         </div>
 
-        <!-- Main Simulation Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-          
-          <!-- Panel Kiri: Code Editor -->
-          <div class="lg:col-span-7 space-y-3">
-            <div class="flex items-center justify-between text-xs">
-              <span class="font-bold text-slate-700 flex items-center gap-1.5">
-                <span>📄</span>
-                <span>Kode Pseudocode Berjalan:</span>
+        <!-- Mini Info 3 Pilar IPO -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-2 text-xs">
+          <div class="p-2.5 rounded-xl bg-blue-50/70 border border-blue-200 flex items-center gap-2.5">
+            <span class="text-xl">📥</span>
+            <div>
+              <div class="font-extrabold text-blue-900">1. INPUT (Masukan)</div>
+              <div class="text-[11px] text-blue-800">Perintah <code>read(...)</code> / <code>INPUT(...)</code></div>
+            </div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-amber-50/70 border border-amber-200 flex items-center gap-2.5">
+            <span class="text-xl">⚡</span>
+            <div>
+              <div class="font-extrabold text-amber-900">2. PROSES (Pengolahan &amp; Logika)</div>
+              <div class="text-[11px] text-amber-800">Rumus hitung (<code>&lt;-</code>) &amp; Percabangan (<code>IF-ELSE</code>)</div>
+            </div>
+          </div>
+          <div class="p-2.5 rounded-xl bg-emerald-50/70 border border-emerald-200 flex items-center gap-2.5">
+            <span class="text-xl">📤</span>
+            <div>
+              <div class="font-extrabold text-emerald-900">3. OUTPUT (Keluaran)</div>
+              <div class="text-[11px] text-emerald-800">Mencetak hasil <code>write(...)</code></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN GAME ARENA (LMS CARD) -->
+      <div class="lms-card p-6 sm:p-8 bg-white border border-slate-200 rounded-3xl shadow-sm space-y-8">
+        
+        <!-- HEADER KASUS AKTIF -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span id="gameCaseBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono text-[10px] font-bold border border-emerald-200">
+                Pemula // Runtunan Matematika
               </span>
-              <div class="flex items-center gap-2 text-[10px] font-bold">
-                <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800">Judul</span>
-                <span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800">Deklarasi</span>
-                <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Algoritma</span>
-              </div>
+              <span id="gameMissionStatusTag" class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-mono text-[10px] font-bold border border-amber-200">
+                Misi 1: Pilah Kategori
+              </span>
             </div>
+            <h4 id="gameCaseTitle" class="text-lg font-extrabold text-slate-900">
+              Kasus 1: Menghitung Luas Persegi Panjang
+            </h4>
+            <p id="gameCaseDesc" class="text-xs text-slate-500 font-medium leading-relaxed">
+              Bantu komputer membaca dimensi persegi panjang, menghitung rumus luasnya, dan mencetak hasilnya ke monitor.
+            </p>
+          </div>
 
-            <div id="runnerCodeBox" class="p-4 sm:p-5 rounded-2xl bg-slate-950 text-white font-code text-xs sm:text-[13px] leading-relaxed shadow-xl border-2 border-slate-800 space-y-1 overflow-x-auto min-h-[300px]">
-              <!-- Lines dynamically rendered via renderRunnerCode() -->
+          <div class="flex items-center gap-2 self-start sm:self-auto shrink-0">
+            <button type="button" onclick="resetCurrentGameCase()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+              <span>↺</span>
+              <span>Acak Ulang Kartu</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================== MISI 1: KLASIFIKASI KATEGORI I-P-O ==================== -->
+        <div class="space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-black flex items-center justify-center">1</span>
+              <h5 class="text-sm font-extrabold text-slate-900">
+                Misi 1: Pilah Kartu Instruksi ke Kotak I-P-O yang Tepat
+              </h5>
             </div>
+            <span id="classificationVerdictBadge" class="text-[11px] font-mono px-3 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold border border-slate-200">
+              Pindahkan semua kartu ke kotak yang sesuai
+            </span>
+          </div>
 
-            <!-- Tombol Kontrol Eksekusi -->
-            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2">
-              <div class="flex items-center gap-2">
-                <button id="btnRunnerNext" type="button" onclick="runnerStepForward()" class="py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer">
-                  <span>▶ Langkah Selanjutnya</span>
-                </button>
-                <button id="btnRunnerAuto" type="button" onclick="runnerToggleAuto()" class="py-2.5 px-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer">
-                  <span id="autoPlayIcon">⚡</span>
-                  <span id="autoPlayText">Otomatis</span>
-                </button>
-              </div>
-
-              <button type="button" onclick="runnerReset()" class="py-2.5 px-3.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs transition cursor-pointer">
-                ↺ Reset Eksekusi
-              </button>
+          <!-- KOLAM KARTU BELUM DIPILAH (UNCLASSIFIED POOL) -->
+          <div id="unclassifiedPoolBox" class="p-4 rounded-2xl bg-slate-50 border-2 border-dashed border-slate-300 space-y-2 transition-all">
+            <div class="text-[11px] font-bold text-slate-500 uppercase flex items-center justify-between">
+              <span>🎴 Kartu Instruksi Belum Terpilah (Drag atau Klik Tombol Cepat):</span>
+              <span id="poolCountBadge" class="font-mono text-slate-400">4 Kartu</span>
+            </div>
+            <div id="unclassifiedCardsList" class="flex flex-wrap gap-3 min-h-[50px] items-center">
+              <!-- Kartu dinamis diinjeksi via JS -->
             </div>
           </div>
 
-          <!-- Panel Kanan: Status Eksekusi, Tabel Nilai Wadah & Console Output -->
-          <div class="lg:col-span-5 space-y-4">
+          <!-- 3 ZONA DROP KATEGORI I-P-O (GRID 3 KOLOM) -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
             
-            <!-- Penjelasan Baris Aktif -->
-            <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 space-y-1.5 shadow-xs">
-              <div class="flex items-center justify-between text-xs font-bold text-amber-900">
-                <span>Eksekusi Komputer Saat Ini:</span>
-                <span id="runnerCurrentLineBadge" class="font-mono text-[10px] bg-amber-200 px-2 py-0.5 rounded">Baris 1</span>
+            <!-- ZONA 1: INPUT -->
+            <div id="zone-input" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event, 'input')" ondrop="handleDrop(event, 'input')" class="p-4 rounded-2xl bg-blue-50/50 border-2 border-blue-200 transition-all flex flex-col justify-between space-y-3 min-h-[180px]">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-extrabold text-blue-800 flex items-center gap-1.5">
+                    <span>📥</span>
+                    <span>1. KOTAK INPUT</span>
+                  </span>
+                  <span id="count-input" class="text-[10px] font-mono font-bold bg-blue-200/80 text-blue-900 px-2 py-0.5 rounded-full">0 Kartu</span>
+                </div>
+                <p class="text-[11px] text-blue-700/80 leading-relaxed font-medium">
+                  Perintah masukan data pengguna (<code>read</code>, <code>INPUT</code>).
+                </p>
               </div>
-              <p id="runnerExplanationText" class="text-xs text-amber-950 leading-relaxed font-medium min-h-[36px]">
-                Tekan tombol <strong>"Langkah Selanjutnya"</strong> untuk mulai mengeksekusi program.
-              </p>
-            </div>
-
-            <!-- Tabel Nilai Wadah Penyimpanan -->
-            <div class="p-4 rounded-2xl bg-white border border-slate-200 space-y-2 shadow-xs">
-              <div class="flex items-center justify-between text-xs">
-                <span class="font-bold text-slate-700 flex items-center gap-1.5">
-                  <span>📦</span>
-                  <span>Nilai Wadah Variabel:</span>
-                </span>
-                <span class="text-[10px] text-slate-400 font-mono">Tabel Tracing</span>
-              </div>
-              <div id="runnerVarsTable" class="divide-y divide-slate-100 text-xs font-code">
-                <!-- Injected via renderVarsTable() -->
+              <div id="cards-input" class="space-y-2 flex-1 flex flex-col justify-start min-h-[60px]">
+                <!-- Kartu input diinjeksi via JS -->
               </div>
             </div>
 
-            <!-- Monitor Layar Output (Console) -->
-            <div class="p-4 rounded-2xl bg-slate-900 text-white space-y-2 shadow-inner border border-slate-800">
-              <div class="flex items-center justify-between text-[11px] text-slate-400 border-b border-slate-800 pb-1.5">
-                <span class="font-bold flex items-center gap-1.5 text-slate-300">
+            <!-- ZONA 2: PROSES -->
+            <div id="zone-proses" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event, 'proses')" ondrop="handleDrop(event, 'proses')" class="p-4 rounded-2xl bg-amber-50/50 border-2 border-amber-200 transition-all flex flex-col justify-between space-y-3 min-h-[180px]">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-extrabold text-amber-800 flex items-center gap-1.5">
+                    <span>⚡</span>
+                    <span>2. KOTAK PROSES</span>
+                  </span>
+                  <span id="count-proses" class="text-[10px] font-mono font-bold bg-amber-200/80 text-amber-900 px-2 py-0.5 rounded-full">0 Kartu</span>
+                </div>
+                <p class="text-[11px] text-amber-700/80 leading-relaxed font-medium">
+                  Perintah hitung rumus (<code>&lt;-</code>) atau percabangan kondisi logika (<code>IF ... THEN ... ELSE</code>).
+                </p>
+              </div>
+              <div id="cards-proses" class="space-y-2 flex-1 flex flex-col justify-start min-h-[60px]">
+                <!-- Kartu proses diinjeksi via JS -->
+              </div>
+            </div>
+
+            <!-- ZONA 3: OUTPUT -->
+            <div id="zone-output" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event, 'output')" ondrop="handleDrop(event, 'output')" class="p-4 rounded-2xl bg-emerald-50/50 border-2 border-emerald-200 transition-all flex flex-col justify-between space-y-3 min-h-[180px]">
+              <div class="space-y-1">
+                <div class="flex items-center justify-between text-xs">
+                  <span class="font-extrabold text-emerald-800 flex items-center gap-1.5">
+                    <span>📤</span>
+                    <span>3. KOTAK OUTPUT</span>
+                  </span>
+                  <span id="count-output" class="text-[10px] font-mono font-bold bg-emerald-200/80 text-emerald-900 px-2 py-0.5 rounded-full">0 Kartu</span>
+                </div>
+                <p class="text-[11px] text-emerald-700/80 leading-relaxed font-medium">
+                  Perintah cetak hasil akhir ke monitor (<code>write</code>, <code>OUTPUT</code>).
+                </p>
+              </div>
+              <div id="cards-output" class="space-y-2 flex-1 flex flex-col justify-start min-h-[60px]">
+                <!-- Kartu output diinjeksi via JS -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ==================== MISI 2: MENGURUTKAN ALUR EKSEKUSI ==================== -->
+        <div class="space-y-4 pt-4 border-t border-slate-200">
+          <div class="flex items-center justify-between flex-wrap gap-2">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-emerald-600 text-white text-xs font-black flex items-center justify-center">2</span>
+              <h5 class="text-sm font-extrabold text-slate-900">
+                Misi 2: Susun Urutan Eksekusi Logis Baris demi Baris
+              </h5>
+            </div>
+            <span class="text-[11px] text-slate-500 font-medium">
+              Gunakan tombol <strong>⬆ Naik</strong> / <strong>⬇ Turun</strong> atau drag baris untuk mengatur urutan
+            </span>
+          </div>
+
+          <!-- LIST SLOT BARIS EKSEKUSI -->
+          <div id="executionOrderContainer" class="p-4 rounded-2xl bg-slate-900 border border-slate-800 space-y-2.5">
+            <!-- Injected via renderExecutionOrderList() -->
+          </div>
+
+          <!-- KONTROL PENGUJIAN LOGIKA & EVALUASI -->
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+              <button id="btnTestLogic" type="button" onclick="testAlgorithmLogic()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md transition hover:scale-105 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+                <span>🚀</span>
+                <span>Uji Eksekusi Logika Algoritma!</span>
+              </button>
+              <button type="button" onclick="resetOrderOnly()" class="px-3.5 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition cursor-pointer">
+                <span>↺</span>
+                <span>Reset Urutan</span>
+              </button>
+            </div>
+            <div class="text-xs text-slate-500 font-medium text-center sm:text-right">
+              Pola Benar: <strong>INPUT</strong> &rarr; <strong>PROSES</strong> &rarr; <strong>OUTPUT</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== KOTAK DIALOG ROBOT EVALUATOR & PREVIEW HASIL ==================== -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch pt-2">
+          
+          <!-- DIALOG ROBOT EVALUATOR (KOLOM KIRI/UTAMA) -->
+          <div class="lg:col-span-7">
+            <div id="gameRobotCard" class="p-5 sm:p-6 rounded-2xl bg-slate-50 border-2 border-slate-200 shadow-sm flex items-start gap-4 transition-all h-full">
+              <div id="gameRobotAvatar" class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center justify-center text-2xl shrink-0 shadow-xs">
+                🤖
+              </div>
+              <div class="space-y-2 text-xs flex-1 min-w-0">
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span id="gameRobotMoodTitle" class="font-extrabold text-slate-900 text-sm">Robot Evaluator: Siap Menguji Algoritmamu!</span>
+                  <span id="gameRobotBadge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700 font-bold">
+                    MENUNGGU PENGUJIAN
+                  </span>
+                </div>
+                <p id="gameRobotExplanation" class="text-slate-600 leading-relaxed font-medium text-xs sm:text-sm">
+                  Pilah kartu ke dalam kotak Input, Proses, dan Output pada Misi 1, lalu atur urutan barisnya pada Misi 2. Setelah siap, klik tombol <strong>"Uji Eksekusi Logika Algoritma"</strong> untuk melihat reaksi komputer!
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- KARTU PREVIEW KODE HASIL DOKUMEN (KOLOM KANAN) -->
+          <div class="lg:col-span-5">
+            <div class="p-5 rounded-2xl bg-slate-950 text-white border border-slate-800 space-y-2.5 font-mono text-xs flex flex-col justify-between h-full shadow-inner">
+              <div class="flex items-center justify-between text-slate-400 text-[11px] border-b border-slate-800 pb-2">
+                <span class="font-bold flex items-center gap-1.5">
                   <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                  <span>Monitor Layar (Hasil Perintah write):</span>
+                  <span>Hasil Baris Algoritma Sah:</span>
                 </span>
-                <span class="font-mono text-[10px]">OUTPUT_CONSOLE</span>
+                <span id="previewStatusBadge" class="text-amber-400 text-[10px]">Belum Tervalidasi</span>
               </div>
-              <div id="runnerConsoleDisplay" class="font-code text-xs font-bold text-emerald-400 min-h-[60px] p-2 bg-slate-950 rounded-xl space-y-1 border border-slate-800">
-                <span class="text-slate-600 italic font-normal">[Layar masih kosong. Menunggu perintah write dijalankan...]</span>
+              <div id="gameResultCodeBlock" class="p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 font-code text-xs leading-relaxed flex-1 space-y-1 overflow-x-auto min-h-[100px] flex flex-col justify-center">
+                <span class="text-slate-500 italic text-[11px]">[Susun urutan baris dengan benar lalu uji logika untuk menghasilkan dokumen kode resmi...]</span>
+              </div>
+              <div class="text-[10px] text-slate-400 font-sans flex items-center justify-between pt-1">
+                <span>Standar Notasi Algoritma Resmi</span>
+                <button type="button" onclick="copyResultCode()" id="btnCopyResultCode" class="text-emerald-400 hover:text-emerald-300 font-bold underline cursor-pointer hidden">
+                  Salin Kode
+                </button>
               </div>
             </div>
-
           </div>
 
         </div>
@@ -2554,7 +2714,13 @@
       document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
       const activeEl = document.getElementById(tabId);
       if (activeEl) activeEl.classList.remove('hidden');
+      if (tabId === 'tab-kesatuan') {
+        if (typeof pilihSkenario === 'function') setTimeout(() => pilihSkenario(activeScenarioId || 1), 50);
+      }
       if (tabId === 'tab-deklarasi') { setTimeout(initLabToples, 50); }
+      if (tabId === 'tab-algoritma') {
+        if (typeof initIpoGame === 'function') setTimeout(initIpoGame, 50);
+      }
 
       // Reset semua tombol tab ke state inactive
       document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -2831,8 +2997,13 @@
       }
 
       if (subTabId === 'sub-scanner-nama') {
+        if (typeof evalKitchenSticker === 'function') {
+          evalKitchenSticker('gula_pasir');
+        }
         const input = document.getElementById('inputTab2VarName');
-        evalVarScanner(input ? input.value : 'luas_persegi');
+        if (typeof evalVarScanner === 'function') {
+          evalVarScanner(input ? input.value : 'luas_persegi');
+        }
       }
     }
 
@@ -2961,13 +3132,12 @@
     }
 
     // =========================================================================
-    // MODUL 2: SCANNER NAMA VARIABEL (toples5 vs luas-persegi)
+    // MODUL 2: SCANNER NAMA VARIABEL (DAPUR: GULA vs PROGRAM: RUMUS LUAS)
     // =========================================================================
-    function evalVarScanner(raw) {
+
+    // 1. ANALOGI DAPUR (AREA VISUAL ATAS: TOPLES GULA & DIALOG ROBOT)
+    function evalKitchenSticker(raw) {
       const stage = document.getElementById('tab2KitchenStage');
-      const lexerBox = document.getElementById('tab2LexerAnalysisBox');
-      const led = document.getElementById('tab2StatusLed');
-      const ledText = document.getElementById('tab2StatusText');
       const verdictTag = document.getElementById('tab2JarVerdictTag');
       const robotCard = document.getElementById('tab2RobotCard');
       const robotAvatar = document.getElementById('tab2RobotAvatar');
@@ -2975,44 +3145,38 @@
       const robotBadge = document.getElementById('tab2RobotBadge');
       const robotExpl = document.getElementById('tab2RobotExplanation');
 
-      const text = (raw || '').trim();
+      const text = (raw || 'gula_pasir').trim();
 
-      if (!text) {
-        if (stage) stage.innerHTML = '<div class="text-slate-500 font-mono text-xs italic">[Ketikkan nama label stiker toples di bawah...]</div>';
-        return;
-      }
-
-      // KASUS 1: SPASI (TOPLES TERBELAH DUA)
-      if (/\s/.test(raw)) {
-        const parts = raw.split(/\s+/).filter(Boolean);
-        const p1 = parts[0] || 'kata1';
-        const p2 = parts[1] || 'kata2';
-
+      // KASUS 1: SPASI (gula pasir) -> toples terbelah dua
+      if (/\s/.test(text)) {
         AudioLab.playError();
+        const parts = text.split(/\s+/).filter(Boolean);
+        const p1 = parts[0] || 'gula';
+        const p2 = parts[1] || 'pasir';
 
         if (stage) {
           stage.innerHTML = 
-            '<div class="flex items-center justify-center gap-4 relative py-2">' +
+            '<div class="flex items-center justify-center gap-3 relative py-2">' +
               '<div class="flex flex-col items-center anim-split-left">' +
-                '<div class="w-24 h-4 rounded-t lid-orange border border-rose-400"></div>' +
-                '<div class="w-32 h-32 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-2 shadow-xl">' +
-                  '<div class="p-2 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs truncate max-w-[110px]">' +
+                '<div class="w-16 h-3 rounded-t lid-orange border border-rose-400"></div>' +
+                '<div class="w-24 h-28 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-1.5 shadow-xl">' +
+                  '<div class="p-1.5 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs truncate max-w-[85px]">' +
                     '🏷️ ' + escapeHtml(p1) +
                   '</div>' +
                   '<span class="text-[9px] text-rose-400 font-mono font-bold mt-2">Potongan #1</span>' +
                 '</div>' +
               '</div>' +
 
-              '<div class="flex flex-col items-center justify-center px-2 z-20 animate-pulse">' +
-                '<span class="text-2xl font-black text-rose-500">⚡</span>' +
-                '<span class="text-[10px] font-mono text-rose-400 font-black tracking-wider text-center">SPASI<br>TERBELAH</span>' +
-                '<span class="text-2xl font-black text-rose-500">⚡</span>' +
+              '<div class="flex flex-col items-center justify-center px-1 z-20 animate-pulse">' +
+                '<span class="text-xl font-black text-rose-500">⚡</span>' +
+                '<span class="text-[9px] font-mono text-rose-400 font-black tracking-wider text-center">SPASI<br>TERBELAH</span>' +
+                '<span class="text-xl font-black text-rose-500">⚡</span>' +
               '</div>' +
 
               '<div class="flex flex-col items-center anim-split-right">' +
-                '<div class="w-24 h-4 rounded-t lid-orange border border-rose-400"></div>' +
-                '<div class="w-32 h-32 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-2 shadow-xl">' +
-                  '<div class="p-2 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs truncate max-w-[110px]">' +
+                '<div class="w-16 h-3 rounded-t lid-orange border border-rose-400"></div>' +
+                '<div class="w-24 h-28 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-1.5 shadow-xl">' +
+                  '<div class="p-1.5 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs truncate max-w-[85px]">' +
                     '🏷️ ' + escapeHtml(p2) +
                   '</div>' +
                   '<span class="text-[9px] text-rose-400 font-mono font-bold mt-2">Potongan #2</span>' +
@@ -3021,174 +3185,334 @@
             '</div>';
         }
 
-        if (lexerBox) {
-          lexerBox.innerHTML = 
-            '<div class="flex items-center justify-between text-rose-400 font-bold text-[11px]">' +
-              '<span>HASIL PEMINDAI: SYNTAX ERROR (SPASI ILEGAL)</span>' +
-              '<span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-[10px]">TIDAK BOLEH SPASI</span>' +
-            '</div>' +
-            '<p class="text-slate-300 leading-relaxed font-medium">' +
-              'Komputer menemukan spasi di antara <strong>' + escapeHtml(p1) + '</strong> dan <strong>' + escapeHtml(p2) + '</strong>. Komputer mengira ini dua wadah berbeda yang bertabrakan. Gunakan garis bawah (<code>_</code>) tanpa spasi!' +
-            '</p>';
+        if (verdictTag) {
+          verdictTag.textContent = 'Toples Terbelah Dua (Spasi)';
+          verdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 font-bold';
         }
-
-        if (led) led.className = 'w-3 h-3 rounded-full bg-rose-500 animate-ping shadow-[0_0_12px_#ef4444]';
-        if (ledText) { ledText.textContent = 'ERROR SCANNER: NAMA TOPLES TERBELAH OLEH SPASI!'; ledText.className = 'font-mono text-rose-400 font-bold tracking-wider text-xs'; }
-        if (verdictTag) { verdictTag.textContent = 'Toples Terbelah Dua (Spasi)'; verdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 font-bold'; }
-        
         if (robotAvatar) robotAvatar.textContent = '🤯';
-        if (robotTitle) { robotTitle.textContent = 'Komputer Kebingungan: Toples Terbelah Dua Karena Spasi!'; robotTitle.className = 'font-extrabold text-rose-400 text-sm'; }
-        if (robotBadge) { robotBadge.textContent = 'CRASH: NAMA TERBELAH (SPASI)'; robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold'; }
-        if (robotExpl) {
-          robotExpl.innerHTML = '<strong>Ada spasi di tengah label stiker!</strong> Komputer membaca <code>' + escapeHtml(p1) + '</code> dan <code>' + escapeHtml(p2) + '</code> sebagai dua instruksi yang bertabrakan. Toplesnya jadi terbelah dua! Gunakan garis bawah <code>_</code> (underscore) agar label merekat menjadi satu wadah utuh!';
+        if (robotTitle) {
+          robotTitle.textContent = 'Koki Kebingungan: Toples Terbelah Dua Karena Spasi!';
+          robotTitle.className = 'font-extrabold text-rose-400 text-sm';
         }
-        if (robotCard) robotCard.className = 'p-4 sm:p-5 rounded-2xl lab-card border-2 border-rose-500/80 shadow-lg flex items-start gap-4 transition-all';
+        if (robotBadge) {
+          robotBadge.textContent = 'CRASH: STIKER TERBELAH (SPASI)';
+          robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold';
+        }
+        if (robotExpl) {
+          robotExpl.innerHTML = '"<strong>Waduh! Ada spasi di tengah label stiker toples!</strong> Pelayan dapur membaca <code>' + escapeHtml(p1) + '</code> dan <code>' + escapeHtml(p2) + '</code> sebagai dua wadah berbeda yang saling bertabrakan. Toplesnya jadi terbelah dua dan butiran gula tumpah berantakan! Rekatkan label menjadi satu kata menggunakan tanda garis bawah (<code>_</code> / underscore)!"';
+        }
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-rose-500/80 shadow-lg flex items-start gap-4 transition-all h-full justify-center';
 
-      // KASUS 2: DIAWALI ANGKA (5 TOPLES HANTU)
-      } else if (/^[0-9]/.test(raw)) {
+      // KASUS 2: AWALAN ANGKA (5gula) -> 5 toples hantu
+      } else if (/^[0-9]/.test(text)) {
         AudioLab.playError();
-
-        const numPrefix = raw.match(/^[0-9]+/)[0];
+        const numPrefix = text.match(/^[0-9]+/)[0];
         const count = Math.min(parseInt(numPrefix, 10) || 5, 5);
 
         let ghosts = '';
         for (let i = 1; i <= count; i++) {
           ghosts += 
-            '<div class="flex flex-col items-center anim-ghost-jar" style="animation-delay: ' + (i * 0.15) + 's">' +
-              '<div class="w-14 h-2.5 rounded-t lid-orange opacity-60"></div>' +
-              '<div class="w-20 h-24 rounded-b-xl border-2 border-dashed border-amber-400/60 bg-amber-950/20 flex flex-col items-center justify-center p-1">' +
-                '<span class="text-base opacity-70">👻</span>' +
-                '<span class="text-[9px] font-mono text-amber-300">Toples #' + i + '</span>' +
+            '<div class="flex flex-col items-center anim-ghost-jar" style="animation-delay: ' + (i * 0.12) + 's">' +
+              '<div class="w-10 h-2 rounded-t lid-orange opacity-60"></div>' +
+              '<div class="w-14 h-18 rounded-b-xl border-2 border-dashed border-amber-400/60 bg-amber-950/20 flex flex-col items-center justify-center p-1">' +
+                '<span class="text-sm opacity-80">👻</span>' +
+                '<span class="text-[8px] font-mono text-amber-300 font-bold">Toples #' + i + '</span>' +
               '</div>' +
             '</div>';
         }
 
         if (stage) {
           stage.innerHTML = 
-            '<div class="flex flex-col items-center justify-center space-y-2">' +
-              '<div class="flex items-center gap-2 flex-wrap justify-center">' +
+            '<div class="flex flex-col items-center justify-center space-y-2 py-1">' +
+              '<div class="flex items-center gap-1.5 flex-wrap justify-center">' +
                 ghosts +
               '</div>' +
-              '<div class="p-2 rounded-xl bg-amber-950/80 border border-amber-500 text-amber-300 font-mono text-xs font-bold">' +
-                '⚠️ Muncul ' + count + ' Bayangan Toples Hantu yang Membingungkan Robot!' +
+              '<div class="px-2.5 py-1 rounded-xl bg-amber-950/80 border border-amber-500 text-amber-300 font-mono text-[10px] font-bold text-center">' +
+                '⚠️ Mengira Koki Memesan ' + count + ' Buah Toples Gula Sekaligus!' +
               '</div>' +
             '</div>';
         }
 
-        if (lexerBox) {
-          lexerBox.innerHTML = 
-            '<div class="flex items-center justify-between text-amber-400 font-bold text-[11px]">' +
-              '<span>HASIL PEMINDAI: SYNTAX ERROR (DIAWALI ANGKA)</span>' +
-              '<span class="px-2 py-0.5 rounded bg-amber-950 border border-amber-700 text-[10px]">AWALAN ANGKA DITOLAK</span>' +
-            '</div>' +
-            '<p class="text-slate-300 leading-relaxed font-medium">' +
-              'Angka di awal membuat komputer mengira kamu ingin memesan ' + count + ' buah toples hantu, bukan nama toplesnya! Tapi jika angka di belakang (seperti <code>toples5</code>), itu dibolehkan karena dianggap nomor seri.' +
-            '</p>';
+        if (verdictTag) {
+          verdictTag.textContent = count + ' Toples Hantu (Awalan Angka)';
+          verdictTag.className = 'text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/30 font-bold';
         }
-
-        if (led) led.className = 'w-3 h-3 rounded-full bg-amber-500 animate-pulse shadow-[0_0_10px_#f59e0b]';
-        if (ledText) { ledText.textContent = 'PERINGATAN: NAMA DIAWALI ANGKA (BINGUNG JUMLAH VS NAMA)'; ledText.className = 'font-mono text-amber-300 font-bold tracking-wider text-xs'; }
-        if (verdictTag) { verdictTag.textContent = count + ' Toples Hantu (Awalan Angka)'; verdictTag.className = 'text-[10px] font-mono text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/30 font-bold'; }
-
         if (robotAvatar) robotAvatar.textContent = '😵';
-        if (robotTitle) { robotTitle.textContent = 'Komputer Kebingungan: Muncul Bayangan Toples Hantu!'; robotTitle.className = 'font-extrabold text-amber-400 text-sm'; }
-        if (robotBadge) { robotBadge.textContent = 'DITOLAK: BINGUNG JUMLAH VS NAMA'; robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/30 font-bold'; }
-        if (robotExpl) {
-          robotExpl.innerHTML = '"Aduh! Komputer mengira angka <strong>' + numPrefix + '</strong> di depan adalah JUMLAH toples (' + count + ' buah toples hantu), bukan nama toplesnya! Komputer tidak bisa membedakan jumlah vs nama jika diawali angka. Selalu awali nama dengan huruf!"';
+        if (robotTitle) {
+          robotTitle.textContent = 'Koki Pusing: Dikira Mau Memesan ' + count + ' Toples Sekaligus!';
+          robotTitle.className = 'font-extrabold text-amber-400 text-sm';
         }
-        if (robotCard) robotCard.className = 'p-4 sm:p-5 rounded-2xl lab-card border-2 border-amber-500/80 shadow-lg flex items-start gap-4 transition-all';
+        if (robotBadge) {
+          robotBadge.textContent = 'DITOLAK: BINGUNG JUMLAH VS NAMA';
+          robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/30 font-bold';
+        }
+        if (robotExpl) {
+          robotExpl.innerHTML = '"Aduh! Ketika stiker diawali angka <strong>' + numPrefix + '</strong>, pelayan dapur mengira kamu memesan <strong>' + count + ' buah toples gula</strong> (kuantitas belanjaan), bukan memberi nama toples! Dapur dan komputer bingung membedakan jumlah vs nama jika diawali angka. Selalu awali nama toples dengan huruf!"';
+        }
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-amber-500/80 shadow-lg flex items-start gap-4 transition-all h-full justify-center';
 
-      // KASUS 3: TANDA MINUS (-) SEPERTI luas-persegi
-      } else if (raw.includes('-')) {
+      // KASUS 3: TANDA MINUS (-) SEPERTI gula-pasir -> dikira pengurangan
+      } else if (text.includes('-')) {
         AudioLab.playError();
-
         if (stage) {
           stage.innerHTML = 
-            '<div class="flex flex-col items-center justify-center space-y-2">' +
-              '<div class="w-24 h-4 rounded-t lid-orange border border-rose-400"></div>' +
-              '<div class="w-44 h-32 rounded-b-3xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-3 shadow-xl">' +
+            '<div class="flex flex-col items-center justify-center space-y-1.5 py-1">' +
+              '<div class="w-20 h-3 rounded-t lid-orange border border-rose-400"></div>' +
+              '<div class="w-36 h-28 rounded-b-2xl border-2 border-rose-500 bg-rose-950/40 relative flex flex-col items-center justify-center p-2 shadow-xl">' +
                 '<div class="p-2 rounded-lg bg-rose-900 border border-rose-400 text-rose-200 font-mono font-bold text-xs">' +
-                  '✂️ ' + escapeHtml(raw) + ' (Tanda Minus)' +
+                  '✂️ ' + escapeHtml(text) +
                 '</div>' +
-                '<span class="text-[10px] text-rose-400 font-mono font-bold mt-2">Dikira Operasi Pengurangan Matematis</span>' +
+                '<span class="text-[9px] text-rose-400 font-mono font-bold mt-2 text-center">Dikira Resep Pengurangan (Gula - Pasir)</span>' +
               '</div>' +
             '</div>';
         }
 
-        if (lexerBox) {
-          lexerBox.innerHTML = 
-            '<div class="flex items-center justify-between text-rose-400 font-bold text-[11px]">' +
-              '<span>HASIL PEMINDAI: SIMBOL MINUS DILARANG DI NAMA</span>' +
-              '<span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-[10px]">DIKIRA PENGURANGAN (-)</span>' +
-            '</div>' +
-            '<p class="text-slate-300 leading-relaxed font-medium">' +
-              'Kenapa tanda minus (<code>-</code>) dilarang? Karena komputer mengira kamu menyuruhnya <strong>mengurangi</strong> (operasi matematika), bukan memberi nama! Gunakan garis bawah (<code>_</code>).' +
-            '</p>';
+        if (verdictTag) {
+          verdictTag.textContent = 'Tanda Minus Ditolak (Pengurangan)';
+          verdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 font-bold';
         }
-
-        if (led) led.className = 'w-3 h-3 rounded-full bg-rose-500 animate-pulse';
-        if (ledText) { ledText.textContent = 'ERROR SCANNER: TANDA MINUS DIKIRA PENGURANGAN MATEMATIKA'; ledText.className = 'font-mono text-rose-400 font-bold tracking-wider text-xs'; }
-        if (verdictTag) { verdictTag.textContent = 'Tanda Minus Ditolak (Pengurangan)'; verdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded-full border border-rose-500/30 font-bold'; }
-
         if (robotAvatar) robotAvatar.textContent = '🧐';
-        if (robotTitle) { robotTitle.textContent = 'Komputer Kebingungan: Tanda Minus Dikira Pengurangan!'; robotTitle.className = 'font-extrabold text-rose-400 text-sm'; }
-        if (robotBadge) { robotBadge.textContent = 'ERROR: DIKIRA PENGURANGAN (-)'; robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold'; }
-        if (robotExpl) {
-          robotExpl.innerHTML = '"Kenapa tanda minus <code>-</code> tidak boleh menggantikan garis bawah <code>_</code>? Karena komputer mengira kamu menyuruhnya <strong>mengurangi toples luas dengan toples persegi</strong> (operasi hitung matematika), bukan memberi nama wadah! Gunakan <code>_</code> (underscore) yang aman!"';
+        if (robotTitle) {
+          robotTitle.textContent = 'Koki Bingung: Tanda Minus Dikira Resep Pengurangan!';
+          robotTitle.className = 'font-extrabold text-rose-400 text-sm';
         }
-        if (robotCard) robotCard.className = 'p-4 sm:p-5 rounded-2xl lab-card border-2 border-rose-500/80 shadow-lg flex items-start gap-4 transition-all';
+        if (robotBadge) {
+          robotBadge.textContent = 'DITOLAK: DIKIRA PENGURANGAN (-)';
+          robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-500/20 text-rose-300 border border-rose-400/30 font-bold';
+        }
+        if (robotExpl) {
+          robotExpl.innerHTML = '"Kenapa tanda strip (<code>-</code>) dilarang? Di resep dapur maupun kompilator komputer, tanda minus diartikan sebagai <strong>operasi matematika pengurangan</strong> (gula dikurangi pasir)! Stiker toples wadah wajib memakai tanda garis bawah (<code>_</code> / underscore) yang aman!"';
+        }
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-rose-500/80 shadow-lg flex items-start gap-4 transition-all h-full justify-center';
 
-      // KASUS 4: ANGKA DI BELAKANG (SEPERTI toples5) ATAU VALID DENGAN UNDERSCORE
+      // KASUS 4: VALID (gula_pasir atau nomor seri gula2)
       } else {
         AudioLab.playSuccess();
-        const hasNumberAtEnd = /[0-9]$/.test(raw);
+        const hasNumEnd = /[0-9]$/.test(text);
+        const numEnd = hasNumEnd ? text.match(/[0-9]+$/)[0] : '';
 
         if (stage) {
           stage.innerHTML = 
-            '<div class="flex flex-col items-center justify-center anim-item-drop">' +
-              '<div class="w-32 h-5 rounded-t-xl lid-orange border-2 border-amber-400 shadow-lg flex items-center justify-center">' +
-                '<div class="w-8 h-1.5 bg-amber-700 rounded-full"></div>' +
+            '<div class="flex flex-col items-center justify-center anim-item-drop py-1">' +
+              '<div class="w-28 h-5 rounded-t-xl lid-orange border-2 border-amber-400 shadow-md flex items-center justify-center">' +
+                '<div class="w-7 h-1.5 bg-amber-700 rounded-full"></div>' +
               '</div>' +
-              '<div class="w-28 h-2 bg-amber-900"></div>' +
-              '<div class="w-52 h-40 rounded-b-3xl glass-jar-body border-2 border-emerald-400 bg-emerald-950/30 relative flex flex-col items-center justify-center p-3 shadow-[0_0_25px_rgba(16,185,129,0.3)] transition-all duration-300">' +
+              '<div class="w-24 h-1.5 bg-amber-900"></div>' +
+              '<div class="w-44 h-36 rounded-b-3xl glass-jar-body border-2 border-emerald-400 bg-emerald-950/30 relative flex flex-col items-center justify-center p-2.5 shadow-[0_0_20px_rgba(16,185,129,0.25)] transition-all">' +
                 '<div class="glass-jar-reflection"></div>' +
-                '<div class="p-3 rounded-xl bg-emerald-600 text-white font-mono font-bold text-sm border-2 border-emerald-300 flex items-center justify-center min-w-[150px] shadow-lg truncate max-w-[180px]">' +
-                  '🏷️ ' + escapeHtml(raw) +
+                '<div class="p-2 rounded-xl bg-emerald-600 text-white font-mono font-bold text-xs border border-emerald-300 shadow-md flex items-center gap-1.5 truncate max-w-[150px]">' +
+                  '<span>🏷️</span><span>' + escapeHtml(text) + '</span>' +
                 '</div>' +
-                '<span class="text-[10px] text-emerald-300 font-bold mt-2.5 flex items-center gap-1.5">' +
-                  '<span>●</span>' +
-                  '<span>' + (hasNumberAtEnd ? '1 Toples Seri ke-' + raw.match(/[0-9]+$/)[0] + ' (Sah)' : '1 Toples Utuh Terdeteksi (Sah)') + '</span>' +
+                '<div class="mt-2 flex items-center gap-1 text-[11px] text-amber-200 font-bold bg-amber-950/60 px-2.5 py-0.5 rounded-full border border-amber-500/30">' +
+                  '<span>🧂</span><span>Isi: Gula Pasir' + (hasNumEnd ? ' (Seri ' + numEnd + ')' : '') + '</span>' +
+                '</div>' +
+                '<span class="text-[9px] text-emerald-300 font-mono font-bold mt-1.5">' +
+                  '● ' + (hasNumEnd ? 'Toples Seri ke-' + numEnd + ' (Sah)' : '1 Toples Gula Utuh (Sah)') +
                 '</span>' +
               '</div>' +
             '</div>';
         }
 
+        if (verdictTag) {
+          verdictTag.textContent = hasNumEnd ? 'Toples Seri ke-' + numEnd + ' (Sah)' : '1 Toples Gula Utuh Terdeteksi';
+          verdictTag.className = 'text-[10px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-bold';
+        }
+        if (robotAvatar) robotAvatar.textContent = '😊';
+        if (robotTitle) {
+          robotTitle.textContent = hasNumEnd ? 'Koki & Komputer Tersenyum Puas: Nomor Seri Sah!' : 'Koki & Komputer Tersenyum Puas: Label 1 Kesatuan Sempurna!';
+          robotTitle.className = 'font-extrabold text-emerald-300 text-sm';
+        }
+        if (robotBadge) {
+          robotBadge.textContent = hasNumEnd ? 'NOMOR SERI SAH (SERI ' + numEnd + ')' : '1 TOPLES GULA UTUH';
+          robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold';
+        }
+        if (robotExpl) {
+          robotExpl.innerHTML = hasNumEnd ?
+            '"Bagus sekali! Menaruh angka di belakang seperti <code>' + escapeHtml(text) + '</code> diperbolehkan karena koki menganggapnya sebagai <strong>nomor seri wadah</strong> (toples gula cadangan seri ke-' + numEnd + '). Wadah tetap utuh dan sah!"' :
+            '"Aha! Di dapur, stiker bertuliskan <strong>' + escapeHtml(text) + '</strong> merekat menjadi <strong>1 KESATUAN UTUH</strong> berkat tanda garis bawah (<code>_</code> / underscore). Koki dan pelayan dapur tahu persis ini toples wadah gula pasir tanpa tertukar!"';
+        }
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl lab-inner-card border-2 border-emerald-500/60 shadow-lg flex items-start gap-4 transition-all h-full justify-center';
+      }
+    }
+
+    // 2. PENERAPAN KODE PEMROGRAMAN: RUMUS LUAS (AREA VISUAL BAWAH)
+    function evalVarScanner(raw) {
+      const codeDisplay = document.getElementById('tab2CodeVarDisplay');
+      const codeVerdictTag = document.getElementById('tab2CodeVerdictTag');
+      const ramBox = document.getElementById('tab2RamStatusBox');
+      const ramIcon = document.getElementById('tab2RamIcon');
+      const ramTitle = document.getElementById('tab2RamStatusTitle');
+      const ramSub = document.getElementById('tab2RamStatusSub');
+      const lexerBox = document.getElementById('tab2LexerAnalysisBox');
+      const led = document.getElementById('tab2StatusLed');
+      const ledText = document.getElementById('tab2StatusText');
+
+      const text = (raw || 'luas_persegi').trim();
+
+      // KASUS 1: SPASI (luas persegi)
+      if (/\s/.test(raw)) {
+        const parts = raw.split(/\s+/).filter(Boolean);
+        const p1 = parts[0] || 'luas';
+        const p2 = parts[1] || 'persegi';
+
+        if (codeDisplay) {
+          codeDisplay.innerHTML = '<span class="text-rose-400 font-bold underline decoration-rose-500 decoration-wavy">' + escapeHtml(raw) + '</span>';
+        }
+        if (codeVerdictTag) {
+          codeVerdictTag.textContent = 'Syntax Error: Spasi Ilegal';
+          codeVerdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-950 px-2.5 py-0.5 rounded-full border border-rose-700 font-bold';
+        }
+        if (ramBox) {
+          ramBox.className = 'p-2.5 rounded-lg bg-rose-950/40 border-2 border-rose-500/70 flex items-center gap-2 transition-all';
+        }
+        if (ramIcon) ramIcon.textContent = '❌';
+        if (ramTitle) {
+          ramTitle.textContent = 'RAM Menolak: Gagal Alokasi Memori';
+          ramTitle.className = 'text-rose-400 font-bold block text-[11px] font-mono';
+        }
+        if (ramSub) {
+          ramSub.textContent = 'Spasi memecah variabel menjadi 2 nama terpisah!';
+          ramSub.className = 'text-rose-300/80 text-[10px] font-mono';
+        }
+        if (lexerBox) {
+          lexerBox.innerHTML = 
+            '<div class="flex items-center justify-between text-rose-400 font-bold text-[11px]">' +
+              '<span>LEXICAL SCANNER: SYNTAX ERROR (SPASI ILEGAL)</span>' +
+              '<span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-[10px]">TIDAK BOLEH SPASI</span>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-lg bg-slate-950 border border-rose-900/50 font-mono text-[11px] text-slate-300 space-y-1">' +
+              '<div><strong class="text-rose-400">Pecahan Token:</strong> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-rose-300">[TOKEN_ID: ' + escapeHtml(p1) + ']</span> <span class="px-1.5 py-0.5 rounded bg-rose-900 text-white">[ILLEGAL_SPACE]</span> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-rose-300">[TOKEN_ID: ' + escapeHtml(p2) + ']</span></div>' +
+              '<p class="text-slate-400 text-[10px] mt-1">Kompilator mengira Anda menulis 2 instruksi bertabrakan tanpa operator. Gunakan <code>' + escapeHtml(p1) + '_' + escapeHtml(p2) + '</code>.</p>' +
+            '</div>';
+        }
+        if (led) led.className = 'w-3 h-3 rounded-full bg-rose-500 animate-ping shadow-[0_0_12px_#ef4444]';
+        if (ledText) {
+          ledText.textContent = 'ERROR SCANNER: NAMA VARIABEL TERBELAH OLEH SPASI!';
+          ledText.className = 'font-mono text-rose-400 font-bold tracking-wider text-xs';
+        }
+
+      // KASUS 2: AWALAN ANGKA (5luas)
+      } else if (/^[0-9]/.test(raw)) {
+        const numPrefix = raw.match(/^[0-9]+/)[0];
+
+        if (codeDisplay) {
+          codeDisplay.innerHTML = '<span class="text-amber-400 font-bold underline decoration-amber-500 decoration-wavy">' + escapeHtml(raw) + '</span>';
+        }
+        if (codeVerdictTag) {
+          codeVerdictTag.textContent = 'Syntax Error: Awalan Angka';
+          codeVerdictTag.className = 'text-[10px] font-mono text-amber-400 bg-amber-950 px-2.5 py-0.5 rounded-full border border-amber-700 font-bold';
+        }
+        if (ramBox) {
+          ramBox.className = 'p-2.5 rounded-lg bg-amber-950/40 border-2 border-amber-500/70 flex items-center gap-2 transition-all';
+        }
+        if (ramIcon) ramIcon.textContent = '⚠️';
+        if (ramTitle) {
+          ramTitle.textContent = 'RAM Menolak: Tokenizer Error (Awalan Angka)';
+          ramTitle.className = 'text-amber-400 font-bold block text-[11px] font-mono';
+        }
+        if (ramSub) {
+          ramSub.textContent = 'Variabel tidak boleh diawali angka literal!';
+          ramSub.className = 'text-amber-300/80 text-[10px] font-mono';
+        }
+        if (lexerBox) {
+          lexerBox.innerHTML = 
+            '<div class="flex items-center justify-between text-amber-400 font-bold text-[11px]">' +
+              '<span>LEXICAL SCANNER: SYNTAX ERROR (DIAWALI ANGKA)</span>' +
+              '<span class="px-2 py-0.5 rounded bg-amber-950 border border-amber-700 text-[10px]">AWALAN ANGKA DITOLAK</span>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-lg bg-slate-950 border border-amber-900/50 font-mono text-[11px] text-slate-300 space-y-1">' +
+              '<div><strong class="text-amber-400">Pecahan Token:</strong> <span class="px-1.5 py-0.5 rounded bg-amber-900 text-amber-200">[TOKEN_NUMBER: ' + escapeHtml(numPrefix) + ']</span> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">[TOKEN_ID: ' + escapeHtml(raw.slice(numPrefix.length)) + ']</span></div>' +
+              '<p class="text-slate-400 text-[10px] mt-1">Awalan angka membuat komputer mengira ini angka perkalian atau nilai konstan, bukan nama wadah RAM. Awali selalu dengan huruf!</p>' +
+            '</div>';
+        }
+        if (led) led.className = 'w-3 h-3 rounded-full bg-amber-500 animate-pulse shadow-[0_0_10px_#f59e0b]';
+        if (ledText) {
+          ledText.textContent = 'PERINGATAN: NAMA DIAWALI ANGKA (BINGUNG NILAI VS NAMA)';
+          ledText.className = 'font-mono text-amber-300 font-bold tracking-wider text-xs';
+        }
+
+      // KASUS 3: TANDA MINUS (-) SEPERTI luas-persegi
+      } else if (raw.includes('-')) {
+        if (codeDisplay) {
+          codeDisplay.innerHTML = '<span class="text-rose-400 font-bold underline decoration-rose-500 decoration-wavy">' + escapeHtml(raw) + '</span>';
+        }
+        if (codeVerdictTag) {
+          codeVerdictTag.textContent = 'Syntax Error: Operator Minus (-)';
+          codeVerdictTag.className = 'text-[10px] font-mono text-rose-400 bg-rose-950 px-2.5 py-0.5 rounded-full border border-rose-700 font-bold';
+        }
+        if (ramBox) {
+          ramBox.className = 'p-2.5 rounded-lg bg-rose-950/40 border-2 border-rose-500/70 flex items-center gap-2 transition-all';
+        }
+        if (ramIcon) ramIcon.textContent = '✂️';
+        if (ramTitle) {
+          ramTitle.textContent = 'RAM Menolak: Operator Minus Terdeteksi';
+          ramTitle.className = 'text-rose-400 font-bold block text-[11px] font-mono';
+        }
+        if (ramSub) {
+          ramSub.textContent = "Tanda '-' terbaca sebagai rumus pengurangan matematika!";
+          ramSub.className = 'text-rose-300/80 text-[10px] font-mono';
+        }
+        if (lexerBox) {
+          lexerBox.innerHTML = 
+            '<div class="flex items-center justify-between text-rose-400 font-bold text-[11px]">' +
+              '<span>LEXICAL SCANNER: OPERATOR MINUS DILARANG PADA NAMA</span>' +
+              '<span class="px-2 py-0.5 rounded bg-rose-950 border border-rose-700 text-[10px]">DIKIRA PENGURANGAN (-)</span>' +
+            '</div>' +
+            '<div class="p-2.5 rounded-lg bg-slate-950 border border-rose-900/50 font-mono text-[11px] text-slate-300 space-y-1">' +
+              '<div><strong class="text-rose-400">Pecahan Token:</strong> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">[ID: luas]</span> <span class="px-1.5 py-0.5 rounded bg-rose-900 text-rose-200">[OP_MINUS: -]</span> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">[ID: persegi]</span></div>' +
+              '<p class="text-slate-400 text-[10px] mt-1">Komputer mengira Anda menulis instruksi: <code>luas DIKURANGI persegi</code>. Gunakan garis bawah (<code>_</code> / underscore)!</p>' +
+            '</div>';
+        }
+        if (led) led.className = 'w-3 h-3 rounded-full bg-rose-500 animate-pulse';
+        if (ledText) {
+          ledText.textContent = 'ERROR SCANNER: TANDA MINUS DIKIRA PENGURANGAN MATEMATIKA';
+          ledText.className = 'font-mono text-rose-400 font-bold tracking-wider text-xs';
+        }
+
+      // KASUS 4: VALID (luas_persegi atau nomor seri luas2)
+      } else {
+        const hasNumEnd = /[0-9]$/.test(raw);
+        const numEnd = hasNumEnd ? raw.match(/[0-9]+$/)[0] : '';
+
+        if (codeDisplay) {
+          codeDisplay.innerHTML = '<span class="text-emerald-300 font-bold underline decoration-emerald-500 decoration-wavy">' + escapeHtml(raw) + '</span>';
+        }
+        if (codeVerdictTag) {
+          codeVerdictTag.textContent = hasNumEnd ? 'Nomor Seri Sah (Seri ' + numEnd + ')' : '1 Kesatuan Identifier Sah';
+          codeVerdictTag.className = 'text-[10px] font-mono text-emerald-300 bg-emerald-950 px-2.5 py-0.5 rounded-full border border-emerald-700 font-bold';
+        }
+        if (ramBox) {
+          ramBox.className = 'p-2.5 rounded-lg bg-emerald-950/40 border-2 border-emerald-500/70 flex items-center gap-2 transition-all';
+        }
+        if (ramIcon) ramIcon.textContent = '💾';
+        if (ramTitle) {
+          ramTitle.textContent = '0x7FFF42: 1 Kamar RAM Sah Dialokasikan';
+          ramTitle.className = 'text-emerald-400 font-bold block text-[11px] font-mono';
+        }
+        if (ramSub) {
+          ramSub.textContent = 'Alamat memori berhasil dipesan untuk: [' + escapeHtml(raw) + ']';
+          ramSub.className = 'text-emerald-300/80 text-[10px] font-mono';
+        }
         if (lexerBox) {
           lexerBox.innerHTML = 
             '<div class="flex items-center justify-between text-emerald-400 font-bold text-[11px]">' +
-              '<span>HASIL PEMINDAI: IDENTIFIER SAH & BAKU</span>' +
+              '<span>LEXICAL SCANNER: IDENTIFIER RESMI &amp; VALID</span>' +
               '<span class="px-2 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-[10px]">1 KESATUAN UTUH</span>' +
             '</div>' +
-            '<p class="text-slate-300 leading-relaxed font-medium">' +
-              (hasNumberAtEnd ?
-                'Angka di belakang (seperti pada <code>' + escapeHtml(raw) + '</code>) diizinkan karena dibaca sebagai <strong>nomor seri urutan</strong> (1 wadah bernomor seri, bukan banyak wadah).' :
-                'Label <code>' + escapeHtml(raw) + '</code> adalah satu kesatuan utuh tanpa spasi dan diawali karakter huruf yang sah.') +
-            '</p>';
+            '<div class="p-2.5 rounded-lg bg-slate-950 border border-emerald-900/50 font-mono text-[11px] text-slate-300 space-y-1">' +
+              '<div><strong class="text-emerald-400">Pecahan Token:</strong> <span class="px-1.5 py-0.5 rounded bg-emerald-900 text-emerald-200">[TOKEN_IDENTIFIER: ' + escapeHtml(raw) + ']</span> <span class="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">[TOKEN_COLON: :]</span> <span class="px-1.5 py-0.5 rounded bg-purple-900 text-purple-200">[TOKEN_TYPE: real]</span></div>' +
+              '<p class="text-slate-400 text-[10px] mt-1">' +
+                (hasNumEnd ?
+                  'Angka di belakang sah sebagai nomor seri wadah variabel rumus luas.' :
+                  'Identifier <code>' + escapeHtml(raw) + '</code> adalah satu kesatuan utuh tanpa spasi dan diawali karakter huruf yang sah.') +
+              '</p>' +
+            '</div>';
         }
-
         if (led) led.className = 'w-3 h-3 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_10px_#10b981]';
-        if (ledText) { ledText.textContent = 'STATUS SCANNER: 1 KESATUAN NAMA ASLI (VALID & SAH)'; ledText.className = 'font-mono text-emerald-300 font-bold tracking-wider text-xs'; }
-        if (verdictTag) { verdictTag.textContent = hasNumberAtEnd ? 'Nomor Seri Sah' : '1 Toples Utuh Sah'; verdictTag.className = 'text-[10px] font-mono text-emerald-300 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 font-bold'; }
-
-        if (robotAvatar) robotAvatar.textContent = '😊';
-        if (robotTitle) { robotTitle.textContent = hasNumberAtEnd ? 'Komputer Tersenyum Puas: Nomor Seri Sah!' : 'Komputer Tersenyum Puas: Label 1 Kesatuan Sempurna!'; robotTitle.className = 'font-extrabold text-emerald-300 text-sm'; }
-        if (robotBadge) { robotBadge.textContent = hasNumberAtEnd ? 'NOMOR SERI SAH (1 WADAH)' : '1 TOPLES UTUH SAH'; robotBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 font-bold'; }
-        if (robotExpl) {
-          robotExpl.innerHTML = hasNumberAtEnd ?
-            '"Kenapa angka di belakang seperti <code>' + escapeHtml(raw) + '</code> dibolehkan? Karena komputer membacanya sebagai <strong>nomor seri urutan</strong> (1 toples bernomor seri ' + raw.match(/[0-9]+$/)[0] + ', bukan banyak wadah). Toples utuh dan sah!"' :
-            '"Aha! Komputer membaca <strong>1 KESATUAN UTUH</strong> bernama <code>' + escapeHtml(raw) + '</code>. Karena tidak ada spasi, toples tetap utuh dan komputer tahu persis nama asli wadah ini!"';
+        if (ledText) {
+          ledText.textContent = 'STATUS SCANNER: 1 KESATUAN VARIABEL RUMUS LUAS (VALID & SAH)';
+          ledText.className = 'font-mono text-emerald-300 font-bold tracking-wider text-xs';
         }
-        if (robotCard) robotCard.className = 'p-4 sm:p-5 rounded-2xl lab-card border-2 border-emerald-500/60 shadow-lg flex items-start gap-4 transition-all';
       }
     }
 
@@ -3519,6 +3843,9 @@
     }
   
     function initLabToples() {
+      if (typeof evalKitchenSticker === 'function') {
+        evalKitchenSticker('gula_pasir');
+      }
       if (typeof evalVarScanner === 'function') {
         const inp = document.getElementById('inputTab2VarName');
         evalVarScanner(inp ? inp.value : 'luas_persegi');
@@ -3534,19 +3861,25 @@
     // ==================== TAB 4: LIVE ALGORITHM RUNNER ENGINE ====================
     let runnerScenarios = {
       1: {
-        title: 'Kasus 1: Runtunan (Menghitung Luas Persegi Panjang)',
+        title: 'Kasus 1: Hitung Luas & Cek Kategori Bidang (IF-ELSE)',
         lines: [
           { num: 1, type: 'judul', text: 'PROGRAM Hitung_Luas_Persegi_Panjang', exp: 'Judul program: Komputer mencatat identitas algoritma.' },
-          { num: 2, type: 'judul', text: '{ Menghitung luas persegi panjang dari panjang dan lebar }', exp: 'Komentar spesifikasi: Dibaca programmer, dilewati komputer.' },
+          { num: 2, type: 'judul', text: '{ Menghitung luas persegi panjang dan menentukan kategori bidang }', exp: 'Komentar spesifikasi: Dibaca programmer, dilewati komputer.' },
           { num: 3, type: 'deklarasi', text: 'DEKLARASI:', exp: 'Komputer mulai menyiapkan kamus wadah variabel di memori.' },
-          { num: 4, type: 'deklarasi', text: '  panjang, lebar, luas : integer', exp: 'Komputer memesan 3 wadah bertipe integer: panjang, lebar, dan luas.' },
-          { num: 5, type: 'algoritma', text: 'ALGORITMA:', exp: 'Komputer bersiap memulai urutan eksekusi langkah komputasi.' },
-          { num: 6, type: 'algoritma', text: '  INPUT(panjang)', exp: 'Komputer membaca input panjang = 8 dari pengguna.', vars: { panjang: 8 } },
-          { num: 7, type: 'algoritma', text: '  INPUT(lebar)', exp: 'Komputer membaca input lebar = 5 dari pengguna.', vars: { lebar: 5 } },
-          { num: 8, type: 'algoritma', text: '  luas <- panjang * lebar', exp: 'Kalkulasi: 8 * 5 = 40. Nilai 40 disimpan ke wadah luas.', vars: { luas: 40 } },
-          { num: 9, type: 'algoritma', text: '  OUTPUT("Luas Persegi Panjang: ", luas)', exp: 'Komputer mencetak hasil ke layar monitor: Luas Persegi Panjang: 40', out: 'Luas Persegi Panjang: 40' }
+          { num: 4, type: 'deklarasi', text: '  panjang, lebar, luas : integer', exp: 'Komputer memesan 3 wadah integer: panjang, lebar, dan luas.' },
+          { num: 5, type: 'deklarasi', text: '  kategori : string', exp: 'Komputer memesan wadah teks: kategori untuk label ukuran bidang.' },
+          { num: 6, type: 'algoritma', text: 'ALGORITMA:', exp: 'Komputer bersiap memulai urutan eksekusi langkah komputasi.' },
+          { num: 7, type: 'algoritma', text: '  INPUT(panjang)', exp: 'Komputer membaca input panjang = 8 dari pengguna.', vars: { panjang: 8 } },
+          { num: 8, type: 'algoritma', text: '  INPUT(lebar)', exp: 'Komputer membaca input lebar = 5 dari pengguna.', vars: { lebar: 5 } },
+          { num: 9, type: 'algoritma', text: '  luas <- panjang * lebar', exp: 'Kalkulasi: 8 * 5 = 40. Nilai 40 disimpan ke wadah luas.', vars: { luas: 40 } },
+          { num: 10, type: 'algoritma', text: '  IF (luas >= 30) THEN', exp: 'Evaluasi kondisi: Apakah 40 >= 30? Jawabannya BENAR (TRUE)!', branch: 'then' },
+          { num: 11, type: 'algoritma', text: '    kategori <- "BIDANG BESAR"', exp: 'Cabang TRUE dijalankan: wadah kategori diisi "BIDANG BESAR".', vars: { kategori: '"BIDANG BESAR"' } },
+          { num: 12, type: 'algoritma', text: '  ELSE', exp: 'Cabang ELSE dilewati karena kondisi sudah terpenuhi.', branch: 'skip' },
+          { num: 13, type: 'algoritma', text: '    kategori <- "BIDANG KECIL"', exp: 'Baris ini dilewati.', branch: 'skip' },
+          { num: 14, type: 'algoritma', text: '  ENDIF', exp: 'Blok percabangan IF-ELSE selesai.' },
+          { num: 15, type: 'algoritma', text: '  OUTPUT("Luas = ", luas, " - Kategori: ", kategori)', exp: 'Komputer mencetak hasil ke layar: Luas = 40 - Kategori: BIDANG BESAR', out: 'Luas = 40 - Kategori: BIDANG BESAR' }
         ],
-        initVars: { panjang: '-', lebar: '-', luas: '-' }
+        initVars: { panjang: '-', lebar: '-', luas: '-', kategori: '-' }
       },
       2: {
         title: 'Kasus 2: Percabangan (Penentuan Kelulusan Nilai)',
@@ -3610,22 +3943,87 @@
       initRunnerVars();
     }
 
-    function renderRunnerCode() {
+            function renderRunnerCode() {
       const box = document.getElementById('runnerCodeBox');
       if (!box) return;
       const sc = runnerScenarios[activeScenarioId];
-      let html = '';
-      sc.lines.forEach((l, idx) => {
-        let badgeColor = 'text-slate-400';
-        if (l.type === 'judul') badgeColor = 'text-blue-400';
-        else if (l.type === 'deklarasi') badgeColor = 'text-purple-400';
-        else if (l.type === 'algoritma') badgeColor = 'text-emerald-400';
 
-        html += '<div id="code-line-' + idx + '" class="p-2 rounded-xl transition-all duration-200 flex items-start gap-3 border-l-4 border-transparent">' +
-          '<span class="text-slate-500 select-none w-6 text-right font-mono text-xs font-bold shrink-0">' + l.num + '.</span>' +
-          '<span class="font-mono text-xs sm:text-[13px] ' + badgeColor + '">' + escapeHtml(l.text) + '</span>' +
-        '</div>';
+      // Partition lines into 3 distinct sections while preserving original global execution index
+      const judulLines = [];
+      const deklarasiLines = [];
+      const algoritmaLines = [];
+
+      sc.lines.forEach((l, idx) => {
+        const item = Object.assign({}, l, { origIdx: idx });
+        if (l.type === 'judul') judulLines.push(item);
+        else if (l.type === 'deklarasi') deklarasiLines.push(item);
+        else if (l.type === 'algoritma') algoritmaLines.push(item);
       });
+
+      function buildLineHtml(item) {
+        let textClass = 'text-slate-300';
+        if (item.type === 'judul') textClass = 'text-blue-300 font-bold';
+        else if (item.type === 'deklarasi') textClass = 'text-purple-300 font-bold';
+        else if (item.type === 'algoritma') textClass = 'text-emerald-300 font-bold';
+
+        return '<div id="code-line-' + item.origIdx + '" class="p-2 rounded-xl transition-all duration-200 flex items-start gap-3 border-l-4 border-transparent hover:bg-white/5">' +
+          '<span class="text-slate-500 select-none w-6 text-right font-mono text-xs font-bold shrink-0">' + item.num + '.</span>' +
+          '<div class="flex-1 min-w-0 font-mono text-xs sm:text-[13px] leading-relaxed">' +
+            '<span class="' + textClass + '">' + escapeHtml(item.text) + '</span>' +
+          '</div>' +
+        '</div>';
+      }
+
+      let html = '';
+
+      // ==================== BAGIAN 1: JUDUL PROGRAM ====================
+      html += 
+        '<div class="p-4 sm:p-5 rounded-2xl bg-blue-950/30 border-l-4 border-l-blue-500 border border-blue-900/40 space-y-3 transition-all">' +
+          '<div class="flex items-center gap-2.5 pb-2.5 border-b border-blue-900/50 flex-wrap">' +
+            '<span class="px-2.5 py-0.5 rounded-md bg-blue-600 text-white font-mono font-bold text-[11px] shadow-xs">BAGIAN 1</span>' +
+            '<span class="font-bold text-blue-300 text-xs sm:text-sm">JUDUL PROGRAM (HEADER)</span>' +
+          '</div>' +
+          '<div class="space-y-1 font-mono">' +
+            judulLines.map(buildLineHtml).join('') +
+          '</div>' +
+          '<div class="pt-2 text-[11px] font-sans text-blue-200/90 flex items-start sm:items-center gap-2 border-t border-blue-900/40">' +
+            '<span class="shrink-0 text-sm">💡</span>' +
+            '<span><strong>Kaidah Baku:</strong> Nama program wajib <strong>1 kesatuan (tanpa spasi)</strong>, deskripsi singkat diapit kurung kurawal <code>{ ... }</code> sebagai komentar dokumentasi.</span>' +
+          '</div>' +
+        '</div>';
+
+      // ==================== BAGIAN 2: DEKLARASI ====================
+      html += 
+        '<div class="p-4 sm:p-5 rounded-2xl bg-purple-950/30 border-l-4 border-l-purple-500 border border-purple-900/40 space-y-3 transition-all">' +
+          '<div class="flex items-center gap-2.5 pb-2.5 border-b border-purple-900/50 flex-wrap">' +
+            '<span class="px-2.5 py-0.5 rounded-md bg-purple-600 text-white font-mono font-bold text-[11px] shadow-xs">BAGIAN 2</span>' +
+            '<span class="font-bold text-purple-300 text-xs sm:text-sm">DEKLARASI (KAMUS VARIABEL &amp; TIPE DATA)</span>' +
+          '</div>' +
+          '<div class="space-y-1 font-mono">' +
+            deklarasiLines.map(buildLineHtml).join('') +
+          '</div>' +
+          '<div class="pt-2 text-[11px] font-sans text-purple-200/90 flex items-start sm:items-center gap-2 border-t border-purple-900/40">' +
+            '<span class="shrink-0 text-sm">💡</span>' +
+            '<span><strong>Kaidah Baku:</strong> Komputer memesan toples memori RAM. Tipe data (<code>integer</code>, <code>real</code>, <code>string</code>) menjaga data agar sesuai jenisnya dan tidak tumpah/rusak.</span>' +
+          '</div>' +
+        '</div>';
+
+      // ==================== BAGIAN 3: ALGORITMA ====================
+      html += 
+        '<div class="p-4 sm:p-5 rounded-2xl bg-emerald-950/30 border-l-4 border-l-emerald-500 border border-emerald-900/40 space-y-3 transition-all">' +
+          '<div class="flex items-center gap-2.5 pb-2.5 border-b border-emerald-900/50 flex-wrap">' +
+            '<span class="px-2.5 py-0.5 rounded-md bg-emerald-600 text-white font-mono font-bold text-[11px] shadow-xs">BAGIAN 3</span>' +
+            '<span class="font-bold text-emerald-300 text-xs sm:text-sm">ALGORITMA (LANGKAH EKSEKUSI PROSES)</span>' +
+          '</div>' +
+          '<div class="space-y-1 font-mono">' +
+            algoritmaLines.map(buildLineHtml).join('') +
+          '</div>' +
+          '<div class="pt-2 text-[11px] font-sans text-emerald-200/90 flex items-start sm:items-center gap-2 border-t border-emerald-900/40">' +
+            '<span class="shrink-0 text-sm">💡</span>' +
+            '<span><strong>Kaidah Baku:</strong> Instruksi berjalan terurut mengikuti alur I-P-O: Membaca input (<code>read</code>), menghitung nilai baru (<code>&lt;-</code>), <strong>percabangan keputusan (<code>IF ... THEN ... ELSE</code>)</strong>, dan mencetak keluaran (<code>write</code>).</span>' +
+          '</div>' +
+        '</div>';
+
       box.innerHTML = html;
     }
 
@@ -3727,6 +4125,8 @@
       const btnNext = document.getElementById('btnRunnerNext');
       if (btnNext) btnNext.disabled = false;
       document.querySelectorAll('[id^="code-line-"]').forEach(el => el.classList.remove('active-code-line'));
+      const codeBox = document.getElementById('runnerCodeBox');
+      if (codeBox) codeBox.scrollTo({ top: 0, behavior: 'smooth' });
       initRunnerVars();
     }
 
@@ -3909,6 +4309,555 @@
       runAmbiguCashierTest();
       runRealTypeCheck();
     });
+
+    // ==================== TAB 3 / 4: GAME INTERAKTIF ALGORITMA (KLASIFIKASI I-P-O & URUTAN) ====================
+    const ipoGameData = {
+      1: {
+        id: 1,
+        title: 'Kasus 1: Menghitung Luas Persegi Panjang',
+        badge: 'Pemula // Runtunan Matematika',
+        desc: 'Bantu komputer membaca dimensi persegi panjang, menghitung rumus luasnya, dan mencetak hasilnya ke monitor.',
+        programHeader: 'PROGRAM Hitung_Luas_Persegi_Panjang;\nDEKLARASI:\n  panjang, lebar, luas : integer;\nALGORITMA:',
+        cards: [
+          {
+            id: 'c1',
+            text: 'INPUT(panjang)',
+            desc: 'Membaca angka panjang dari pengguna',
+            category: 'input',
+            correctOrder: 1,
+            hint: 'Perintah membaca masukan panjang (INPUT)'
+          },
+          {
+            id: 'c2',
+            text: 'INPUT(lebar)',
+            desc: 'Membaca angka lebar dari pengguna',
+            category: 'input',
+            correctOrder: 2,
+            hint: 'Perintah membaca masukan lebar (INPUT)'
+          },
+          {
+            id: 'c3',
+            text: 'luas <- panjang * lebar',
+            desc: 'Menghitung perkalian dan menyimpan ke wadah luas',
+            category: 'proses',
+            correctOrder: 3,
+            hint: 'Perintah kalkulasi rumus matematika dan penugasan (PROSES)'
+          },
+          {
+            id: 'c4',
+            text: 'OUTPUT("Luas adalah: ", luas)',
+            desc: 'Mencetak hasil akhir luas ke monitor pengguna',
+            category: 'output',
+            correctOrder: 4,
+            hint: 'Perintah menampilkan hasil akhir ke monitor (OUTPUT)'
+          }
+        ]
+      },
+      2: {
+        id: 2,
+        title: 'Kasus 2: Percabangan Kondisi (Cek Kelulusan Nilai Siswa)',
+        badge: 'Logika // Percabangan IF-ELSE',
+        desc: 'Komputer membaca nama siswa dan nilai ujian. Jika nilai >= 75 maka siswa dinyatakan "LULUS", jika di bawah 75 (ELSE) maka dinyatakan "REMIDIAL".',
+        programHeader: 'PROGRAM Cek_Kelulusan_Siswa;\nDEKLARASI:\n  nama, status : string;\n  nilai : integer;\nALGORITMA:',
+        cards: [
+          {
+            id: 'c1',
+            text: 'read(nama, nilai)',
+            desc: 'Membaca data masukan nama dan nilai ujian siswa',
+            category: 'input',
+            correctOrder: 1,
+            hint: 'Input masukan nama dan nilai (INPUT)'
+          },
+          {
+            id: 'c2',
+            text: 'IF (nilai >= 75) THEN status <- "LULUS"',
+            desc: 'Kondisi percabangan jika nilai memenuhi KKM 75',
+            category: 'proses',
+            correctOrder: 2,
+            hint: 'Logika keputusan kondisi IF (PROSES)'
+          },
+          {
+            id: 'c3',
+            text: 'ELSE status <- "REMIDIAL"',
+            desc: 'Cabang alternatif bila nilai tidak memenuhi KKM',
+            category: 'proses',
+            correctOrder: 3,
+            hint: 'Cabang alternatif keputusan ELSE (PROSES)'
+          },
+          {
+            id: 'c4',
+            text: 'write(nama, " dinyatakan: ", status)',
+            desc: 'Mencetak hasil keputusan kelulusan ke layar',
+            category: 'output',
+            correctOrder: 4,
+            hint: 'Mencetak hasil akhir ke monitor (OUTPUT)'
+          }
+        ]
+      },
+      3: {
+        id: 3,
+        title: 'Kasus 3: Kasir Toko Sederhana (Total Belanja)',
+        badge: 'Menengah // Aritmatika Transaksi',
+        desc: 'Kasir membaca nama barang, tarif harga satuan, dan jumlah beli, lalu mengalikan total tagihan dan mencetaknya di struk.',
+        programHeader: 'PROGRAM Kasir_Toko_Sederhana;\nDEKLARASI:\n  nama_barang : string;\n  harga_satuan, jumlah, total : integer;\nALGORITMA:',
+        cards: [
+          {
+            id: 'c1',
+            text: 'read(nama_barang)',
+            desc: 'Membaca teks nama barang belanjaan',
+            category: 'input',
+            correctOrder: 1,
+            hint: 'Input teks nama barang'
+          },
+          {
+            id: 'c2',
+            text: 'read(harga_satuan, jumlah)',
+            desc: 'Membaca harga satuan dan jumlah pembelian',
+            category: 'input',
+            correctOrder: 2,
+            hint: 'Input harga & kuantitas'
+          },
+          {
+            id: 'c3',
+            text: 'total <- harga_satuan * jumlah',
+            desc: 'Mengalikan harga dengan jumlah belanjaan',
+            category: 'proses',
+            correctOrder: 3,
+            hint: 'Kalkulasi perkalian total tagihan (PROSES)'
+          },
+          {
+            id: 'c4',
+            text: 'write("Total Bayar Rp: ", total)',
+            desc: 'Mencetak struk belanja ke monitor kasir',
+            category: 'output',
+            correctOrder: 4,
+            hint: 'Output struk belanja ke monitor (OUTPUT)'
+          }
+        ]
+      },
+      4: {
+        id: 4,
+        title: 'Kasus 4: Konversi Suhu Celcius ke Fahrenheit',
+        badge: 'Tantangan // Rumus Konversi Fisika',
+        desc: 'Ubah derajat Celcius menjadi Fahrenheit dengan rumus (9/5 * C) + 32, lalu tampilkan hasil konversinya.',
+        programHeader: 'PROGRAM Konversi_Suhu_Celcius_Fahrenheit;\nDEKLARASI:\n  c, f : real;\nALGORITMA:',
+        cards: [
+          {
+            id: 'c1',
+            text: 'read(c)',
+            desc: 'Menerima derajat suhu dalam Celcius',
+            category: 'input',
+            correctOrder: 1,
+            hint: 'Input nilai derajat Celcius'
+          },
+          {
+            id: 'c2',
+            text: 'f <- (9/5 * c) + 32',
+            desc: 'Menghitung rumus konversi fisika suhu',
+            category: 'proses',
+            correctOrder: 2,
+            hint: 'Kalkulasi rumus matematika (PROSES)'
+          },
+          {
+            id: 'c3',
+            text: 'write("Suhu Fahrenheit = ", f)',
+            desc: 'Menampilkan derajat akhir Fahrenheit ke layar',
+            category: 'output',
+            correctOrder: 3,
+            hint: 'Output derajat akhir ke layar (OUTPUT)'
+          }
+        ]
+      }
+    };
+
+    let activeGameCaseId = 1;
+    let gameUserCategories = {}; // cardId -> 'unclassified' | 'input' | 'proses' | 'output'
+    let gameUserOrder = []; // array of card objects in current order
+    let draggedCardId = null;
+
+    function initIpoGame() {
+      loadGameCase(activeGameCaseId || 1);
+    }
+
+    function loadGameCase(caseId) {
+      activeGameCaseId = caseId;
+      const data = ipoGameData[caseId];
+      if (!data) return;
+
+      // Update Case Buttons
+      [1, 2, 3, 4].forEach(id => {
+        const btn = document.getElementById('btnCase' + id);
+        if (btn) {
+          if (id === caseId) {
+            btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-sm cursor-pointer';
+          } else {
+            btn.className = 'px-3.5 py-2 rounded-xl text-xs font-bold transition bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer';
+          }
+        }
+      });
+
+      // Update Case Header
+      const badge = document.getElementById('gameCaseBadge');
+      if (badge) badge.textContent = data.badge;
+      const title = document.getElementById('gameCaseTitle');
+      if (title) title.textContent = data.title;
+      const desc = document.getElementById('gameCaseDesc');
+      if (desc) desc.textContent = data.desc;
+
+      // Reset state and shuffle cards
+      gameUserCategories = {};
+      const shuffled = [...data.cards].sort(() => Math.random() - 0.5);
+      shuffled.forEach(c => {
+        gameUserCategories[c.id] = 'unclassified';
+      });
+
+      // Reset order list to shuffled order
+      gameUserOrder = [...shuffled];
+
+      // Reset robot card
+      resetGameRobotCard();
+
+      // Render game views
+      renderIpoGame();
+    }
+
+    function resetCurrentGameCase() {
+      loadGameCase(activeGameCaseId);
+    }
+
+    function resetOrderOnly() {
+      const data = ipoGameData[activeGameCaseId];
+      if (!data) return;
+      gameUserOrder = [...data.cards].sort(() => Math.random() - 0.5);
+      renderExecutionOrderList();
+      resetGameRobotCard();
+    }
+
+    function resetGameRobotCard() {
+      const robotCard = document.getElementById('gameRobotCard');
+      const avatar = document.getElementById('gameRobotAvatar');
+      const title = document.getElementById('gameRobotMoodTitle');
+      const badge = document.getElementById('gameRobotBadge');
+      const expl = document.getElementById('gameRobotExplanation');
+      const codeBlock = document.getElementById('gameResultCodeBlock');
+      const previewStatus = document.getElementById('previewStatusBadge');
+      const copyBtn = document.getElementById('btnCopyResultCode');
+
+      if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl bg-slate-50 border-2 border-slate-200 shadow-sm flex items-start gap-4 transition-all h-full';
+      if (avatar) avatar.textContent = '🤖';
+      if (title) { title.textContent = 'Robot Evaluator: Siap Menguji Algoritmamu!'; title.className = 'font-extrabold text-slate-900 text-sm'; }
+      if (badge) { badge.textContent = 'MENUNGGU PENGUJIAN'; badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-slate-200 text-slate-700 font-bold'; }
+      if (expl) expl.innerHTML = 'Pilah kartu ke dalam kotak Input, Proses, dan Output pada Misi 1, lalu atur urutan barisnya pada Misi 2. Setelah siap, klik tombol <strong>"Uji Eksekusi Logika Algoritma"</strong> untuk melihat reaksi komputer!';
+      if (codeBlock) codeBlock.innerHTML = '<span class="text-slate-500 italic text-[11px]">[Susun urutan baris dengan benar lalu uji logika untuk menghasilkan dokumen kode resmi...]</span>';
+      if (previewStatus) { previewStatus.textContent = 'Belum Tervalidasi'; previewStatus.className = 'text-amber-400 text-[10px] font-bold'; }
+      if (copyBtn) copyBtn.classList.add('hidden');
+    }
+
+    function moveCardToCategory(cardId, targetCategory) {
+      gameUserCategories[cardId] = targetCategory;
+      AudioLab.playSuccess();
+      renderIpoGame();
+    }
+
+    // Drag and drop handlers
+    function handleDragStart(e, cardId) {
+      draggedCardId = cardId;
+      e.dataTransfer.setData('text/plain', cardId);
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('ring-2', 'ring-emerald-400', 'bg-emerald-50/80');
+    }
+
+    function handleDragLeave(e, zone) {
+      e.currentTarget.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-50/80');
+    }
+
+    function handleDrop(e, targetCategory) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('ring-2', 'ring-emerald-400', 'bg-emerald-50/80');
+      const cardId = e.dataTransfer.getData('text/plain') || draggedCardId;
+      if (cardId) {
+        moveCardToCategory(cardId, targetCategory);
+      }
+      draggedCardId = null;
+    }
+
+    function renderIpoGame() {
+      const data = ipoGameData[activeGameCaseId];
+      if (!data) return;
+
+      const unclassifiedList = document.getElementById('unclassifiedCardsList');
+      const inputList = document.getElementById('cards-input');
+      const prosesList = document.getElementById('cards-proses');
+      const outputList = document.getElementById('cards-output');
+
+      const countInputEl = document.getElementById('count-input');
+      const countProsesEl = document.getElementById('count-proses');
+      const countOutputEl = document.getElementById('count-output');
+      const poolCountBadge = document.getElementById('poolCountBadge');
+      const verdictBadge = document.getElementById('classificationVerdictBadge');
+      const missionTag = document.getElementById('gameMissionStatusTag');
+
+      let unclassifiedCards = [];
+      let inputCards = [];
+      let prosesCards = [];
+      let outputCards = [];
+
+      data.cards.forEach(c => {
+        const cat = gameUserCategories[c.id] || 'unclassified';
+        if (cat === 'input') inputCards.push(c);
+        else if (cat === 'proses') prosesCards.push(c);
+        else if (cat === 'output') outputCards.push(c);
+        else unclassifiedCards.push(c);
+      });
+
+      if (poolCountBadge) poolCountBadge.textContent = unclassifiedCards.length + ' Kartu Tersisa';
+      if (countInputEl) countInputEl.textContent = inputCards.length + ' Kartu';
+      if (countProsesEl) countProsesEl.textContent = prosesCards.length + ' Kartu';
+      if (countOutputEl) countOutputEl.textContent = outputCards.length + ' Kartu';
+
+      // Render Unclassified Cards
+      if (unclassifiedList) {
+        if (unclassifiedCards.length === 0) {
+          unclassifiedList.innerHTML = '<div class="text-xs text-emerald-700 font-bold flex items-center gap-1.5 py-1"><span>✨</span><span>Semua kartu sudah dipindahkan ke kotak I-P-O di bawah!</span></div>';
+        } else {
+          unclassifiedList.innerHTML = unclassifiedCards.map(c => renderCardHtml(c, 'unclassified')).join('');
+        }
+      }
+
+      // Render Categories
+      if (inputList) {
+        inputList.innerHTML = inputCards.length ? inputCards.map(c => renderCardHtml(c, 'input')).join('') : '<div class="text-[11px] text-blue-400 italic text-center py-3 border border-dashed border-blue-200 rounded-xl">Tarik kartu perintah INPUT ke sini...</div>';
+      }
+      if (prosesList) {
+        prosesList.innerHTML = prosesCards.length ? prosesCards.map(c => renderCardHtml(c, 'proses')).join('') : '<div class="text-[11px] text-amber-400 italic text-center py-3 border border-dashed border-amber-200 rounded-xl">Tarik kartu rumus PROSES ke sini...</div>';
+      }
+      if (outputList) {
+        outputList.innerHTML = outputCards.length ? outputCards.map(c => renderCardHtml(c, 'output')).join('') : '<div class="text-[11px] text-emerald-400 italic text-center py-3 border border-dashed border-emerald-200 rounded-xl">Tarik kartu hasil OUTPUT ke sini...</div>';
+      }
+
+      // Check classification accuracy
+      if (unclassifiedCards.length === 0) {
+        const allCorrect = data.cards.every(c => gameUserCategories[c.id] === c.category);
+        if (allCorrect) {
+          if (verdictBadge) {
+            verdictBadge.textContent = 'Semua Kategori Benar 100% ✔';
+            verdictBadge.className = 'text-[11px] font-mono px-3 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold border border-emerald-300';
+          }
+          if (missionTag) {
+            missionTag.textContent = 'Misi 1: Selesai ✔';
+            missionTag.className = 'px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-mono text-[10px] font-bold border border-emerald-200';
+          }
+        } else {
+          if (verdictBadge) {
+            verdictBadge.textContent = 'Ada kartu di kotak yang keliru ⚠️';
+            verdictBadge.className = 'text-[11px] font-mono px-3 py-0.5 rounded-full bg-amber-100 text-amber-800 font-bold border border-amber-300';
+          }
+        }
+      } else {
+        if (verdictBadge) {
+          verdictBadge.textContent = 'Pindahkan semua kartu ke kotak yang sesuai';
+          verdictBadge.className = 'text-[11px] font-mono px-3 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold border border-slate-200';
+        }
+        if (missionTag) {
+          missionTag.textContent = 'Misi 1: Pilah Kategori';
+          missionTag.className = 'px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 font-mono text-[10px] font-bold border border-amber-200';
+        }
+      }
+
+      // Render Misi 2 Execution Order List
+      renderExecutionOrderList();
+    }
+
+    function renderCardHtml(card, currentZone) {
+      let borderTheme = 'border-slate-200 bg-white hover:border-slate-300';
+      let tagBadge = '';
+
+      if (currentZone === 'input') {
+        borderTheme = 'border-blue-300 bg-blue-50/90 shadow-2xs';
+        tagBadge = '<span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-200 text-blue-900">INPUT</span>';
+      } else if (currentZone === 'proses') {
+        borderTheme = 'border-amber-300 bg-amber-50/90 shadow-2xs';
+        tagBadge = '<span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-200 text-amber-900">PROSES</span>';
+      } else if (currentZone === 'output') {
+        borderTheme = 'border-emerald-300 bg-emerald-50/90 shadow-2xs';
+        tagBadge = '<span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-200 text-emerald-900">OUTPUT</span>';
+      }
+
+      return '<div draggable="true" ondragstart="handleDragStart(event, \'' + card.id + '\')" class="p-2.5 rounded-xl border-2 ' + borderTheme + ' transition-all cursor-grab active:cursor-grabbing space-y-1.5 shadow-2xs">' +
+        '<div class="flex items-center justify-between gap-1 flex-wrap">' +
+          '<div class="font-mono font-extrabold text-xs text-slate-900">' + escapeHtml(card.text) + '</div>' +
+          tagBadge +
+        '</div>' +
+        '<div class="text-[10px] text-slate-600 leading-tight">' + escapeHtml(card.desc) + '</div>' +
+        '<div class="flex items-center gap-1 pt-1 border-t border-slate-200/60">' +
+          '<span class="text-[9px] text-slate-400 font-bold">Pindah:</span>' +
+          (currentZone !== 'input' ? '<button type="button" onclick="moveCardToCategory(\'' + card.id + '\', \'input\')" class="px-1.5 py-0.5 rounded bg-blue-100 hover:bg-blue-200 text-blue-800 text-[9px] font-bold cursor-pointer">📥 Input</button>' : '') +
+          (currentZone !== 'proses' ? '<button type="button" onclick="moveCardToCategory(\'' + card.id + '\', \'proses\')" class="px-1.5 py-0.5 rounded bg-amber-100 hover:bg-amber-200 text-amber-800 text-[9px] font-bold cursor-pointer">⚡ Proses</button>' : '') +
+          (currentZone !== 'output' ? '<button type="button" onclick="moveCardToCategory(\'' + card.id + '\', \'output\')" class="px-1.5 py-0.5 rounded bg-emerald-100 hover:bg-emerald-200 text-emerald-800 text-[9px] font-bold cursor-pointer">📤 Output</button>' : '') +
+          (currentZone !== 'unclassified' ? '<button type="button" onclick="moveCardToCategory(\'' + card.id + '\', \'unclassified\')" class="px-1.5 py-0.5 rounded bg-slate-200 hover:bg-slate-300 text-slate-700 text-[9px] font-bold cursor-pointer" title="Kembalikan ke kolam">↺</button>' : '') +
+        '</div>' +
+      '</div>';
+    }
+
+    function moveLineOrder(idx, dir) {
+      const targetIdx = idx + dir;
+      if (targetIdx < 0 || targetIdx >= gameUserOrder.length) return;
+      const temp = gameUserOrder[idx];
+      gameUserOrder[idx] = gameUserOrder[targetIdx];
+      gameUserOrder[targetIdx] = temp;
+      AudioLab.playSuccess();
+      renderExecutionOrderList();
+    }
+
+    function renderExecutionOrderList() {
+      const container = document.getElementById('executionOrderContainer');
+      if (!container) return;
+
+      let html = '';
+      gameUserOrder.forEach((card, idx) => {
+        let catBadge = '';
+        if (card.category === 'input') catBadge = '<span class="px-2 py-0.5 rounded-full bg-blue-900/60 text-blue-300 border border-blue-700 text-[10px] font-mono font-bold">INPUT</span>';
+        else if (card.category === 'proses') catBadge = '<span class="px-2 py-0.5 rounded-full bg-amber-900/60 text-amber-300 border border-amber-700 text-[10px] font-mono font-bold">PROSES</span>';
+        else if (card.category === 'output') catBadge = '<span class="px-2 py-0.5 rounded-full bg-emerald-900/60 text-emerald-300 border border-emerald-700 text-[10px] font-mono font-bold">OUTPUT</span>';
+
+        html += '<div class="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between gap-3 text-white transition-all hover:border-slate-700">' +
+          '<div class="flex items-center gap-3 min-w-0">' +
+            '<span class="w-6 h-6 rounded-lg bg-slate-800 text-emerald-400 font-mono font-bold text-xs flex items-center justify-center shrink-0">' + (idx + 1) + '</span>' +
+            '<div class="min-w-0">' +
+              '<div class="font-code font-bold text-xs sm:text-sm text-emerald-300 truncate">' + escapeHtml(card.text) + '</div>' +
+              '<div class="text-[10px] text-slate-400 truncate">' + escapeHtml(card.desc) + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="flex items-center gap-2 shrink-0">' +
+            catBadge +
+            '<div class="flex items-center gap-1">' +
+              '<button type="button" onclick="moveLineOrder(' + idx + ', -1)" ' + (idx === 0 ? 'disabled class="opacity-30 cursor-not-allowed"' : 'class="cursor-pointer hover:bg-slate-800"') + ' class="w-7 h-7 rounded-lg bg-slate-900 border border-slate-700 text-white font-bold text-xs flex items-center justify-center transition" title="Pindah ke Atas">⬆</button>' +
+              '<button type="button" onclick="moveLineOrder(' + idx + ', 1)" ' + (idx === gameUserOrder.length - 1 ? 'disabled class="opacity-30 cursor-not-allowed"' : 'class="cursor-pointer hover:bg-slate-800"') + ' class="w-7 h-7 rounded-lg bg-slate-900 border border-slate-700 text-white font-bold text-xs flex items-center justify-center transition" title="Pindah ke Bawah">⬇</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      });
+
+      container.innerHTML = html;
+    }
+
+    function testAlgorithmLogic() {
+      const data = ipoGameData[activeGameCaseId];
+      if (!data) return;
+
+      const robotCard = document.getElementById('gameRobotCard');
+      const avatar = document.getElementById('gameRobotAvatar');
+      const title = document.getElementById('gameRobotMoodTitle');
+      const badge = document.getElementById('gameRobotBadge');
+      const expl = document.getElementById('gameRobotExplanation');
+      const codeBlock = document.getElementById('gameResultCodeBlock');
+      const previewStatus = document.getElementById('previewStatusBadge');
+      const copyBtn = document.getElementById('btnCopyResultCode');
+
+      // 1. Check if all cards classified
+      const unclassified = data.cards.filter(c => !gameUserCategories[c.id] || gameUserCategories[c.id] === 'unclassified');
+      if (unclassified.length > 0) {
+        AudioLab.playError();
+        if (avatar) avatar.textContent = '🤔';
+        if (title) { title.textContent = 'Misi 1 Belum Selesai: Masih Ada Kartu Belum Dipilah!'; title.className = 'font-extrabold text-amber-600 text-sm'; }
+        if (badge) { badge.textContent = 'MISI 1 BELUM LENGKAP'; badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold border border-amber-300'; }
+        if (expl) expl.innerHTML = 'Kamu masih memiliki <strong>' + unclassified.length + ' kartu instruksi</strong> di kolam atas. Masukkan semua kartu ke dalam kotak 📥 Input, ⚡ Proses, atau 📤 Output terlebih dahulu!';
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl bg-amber-50 border-2 border-amber-400 shadow-md flex items-start gap-4 transition-all h-full';
+        return;
+      }
+
+      // 2. Check category correctness
+      const wrongCat = data.cards.filter(c => gameUserCategories[c.id] !== c.category);
+      if (wrongCat.length > 0) {
+        AudioLab.playError();
+        const firstWrong = wrongCat[0];
+        if (avatar) avatar.textContent = '🤯';
+        if (title) { title.textContent = 'Ada Kartu yang Salah Kamar di Misi 1!'; title.className = 'font-extrabold text-rose-600 text-sm'; }
+        if (badge) { badge.textContent = 'KATEGORI KELIRU'; badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold border border-rose-300'; }
+        if (expl) expl.innerHTML = 'Perhatikan kartu <code>' + escapeHtml(firstWrong.text) + '</code>! ' + escapeHtml(firstWrong.hint) + '. Pindahkan ke kotak yang benar ya!';
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl bg-rose-50 border-2 border-rose-400 shadow-md flex items-start gap-4 transition-all h-full';
+        return;
+      }
+
+      // 3. Check sequence logic (Input -> Proses -> Output)
+      let lastInputIdx = -1;
+      let firstProsesIdx = 999;
+      let lastProsesIdx = -1;
+      let firstOutputIdx = 999;
+
+      gameUserOrder.forEach((c, idx) => {
+        if (c.category === 'input') lastInputIdx = Math.max(lastInputIdx, idx);
+        if (c.category === 'proses') {
+          firstProsesIdx = Math.min(firstProsesIdx, idx);
+          lastProsesIdx = Math.max(lastProsesIdx, idx);
+        }
+        if (c.category === 'output') firstOutputIdx = Math.min(firstOutputIdx, idx);
+      });
+
+      // Error: Proses before Input
+      if (firstProsesIdx < lastInputIdx) {
+        AudioLab.playError();
+        const wrongProses = gameUserOrder[firstProsesIdx];
+        if (avatar) avatar.textContent = '💥';
+        if (title) { title.textContent = 'Error Logika: Menghitung Sebelum Membaca Input!'; title.className = 'font-extrabold text-rose-600 text-sm'; }
+        if (badge) { badge.textContent = 'LOGIKA TERBALIK (PROSES DULUAN)'; badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold border border-rose-300'; }
+        if (expl) expl.innerHTML = 'Pada Baris ' + (firstProsesIdx + 1) + ', kamu menyuruh komputer menghitung <code>' + escapeHtml(wrongProses.text) + '</code>, padahal pengguna belum memasukkan nilai variabelnya! Komputer tidak bisa menghitung toples kosong di memori RAM. Pindahkan semua baris <strong>INPUT ke atas</strong> sebelum rumus proses!';
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl bg-rose-50 border-2 border-rose-400 shadow-md flex items-start gap-4 transition-all h-full';
+        return;
+      }
+
+      // Error: Output before Proses
+      if (firstOutputIdx < lastProsesIdx) {
+        AudioLab.playError();
+        const wrongOut = gameUserOrder[firstOutputIdx];
+        if (avatar) avatar.textContent = '😵';
+        if (title) { title.textContent = 'Error Logika: Mencetak Sebelum Nilai Dihitung!'; title.className = 'font-extrabold text-rose-600 text-sm'; }
+        if (badge) { badge.textContent = 'LOGIKA TERBALIK (OUTPUT DULUAN)'; badge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-rose-100 text-rose-800 font-bold border border-rose-300'; }
+        if (expl) expl.innerHTML = 'Pada Baris ' + (firstOutputIdx + 1) + ', kamu menyuruh komputer mencetak <code>' + escapeHtml(wrongOut.text) + '</code> padahal rumus kalkulasinya baru dihitung di baris bawahnya! Nilai apa yang mau dicetak ke monitor? Pindahkan baris <strong>OUTPUT ke baris paling akhir</strong>!';
+        if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl bg-rose-50 border-2 border-rose-400 shadow-md flex items-start gap-4 transition-all h-full';
+        return;
+      }
+
+      // 4. SUCCESS! Full logical sequence approved!
+      AudioLab.playSuccess();
+      if (avatar) avatar.textContent = '😎';
+      if (title) { title.textContent = 'LUAR BIASA! Algoritma 100% Sah & Logis!'; title.className = 'font-extrabold text-emerald-700 text-sm'; }
+      if (badge) { badge.textContent = 'LOGIKA SEMPURNA: I-P-O SAH'; badge.className = 'text-[10px] font-mono px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'; }
+      if (expl) expl.innerHTML = '"Selamat! Algoritma berjalan dengan urutan sempurna! Komputer terlebih dahulu <strong>membaca INPUT</strong> pengguna ke dalam toples RAM, kemudian <strong>menghitung PROSES rumus</strong> tanpa error, dan akhirnya <strong>mencetak OUTPUT</strong> hasil ke layar monitor. Logika berpikir komputasimu hebat!"';
+      if (robotCard) robotCard.className = 'p-5 sm:p-6 rounded-2xl bg-emerald-50 border-2 border-emerald-500 shadow-lg flex items-start gap-4 transition-all h-full';
+
+      // Build official pseudocode lines
+      let codeLines = data.programHeader.split('\n');
+      gameUserOrder.forEach(c => {
+        codeLines.push('  ' + c.text);
+      });
+
+      if (codeBlock) {
+        codeBlock.innerHTML = codeLines.map((line, i) => {
+          let lineNum = (i + 1) + '.';
+          return '<div class="flex items-center gap-2"><span class="text-emerald-500 select-none w-5 text-right font-mono text-[11px]">' + lineNum + '</span><span>' + escapeHtml(line) + '</span></div>';
+        }).join('');
+      }
+
+      if (previewStatus) {
+        previewStatus.textContent = 'Tervalidasi Sah ✔';
+        previewStatus.className = 'text-emerald-400 text-[10px] font-bold';
+      }
+      if (copyBtn) copyBtn.classList.remove('hidden');
+    }
+
+    function copyResultCode() {
+      const data = ipoGameData[activeGameCaseId];
+      if (!data) return;
+      let text = data.programHeader + '\n' + gameUserOrder.map(c => '  ' + c.text).join('\n');
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Kode Algoritma resmi berhasil disalin ke clipboard!');
+      }).catch(() => {});
+    }
+
   </script>
 </body>
 </html>
