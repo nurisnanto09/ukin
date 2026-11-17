@@ -39,15 +39,29 @@
       }
     });
 
-    const usedGasRecords = new Set();
     const merged = rosterList.map(function (student) {
       const match = gasMapByAbsen[Number(student.absen)] || gasMapByName[String(student.nama).trim().toLowerCase()];
       if (match) {
-        usedGasRecords.add(match);
+        const rawPre = match.pretestScore !== undefined && match.pretestScore !== null && match.pretestScore !== ''
+          ? match.pretestScore
+          : (match.pretest !== undefined && match.pretest !== null && match.pretest !== '' ? match.pretest : student.pretestScore);
+        const rawPost = match.posttestScore !== undefined && match.posttestScore !== null && match.posttestScore !== ''
+          ? match.posttestScore
+          : (match.posttest !== undefined && match.posttest !== null && match.posttest !== '' ? match.posttest : student.posttestScore);
+
+        const preScore = (rawPre !== undefined && rawPre !== null && rawPre !== '' && !isNaN(Number(rawPre)))
+          ? Number(rawPre)
+          : undefined;
+        const postScore = (rawPost !== undefined && rawPost !== null && rawPost !== '' && !isNaN(Number(rawPost)))
+          ? Number(rawPost)
+          : undefined;
+
         return Object.assign({}, student, match, {
           absen: Number(student.absen),
           nama: student.nama, // Gunakan nama baku roster
-          kelas: student.kelas || 'Informatika - X E7'
+          kelas: student.kelas || 'Informatika - X E7',
+          pretestScore: preScore,
+          posttestScore: postScore
         });
       } else {
         return {
@@ -67,10 +81,21 @@
       }
     });
 
-    // Jika ada respon dari GAS di luar 36 siswa resmi, tetap sertakan di akhir
+    // Mencegah duplikasi data: hanya tambahkan jika absen di luar 1 - 36 dan belum ada di merged
+    const officialAbsens = new Set(rosterList.map(function (s) { return Number(s.absen); }));
+    const extraSeenAbsens = new Set();
     gasList.forEach(function (rec) {
-      if (rec && !usedGasRecords.has(rec)) {
-        merged.push(rec);
+      if (!rec) return;
+      const recAbs = Number(rec.absen);
+      if (recAbs && !officialAbsens.has(recAbs) && !extraSeenAbsens.has(recAbs)) {
+        extraSeenAbsens.add(recAbs);
+        const rawPre = rec.pretestScore !== undefined ? rec.pretestScore : rec.pretest;
+        const rawPost = rec.posttestScore !== undefined ? rec.posttestScore : rec.posttest;
+        merged.push(Object.assign({}, rec, {
+          absen: recAbs,
+          pretestScore: (rawPre !== undefined && !isNaN(Number(rawPre))) ? Number(rawPre) : undefined,
+          posttestScore: (rawPost !== undefined && !isNaN(Number(rawPost))) ? Number(rawPost) : undefined
+        }));
       }
     });
 
