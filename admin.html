@@ -31,7 +31,7 @@
           Portal Dasbor Guru
         </h2>
         <p class="text-xs text-slate-500 font-medium leading-relaxed">
-          Masukkan kredensial pengampu mata pelajaran Informatika untuk membuka akses analitik TaRL, rekap nilai, dan verifikasi ACC.
+          Masukkan kredensial pengampu mata pelajaran Informatika untuk membuka akses analitik TaRL dan rekap nilai langsung dari Google Apps Script.
         </p>
       </div>
 
@@ -149,11 +149,19 @@
         </a>
         <a href="simulasi_pseudocode.html" target="_blank" class="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-teal-200 bg-teal-50 text-teal-800 hover:bg-teal-100 text-xs font-bold transition">
           <span>💻</span>
-          <span>Simulasi</span>
+          <span>Simulasi Siswa</span>
         </a>
-        <button id="batchAccAllBtn" type="button" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1">
-          <span>✓</span>
-          <span>ACC Semua</span>
+        <a href="uji_pseudocode.html" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 text-xs font-bold transition shadow-xs">
+          <span>🖥️</span>
+          <span>Terminal Uji Guru</span>
+        </a>
+        <button id="syncGasBtnHeader" type="button" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer" title="Tarik data terbaru dari Google Apps Script">
+          <span>🔄</span>
+          <span class="hidden sm:inline">Tarik Data GAS</span>
+        </button>
+        <button id="openGasSettingsBtn" type="button" class="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer" title="Pengaturan URL Google Apps Script">
+          <span>⚙️</span>
+          <span class="hidden sm:inline">GAS</span>
         </button>
         <button id="exportCsvBtn" type="button" class="px-3 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-1">
           <span>📥</span>
@@ -170,28 +178,30 @@
 
   <!-- ==================== SUB-NAV TABS ==================== -->
   <div class="bg-white border-b border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex items-center justify-between gap-2 overflow-x-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-2.5 flex flex-wrap items-center justify-between gap-3">
+      <!-- HANYA 2 TAB SESUAI PERMINTAAN GURU -->
       <div class="inline-flex rounded-xl bg-slate-100 p-1 border border-slate-200 gap-1 text-xs font-bold">
-        <button type="button" data-teacher-tab="pretestTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg bg-white text-blue-700 shadow-xs transition">
-          📊 1. Hasil Pretest
+        <button type="button" data-teacher-tab="rekapNilaiTab" class="teacher-tab-btn px-4 py-2 rounded-lg bg-white text-indigo-700 shadow-xs font-bold transition flex items-center gap-2 cursor-pointer">
+          <span class="text-sm">📊</span>
+          <span>1. Rekap Nilai Pretest &amp; Posttest (Pemisahan Pengayaan &amp; Remedial)</span>
         </button>
-        <button type="button" data-teacher-tab="drawGroupTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg text-purple-700 hover:text-purple-900 transition flex items-center gap-1.5">
-          <span>🎲</span>
-          <span>2. Pengacakan Kelompok (Draw)</span>
+        <button type="button" data-teacher-tab="simulatorTab" class="teacher-tab-btn px-4 py-2 rounded-lg text-slate-600 hover:text-slate-900 font-bold transition flex items-center gap-2 cursor-pointer">
+          <span class="text-sm">💻</span>
+          <span>2. Simulasi Pseudocode (Terminal &amp; Pengujian Guru)</span>
         </button>
-        <button type="button" data-teacher-tab="simulatorTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg text-indigo-700 hover:text-indigo-900 transition flex items-center gap-1.5">
-          <span>💻</span>
-          <span>3. Simulasi Pseudocode (Live)</span>
-        </button>
-        <button type="button" data-teacher-tab="posttestTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
-          📈 4. Hasil Posttest
-        </button>
-        <button type="button" data-teacher-tab="uploadJsonTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
-          ☁️ 5. Google Apps Script &amp; Bank Soal
-        </button>
-        <button type="button" data-teacher-tab="checkinTab" class="teacher-tab-btn px-3.5 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition">
-          🌱 6. Check-In / Out
-        </button>
+      </div>
+
+      <!-- Ambang KKM Selector -->
+      <div class="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+        <label for="kkmThresholdSelect" class="text-xs font-bold text-slate-600 flex items-center gap-1.5">
+          <i class="fas fa-sliders-h text-indigo-500"></i>
+          <span>Ambang KKM:</span>
+        </label>
+        <select id="kkmThresholdSelect" class="text-xs font-bold bg-white border border-slate-300 text-slate-800 rounded-lg px-2.5 py-1 focus:outline-none focus:border-indigo-600 cursor-pointer shadow-2xs">
+          <option value="70">KKM 70</option>
+          <option value="75" selected>KKM 75 (Standar UKIN)</option>
+          <option value="80">KKM 80</option>
+        </select>
       </div>
     </div>
   </div>
@@ -200,601 +210,220 @@
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
     <!-- Top KPI Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-5 gap-3.5" id="teacherKpiCards"></div>
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5" id="teacherKpiCards"></div>
 
-    <!-- ==================== TAB 1: PRETEST, TARL & ACC ==================== -->
-    <div id="pretestTab" class="teacher-tab-panel space-y-6">
+    <!-- ==================== TAB 1: REKAP NILAI PRETEST & POSTTEST (PENGAYAAN VS REMEDIAL) ==================== -->
+    <div id="rekapNilaiTab" class="teacher-tab-panel space-y-6">
       
-      <!-- 3 Kelompok TaRL Berdasarkan Pretest -->
-      <div>
-        <div class="flex items-center justify-between mb-3">
-          <div>
-            <h3 class="text-sm font-extrabold text-slate-900">Diferensiasi Pembelajaran TaRL (Teaching at the Right Level)</h3>
-            <p class="text-xs text-slate-500">Kelompok otomatis berdasarkan capaian 10 Soal Pretest Taksonomi Bloom (C1–C6).</p>
-          </div>
-        </div>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4" id="pretestGroupCards"></div>
-      </div>
-
-      <!-- Chart.js Bloom & Tabel Skor Pretest -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <!-- Chart.js Bloom Accuracy Bar Chart -->
-        <div class="lms-card p-5 flex flex-col">
-          <div class="mb-3">
-            <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold uppercase">Statistik Kognitif</span>
-            <h4 class="text-sm font-bold text-slate-900 mt-1">Akurasi Jawaban Benar per Level Bloom (C1–C6)</h4>
-            <p class="text-xs text-slate-500">Persentase rata-rata jawaban benar seluruh murid pada tingkatan Bloom.</p>
-          </div>
-          <div class="relative flex-1 min-h-[250px]">
-            <canvas id="bloomChartCanvas"></canvas>
-          </div>
-        </div>
-
-        <!-- Tabel Hasil Pretest dengan Aksi ACC Langsung -->
-        <div class="lg:col-span-2 lms-card p-5 space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
-            <div>
-              <h4 class="text-sm font-bold text-slate-900">Daftar Skor Pretest &amp; Verifikasi ACC Guru</h4>
-              <p class="text-xs text-slate-500">Klik tombol "ACC Langsung" untuk memberikan status verifikasi pada lembar asesmen murid.</p>
-            </div>
-
-            <!-- Filter Controls -->
-            <div class="flex flex-wrap items-center gap-2">
-              <select id="filterPretestGroupSelect" class="text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
-                <option value="ALL">Semua Kelompok</option>
-                <option value="Mahir">Mahir (&ge; 80)</option>
-                <option value="Menengah">Menengah (60–79)</option>
-                <option value="Butuh Pendampingan">Butuh Pendampingan (&lt; 60)</option>
-              </select>
-
-              <select id="filterBloomFocusSelect" class="text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
-                <option value="ALL">Semua Level Bloom</option>
-                <option value="LOTS">Kuasai LOTS (C1-C2)</option>
-                <option value="MOTS">Tuntas MOTS (C3)</option>
-                <option value="HOTS">Kuat HOTS (C4-C6)</option>
-                <option value="WEAK_HOTS">Butuh Bantuan HOTS</option>
-              </select>
-
-              <select id="filterAccSelect" class="text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
-                <option value="ALL">Semua Status ACC</option>
-                <option value="ACC">Sudah di-ACC (✓)</option>
-                <option value="PENDING">Belum di-ACC (⏳)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="overflow-x-auto max-h-96 overflow-y-auto">
-            <table class="w-full text-left border-collapse text-xs">
-              <thead>
-                <tr class="text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 bg-slate-50 sticky top-0 z-10">
-                  <th class="py-2.5 px-3">Murid</th>
-                  <th class="py-2.5 px-3 text-center">Skor Pre</th>
-                  <th class="py-2.5 px-1.5 text-center">C1</th>
-                  <th class="py-2.5 px-1.5 text-center">C2</th>
-                  <th class="py-2.5 px-1.5 text-center">C3</th>
-                  <th class="py-2.5 px-1.5 text-center">C4</th>
-                  <th class="py-2.5 px-1.5 text-center">C5</th>
-                  <th class="py-2.5 px-1.5 text-center">C6</th>
-                  <th class="py-2.5 px-3 text-center">Kelompok</th>
-                  <th class="py-2.5 px-3 text-center">Status ACC</th>
-                  <th class="py-2.5 px-3 text-center">Aksi Guru</th>
-                </tr>
-              </thead>
-              <tbody id="pretestTableBody" class="divide-y divide-slate-100"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ==================== TAB: PENGACAKAN KELOMPOK (DRAW KELAS PROYEKTOR) ==================== -->
-    <div id="drawGroupTab" class="teacher-tab-panel hidden space-y-5">
-      
-      <!-- Banner Proyektor Kelas & Kontrol Draw -->
-      <div class="lms-card p-5 sm:p-6 bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 text-white border-2 border-purple-400/50 shadow-lg flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="space-y-1.5 max-w-xl">
+      <!-- Banner Pemisahan Pengayaan vs Remedial -->
+      <div class="lms-card p-5 bg-gradient-to-r from-indigo-900 via-slate-900 to-purple-950 text-white rounded-2xl shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4 border border-indigo-700/50">
+        <div class="space-y-1">
           <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full bg-purple-500/30 text-purple-200 text-[10px] font-black uppercase tracking-wider border border-purple-400/30">
-              🎲 Undian Proyektor Kelas
+            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-black uppercase tracking-wider border border-emerald-500/30">
+              Evaluasi Formatif &amp; Sumatif
             </span>
-            <span class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-400/30">
-              🛡️ Mode Bersih: Level Siswa Disembunyikan
+            <span class="px-2.5 py-0.5 rounded-full bg-white/10 text-white text-[10px] font-bold">
+              36 Murid Kelas X E7
             </span>
           </div>
-          <h3 class="text-lg sm:text-xl font-extrabold text-white tracking-tight">
-            Pengacakan Kelompok Diskusi (Kelompok 1 s.d. 9)
+          <h3 class="text-base sm:text-lg font-black text-white">
+            Pemetaan Hasil Belajar: Pretest vs Posttest &amp; Kategori Tindak Lanjut
           </h3>
-          <p class="text-xs text-purple-100/80 leading-relaxed font-medium">
-            Tayangkan halaman ini ke layar proyektor kelas. Sistem membagikan 36 siswa secara seimbang ke 9 meja diskusi secara adil dan menyenangkan tanpa menampilkan peringkat atau level kognitif masing-masing murid.
+          <p class="text-xs text-slate-300 leading-relaxed font-medium">
+            Memisahkan secara otomatis murid yang berhak menerima <b>Pengayaan (Tuntas KKM &ge; <span class="kkm-label">75</span>)</b> dan murid yang wajib mengikuti <b>Remedial (&lt; <span class="kkm-label">75</span>)</b>.
           </p>
         </div>
 
-        <!-- Tombol Aksi Draw -->
-        <div class="flex flex-wrap items-center gap-2.5 shrink-0 justify-end">
-          <button id="btnRollDrawGroups" type="button" class="px-4 sm:px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 active:scale-95 text-slate-950 font-black text-xs sm:text-sm shadow-md transition flex items-center gap-2 cursor-pointer hover:scale-102">
-            <span class="text-base animate-bounce">🎲</span>
-            <span>Mulai Acak / Draw Sekarang!</span>
-          </button>
-          <button id="btnSaveDrawGroups" type="button" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-95 text-white font-bold text-xs transition flex items-center gap-1.5 shadow-sm cursor-pointer" title="Simpan ke sistem agar otomatis muncul di simulator">
-            <span>💾</span>
-            <span>Terapkan Kelompok</span>
-          </button>
-          <button id="btnPrintDrawGroups" type="button" class="px-3.5 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 active:scale-95 text-white font-bold text-xs border border-white/20 transition flex items-center gap-1.5 cursor-pointer">
-            <span>🖨️</span>
-            <span>Cetak Meja</span>
-          </button>
-          <button id="btnToggleSecretTeacherLevel" type="button" class="px-3 py-2.5 rounded-xl bg-purple-950/80 hover:bg-purple-900 border border-purple-500/40 text-purple-200 text-xs font-bold transition flex items-center gap-1 cursor-pointer" title="Hanya aktifkan saat tidak tersambung ke proyektor kelas">
-            <span id="secretToggleIcon">👁️</span>
-            <span id="secretToggleText">Intip Level (Rahasia Guru)</span>
-          </button>
-        </div>
-      </div>
-
-      <!-- Live Draw Announcer Box (Muncul saat draw bergulir) -->
-      <div id="drawAnnounceBox" class="hidden p-4 rounded-2xl bg-indigo-50 border-2 border-dashed border-indigo-300 text-center space-y-1 animate-pulse">
-        <div class="text-sm font-extrabold text-indigo-900 flex items-center justify-center gap-2">
-          <span class="animate-spin text-lg">⚙️</span>
-          <span>Sedang mengundi dan menyeimbangkan anggota 9 meja diskusi...</span>
-        </div>
-        <p class="text-xs text-indigo-600">Menyusun kombinasi terbaik agar seluruh kelompok dapat berkolaborasi aktif!</p>
-      </div>
-
-      <!-- Grid 9 Kartu Kelompok (3 x 3 Responsive Grid) -->
-      <div id="drawGroupCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <!-- Rendered by JavaScript: Kelompok 1 s.d. 9 -->
-      </div>
-
-    </div>
-
-    <!-- ==================== TAB 2: POSTTEST (REMIDI & PENGAYAAN) ==================== -->
-    <div id="posttestTab" class="teacher-tab-panel hidden space-y-6">
-      <div class="lms-card p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase">Evaluasi Akhir Posttest</span>
-          <h3 class="text-sm font-extrabold text-slate-900 mt-1">Pemetaan Remidi vs Pengayaan</h3>
-          <p class="text-xs text-slate-500">Tentukan ambang batas KKM untuk memisahkan murid yang butuh remidi dan pengayaan.</p>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <label for="kkmThresholdSelect" class="text-xs font-bold text-slate-600">Ambang KKM:</label>
-          <select id="kkmThresholdSelect" class="text-xs font-bold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-3 py-1.5 focus:outline-none">
-            <option value="70">KKM 70</option>
-            <option value="75" selected>KKM 75 (Standar)</option>
-            <option value="80">KKM 80</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Kolom Remidi -->
-        <div class="lms-card p-5 space-y-4 border-rose-200">
-          <div class="flex items-center justify-between border-b border-rose-100 pb-3">
-            <div>
-              <h4 class="text-sm font-bold text-rose-900 flex items-center gap-2">
-                <span>⚠️</span> Murid Wajib Remidi
-              </h4>
-              <p class="text-xs text-slate-500">Skor Posttest di bawah KKM. Memerlukan ulasan pada level Bloom yang belum tuntas.</p>
-            </div>
-            <span id="remedialCountBadge" class="w-7 h-7 rounded-lg bg-rose-600 text-white font-bold text-xs flex items-center justify-center">0</span>
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="p-3 rounded-xl bg-white/10 border border-white/15 text-center">
+            <div class="text-[10px] uppercase font-bold text-emerald-300">Pengayaan</div>
+            <div id="bannerEnrichmentCount" class="text-xl font-black text-emerald-400">0</div>
           </div>
-          <div id="remedialListContainer" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
-        </div>
-
-        <!-- Kolom Pengayaan -->
-        <div class="lms-card p-5 space-y-4 border-emerald-200">
-          <div class="flex items-center justify-between border-b border-emerald-100 pb-3">
-            <div>
-              <h4 class="text-sm font-bold text-emerald-900 flex items-center gap-2">
-                <span>🌟</span> Murid Berhak Pengayaan
-              </h4>
-              <p class="text-xs text-slate-500">Skor Posttest memenuhi KKM. Siap diberikan tantangan eksplorasi lebih lanjut.</p>
-            </div>
-            <span id="enrichmentCountBadge" class="w-7 h-7 rounded-lg bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">0</span>
+          <div class="p-3 rounded-xl bg-white/10 border border-white/15 text-center">
+            <div class="text-[10px] uppercase font-bold text-rose-300">Remedial</div>
+            <div id="bannerRemedialCount" class="text-xl font-black text-rose-400">0</div>
           </div>
-          <div id="enrichmentListContainer" class="space-y-3 max-h-96 overflow-y-auto pr-1"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ==================== TAB 3: FILTER CHECK-IN & CHECK-OUT ==================== -->
-    <div id="checkinTab" class="teacher-tab-panel hidden space-y-6">
-      <!-- Quick Mood Counters -->
-      <div>
-        <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Sebaran Emosi &amp; Mood Awal Siswa:</h4>
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5" id="checkinSummaryCounters"></div>
-      </div>
-
-      <!-- Filter Bar -->
-      <div class="lms-card p-4 flex flex-wrap items-center gap-3">
-        <div class="flex-1 min-w-[140px]">
-          <label for="filterMoodSelect" class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Mood Awal</label>
-          <select id="filterMoodSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
-            <option value="ALL">Semua Mood</option>
-          </select>
-        </div>
-
-        <div class="flex-1 min-w-[140px]">
-          <label for="filterEnergySelect" class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Energi Fisik</label>
-          <select id="filterEnergySelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
-            <option value="ALL">Semua Energi</option>
-          </select>
-        </div>
-
-        <div class="flex-1 min-w-[140px]">
-          <label for="filterStyleSelect" class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Gaya Belajar</label>
-          <select id="filterStyleSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
-            <option value="ALL">Semua Gaya</option>
-          </select>
-        </div>
-
-        <div class="flex-1 min-w-[160px]">
-          <label for="filterCheckoutSelect" class="block text-[10px] font-bold uppercase text-slate-500 mb-1">Pemahaman Akhir</label>
-          <select id="filterCheckoutSelect" class="w-full text-xs font-semibold bg-slate-50 border border-slate-200 text-slate-800 rounded-xl px-2.5 py-1.5 focus:outline-none">
-            <option value="ALL">Semua Pemahaman</option>
-          </select>
-        </div>
-
-        <div class="flex-1 min-w-[130px]">
-          <label for="filterCheckinAccSelect" class="block text-[10px] font-bold uppercase text-emerald-700 mb-1">Status ACC</label>
-          <select id="filterCheckinAccSelect" class="w-full text-xs font-bold bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl px-2.5 py-1.5 focus:outline-none">
-            <option value="ALL">Semua ACC</option>
-            <option value="ACC">Ter-ACC (✓)</option>
-            <option value="PENDING">Belum ACC (⏳)</option>
-          </select>
-        </div>
-
-        <div class="self-end pt-1">
-          <button id="resetCheckinFiltersBtn" type="button" class="px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition">
-            Reset Filter
-          </button>
         </div>
       </div>
 
-      <!-- Kartu Murid Terfilter -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="checkinFilteredGrid"></div>
-    </div>
-
-    <!-- ==================== TAB 4: GOOGLE APPS SCRIPT & BANK SOAL HOTS ==================== -->
-    <div id="uploadJsonTab" class="teacher-tab-panel hidden space-y-6">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-        <!-- Google Apps Script Hub Card -->
-        <div class="lms-card p-5 space-y-4">
-          <div class="flex items-center justify-between pb-2 border-b border-slate-100">
-            <div>
-              <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-bold uppercase tracking-wider">Cloud Spreadsheet Sync</span>
-              <h4 class="text-sm font-black text-slate-900 mt-1">Integrasi Google Apps Script (GAS)</h4>
-              <p class="text-xs text-slate-500">Hubungkan portal ke Google Spreadsheet untuk backup nilai, roster, & LKPD.</p>
-            </div>
-            <span id="gasLiveStatusBadge" class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200 shrink-0">
-              🟡 Mode Lokal
-            </span>
-          </div>
-
-          <!-- Input Endpoint URL & Actions -->
-          <div class="space-y-2">
-            <label class="block text-xs font-bold text-slate-700">URL Deployment Web App GAS:</label>
-            <div class="flex flex-col sm:flex-row gap-2">
-              <input id="gasUrlInput" type="url" value="https://script.google.com/macros/s/AKfycbwuYVpatjOrEPwjaSQMWy79qvKoy2dygctQMZM3YP8XOYXV9vsRK_yDDP-XKWeECSGc/exec" placeholder="https://script.google.com/macros/s/.../exec" class="flex-1 px-3 py-2 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-emerald-600 font-mono">
-              <button id="saveGasUrlBtn" type="button" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-900 active:bg-black text-white text-xs font-bold transition flex items-center justify-center gap-1 cursor-pointer">
-                <span>💾</span><span>Simpan URL</span>
-              </button>
-            </div>
-
-            <!-- Action Buttons GAS -->
-            <div class="flex flex-wrap items-center gap-2 pt-1">
-              <button id="testGasConnectionBtn" type="button" class="px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                <span>⚡</span><span>Tes Koneksi</span>
-              </button>
-              <button id="exportRecordsToGasBtn" type="button" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                <span>📤</span><span>Kirim Rekap Nilai ke Sheets</span>
-              </button>
-              <button id="exportRosterToGasBtn" type="button" class="px-3.5 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                <span>📤</span><span>Kirim Roster 36 Murid ke Sheets</span>
-              </button>
-              <button id="fetchGasRosterBtn" type="button" class="px-3.5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                <span>📥</span><span>Tarik Roster Murid</span>
-              </button>
-              <button id="fetchGasRecordsBtn" type="button" class="px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                <span>📥</span><span>Tarik Rekap Nilai dari Sheets</span>
-              </button>
-              <button id="clearLocalRecordsBtn" type="button" class="px-3.5 py-2 rounded-xl bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
-                <span>🗑️</span><span>Kosongkan Rekap Nilai Lokal</span>
-              </button>
-            </div>
-            <div id="gasStatusText" class="text-[11px] font-bold text-slate-600 pt-0.5">Status: Siap dihubungkan ke Google Spreadsheet.</div>
-          </div>
-
-          <!-- Panduan Praktis 3 Langkah -->
-          <div class="p-3.5 bg-emerald-50/70 rounded-2xl border border-emerald-200 text-[11px] text-emerald-950 space-y-1.5">
-            <div class="font-extrabold flex items-center gap-1.5 text-emerald-900">
-              <span>📋</span>
-              <span>Panduan Cepat Pasang Google Apps Script:</span>
-            </div>
-            <div class="text-[11px] text-slate-700 leading-relaxed space-y-1 font-sans">
-              <div>1. Buka spreadsheet baru di <a href="https://sheets.new" target="_blank" class="underline font-bold text-emerald-800">sheets.new ↗</a></div>
-              <div>2. Buka menu <b>Ekstensi &rarr; Apps Script</b>, hapus kode bawaan lalu tempel kode di bawah.</div>
-              <div>3. Klik tombol biru <b>Deploy &rarr; New Deployment</b> &rarr; Pilih jenis <b>Web App</b> (Pilih: <i>Execute as: Me</i>, <i>Who has access: Anyone</i>). Salin URL Web App dan tempel pada kolom di atas!</div>
-            </div>
-          </div>
-
-          <!-- Kode GAS Code.gs -->
-          <div class="bg-slate-900 text-slate-200 p-4 rounded-2xl text-[11px] font-mono space-y-2">
-            <div class="flex items-center justify-between text-slate-400 pb-1 border-b border-slate-800">
-              <span class="font-bold text-amber-300 flex items-center gap-1">
-                <span>📜</span><span>Kode Google Apps Script (Code.gs):</span>
+      <!-- DUA KOLOM BERDAMPINGAN: PENGAYAAN VS REMEDIAL -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        
+        <!-- KOLOM 1: MURID BERHAK PENGAYAAN (TUNTAS KKM) -->
+        <div class="lms-card p-5 space-y-4 border-2 border-emerald-300 bg-emerald-50/30 rounded-2xl shadow-sm">
+          <div class="flex items-center justify-between border-b border-emerald-200 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-sm font-black shadow-xs">
+                🌟
               </span>
-              <button id="copyGasCodeBtn" type="button" class="text-xs text-blue-400 hover:text-blue-300 active:text-blue-200 font-bold underline flex items-center gap-1 cursor-pointer">
-                <span>📋</span><span>Salin Kode</span>
-              </button>
+              <div>
+                <h4 class="text-sm font-black text-emerald-950 flex items-center gap-1.5">
+                  <span>Kelompok Pengayaan (Lolos KKM &ge; <span class="kkm-label">75</span>)</span>
+                </h4>
+                <p class="text-xs text-slate-600">Siswa telah tuntas kompetensi, siap eksplorasi tantangan algoritma tingkat lanjut (C5–C6).</p>
+              </div>
             </div>
-            <pre id="gasCodeBlock" class="overflow-x-auto text-[10px] leading-relaxed max-h-56 overflow-y-auto pr-1">/**
- * GOOGLE APPS SCRIPT - EDUASSESS LMS &amp; SIMULATOR PSEUDOCODE UKIN
- * Otomatisasi Sinkronisasi Spreadsheet Google Apps Script:
- * 1. Roster Siswa &amp; Kelompok (1 - 9)
- * 2. Rekap Nilai Pretest, Posttest &amp; Skor HOTS C4-C6
- * 3. Rancangan Pseudocode LKPD Kelompok
- */
-
-function doGet(e) {
-  var action = (e &amp;&amp; e.parameter &amp;&amp; e.parameter.action) || 'ping';
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-
-  // 1. Tarik Data Roster Siswa
-  if (action === 'getRoster') {
-    var sheet = ss.getSheetByName('Roster_Siswa') || ss.getSheets()[0];
-    var data = sheet.getDataRange().getValues();
-    var result = [];
-    for (var i = 1; i &lt; data.length; i++) {
-      if (data[i][0] !== '') {
-        result.push({
-          absen: Number(data[i][0]),
-          nama: String(data[i][1] || ''),
-          kelas: String(data[i][2] || 'Informatika - X E7'),
-          nis: String(data[i][3] || ''),
-          kelompok: String(data[i][4] || ('Kelompok ' + (Math.floor((i - 1) / 4) + 1)))
-        });
-      }
-    }
-    return ContentService.createTextOutput(JSON.stringify(result)).setMimeType(ContentService.MimeType.JSON);
-  }
-
-  // 2. Tarik Rekap Nilai
-  if (action === 'getRecords') {
-    var sheetNilai = ss.getSheetByName('Rekap_Nilai');
-    if (!sheetNilai) return ContentService.createTextOutput(JSON.stringify([])).setMimeType(ContentService.MimeType.JSON);
-    var dataNilai = sheetNilai.getDataRange().getValues();
-    var records = [];
-    for (var j = 1; j &lt; dataNilai.length; j++) {
-      if (dataNilai[j][0] !== '') {
-        records.push({
-          absen: Number(dataNilai[j][0]),
-          nama: String(dataNilai[j][1] || ''),
-          kelas: String(dataNilai[j][2] || ''),
-          pretest: Number(dataNilai[j][3] || 0),
-          posttest: Number(dataNilai[j][4] || 0),
-          accStatus: String(dataNilai[j][5] || 'PENDING')
-        });
-      }
-    }
-    return ContentService.createTextOutput(JSON.stringify(records)).setMimeType(ContentService.MimeType.JSON);
-  }
-
-  // Ping test
-  return ContentService.createTextOutput(JSON.stringify({
-    status: 'success',
-    message: 'Endpoint GAS EduAssess Aktif &amp; Terhubung!',
-    timestamp: new Date().toISOString()
-  })).setMimeType(ContentService.MimeType.JSON);
-}
-
-function doPost(e) {
-  try {
-    var raw = e.postData.contents;
-    var payload = JSON.parse(raw);
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-
-    // Simpan Rekap Nilai Murid
-    if (payload.action === 'syncAllRecords' &amp;&amp; Array.isArray(payload.records)) {
-      var sheetNilai = getOrCreateSheet(ss, 'Rekap_Nilai', [
-        'No. Absen', 'Nama Siswa', 'Kelas', 'Pretest', 'Posttest',
-        'HOTS C4', 'HOTS C5', 'HOTS C6', 'Status ACC', 'Waktu ACC', 'Waktu Pengerjaan'
-      ]);
-
-      payload.records.forEach(function(r) {
-        var c4 = (r.pretestBloomCorrect &amp;&amp; r.pretestBloomCorrect.C4) || 0;
-        var c5 = (r.pretestBloomCorrect &amp;&amp; r.pretestBloomCorrect.C5) || 0;
-        var c6 = (r.pretestBloomCorrect &amp;&amp; r.pretestBloomCorrect.C6) || 0;
-        sheetNilai.appendRow([
-          r.absen,
-          r.nama,
-          r.kelas || 'Informatika - X E7',
-          r.pretestScore || 0,
-          r.posttestScore || 0,
-          c4 + '/4',
-          c5 + '/2',
-          c6 + '/4',
-          r.accStatus || 'PENDING',
-          r.accTimestamp || '-',
-          r.timestamp || new Date().toLocaleTimeString('id-ID')
-        ]);
-      });
-
-      return ContentService.createTextOutput(JSON.stringify({
-        status: 'success',
-        message: 'Berhasil mencatat ' + payload.records.length + ' rekap nilai ke Google Sheets!'
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    // Simpan Rancangan LKPD Kelompok
-    if (payload.action === 'saveLKPD' &amp;&amp; payload.submission) {
-      var sub = payload.submission;
-      var sheetLKPD = getOrCreateSheet(ss, 'Rancangan_LKPD_Kelompok', [
-        'Kelompok', 'Anggota', 'Kelas', 'Nama Program', 'Deklarasi Variabel', 'Kode Pseudocode', 'Waktu Kirim'
-      ]);
-
-      var codeText = Array.isArray(sub.lines) ? sub.lines.join('\n') : String(sub.lines || '');
-      sheetLKPD.appendRow([
-        sub.namaKelompok || ('Kelompok ' + sub.groupId),
-        sub.memberStr || (Array.isArray(sub.members) ? sub.members.join(', ') : '-'),
-        sub.kelas || 'Informatika - X E7',
-        sub.progName || 'Tentukan_Peringkat_Kelas',
-        sub.progDecl || '',
-        codeText,
-        sub.submittedAt || new Date().toLocaleTimeString('id-ID')
-      ]);
-
-      return ContentService.createTextOutput(JSON.stringify({
-        status: 'success',
-        message: 'Rancangan ' + (sub.namaKelompok || 'Kelompok') + ' berhasil dicatat!'
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    // Simpan/Sinkron Roster Murid (36 Siswa)
-    if (payload.action === 'saveRoster' && Array.isArray(payload.roster)) {
-      var sheetRoster = getOrCreateSheet(ss, 'Roster_Siswa', [
-        'Absen', 'Nama Siswa', 'Kelas', 'NIS', 'Kelompok'
-      ]);
-      if (sheetRoster.getLastRow() > 1) {
-        sheetRoster.getRange(2, 1, sheetRoster.getLastRow() - 1, 5).clearContent();
-      }
-      var rows = payload.roster.map(function(item) {
-        return [
-          item.absen,
-          item.nama,
-          item.kelas || 'Informatika - X E7',
-          item.nis || '',
-          item.kelompok || ('Kelompok ' + (Math.floor((item.absen - 1) / 4) + 1))
-        ];
-      });
-      if (rows.length > 0) {
-        sheetRoster.getRange(2, 1, rows.length, 5).setValues(rows);
-      }
-      return ContentService.createTextOutput(JSON.stringify({
-        status: 'success',
-        message: 'Berhasil menyimpan ' + rows.length + ' data siswa ke tab Roster_Siswa!'
-      })).setMimeType(ContentService.MimeType.JSON);
-    }
-
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: 'Action tidak dikenali' }))
-      .setMimeType(ContentService.MimeType.JSON);
-  } catch(err) {
-    return ContentService.createTextOutput(JSON.stringify({ status: 'error', message: err.toString() }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-}
-
-function getOrCreateSheet(ss, name, headers) {
-  var sheet = ss.getSheetByName(name);
-  if (!sheet) {
-    sheet = ss.insertSheet(name);
-    sheet.appendRow(headers);
-    sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold').setBackground('#e2e8f0');
-    sheet.setFrozenRows(1);
-  }
-  return sheet;
-}</pre>
+            <span id="enrichmentCountBadge" class="px-3 py-1 rounded-full bg-emerald-600 text-white font-black text-xs shadow-xs">0</span>
           </div>
+
+          <!-- List Card Murid Pengayaan -->
+          <div id="enrichmentListContainer" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1"></div>
         </div>
 
-        <!-- Manajemen JSON & Tambah Murid Manual -->
-        <div class="space-y-6">
-
-          <!-- Upload JSON Soal -->
-          <div class="lms-card p-5 space-y-4">
-            <div>
-              <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold uppercase tracking-wider">Manajemen Paket Soal</span>
-              <h4 class="text-sm font-black text-slate-900 mt-1">Unggah atau Tempel Format JSON Soal</h4>
-              <p class="text-xs text-slate-500">Sesuaikan paket soal Pretest dan Posttest Taksonomi Bloom.</p>
+        <!-- KOLOM 2: MURID WAJIB REMEDIAL (BELUM TUNTAS KKM) -->
+        <div class="lms-card p-5 space-y-4 border-2 border-rose-300 bg-rose-50/30 rounded-2xl shadow-sm">
+          <div class="flex items-center justify-between border-b border-rose-200 pb-3">
+            <div class="flex items-center gap-2.5">
+              <span class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center text-sm font-black shadow-xs">
+                ⚠️
+              </span>
+              <div>
+                <h4 class="text-sm font-black text-rose-950 flex items-center gap-1.5">
+                  <span>Kelompok Remedial / Pendampingan (&lt; <span class="kkm-label">75</span>)</span>
+                </h4>
+                <p class="text-xs text-slate-600">Siswa di bawah KKM, memerlukan ulasan variabel, struktur pseudocode, dan bimbingan guru.</p>
+              </div>
             </div>
-
-            <div>
-              <input id="jsonFileInput" type="file" accept=".json,application/json" class="block w-full text-xs text-slate-600 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer">
-            </div>
-
-            <div>
-              <textarea id="jsonPasteTextarea" rows="4" class="dotted-textarea font-mono text-[11px]" placeholder="Paste JSON format { pretest: [...], posttest: [...] }"></textarea>
-            </div>
-
-            <div class="flex flex-wrap items-center gap-2">
-              <button id="applyJsonQuestionsBtn" type="button" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition cursor-pointer">
-                Terapkan Paket JSON
-              </button>
-              <button id="loadSampleAlternativeJsonBtn" type="button" class="px-3.5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold transition cursor-pointer">
-                Muat 10 Soal HOTS Default
-              </button>
-              <button id="downloadTemplateJsonBtn" type="button" class="px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold transition cursor-pointer">
-                Unduh JSON
-              </button>
-            </div>
+            <span id="remedialCountBadge" class="px-3 py-1 rounded-full bg-rose-600 text-white font-black text-xs shadow-xs">0</span>
           </div>
 
-          <!-- Tambah Murid Manual -->
-          <div class="lms-card p-5 space-y-3">
-            <h5 class="text-xs font-extrabold uppercase tracking-wider text-slate-800">Tambah / Koreksi Murid Manual:</h5>
-            <div class="flex gap-2">
-              <input id="newRosterAbsen" type="number" placeholder="Absen" class="w-20 px-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-600 font-mono">
-              <input id="newRosterNama" type="text" placeholder="Nama Murid" class="flex-1 px-3 py-1.5 rounded-xl border border-slate-200 text-xs focus:outline-none focus:border-blue-600">
-              <button id="addRosterBtn" type="button" class="px-4 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition cursor-pointer">
-                Simpan
-              </button>
-            </div>
-          </div>
-
+          <!-- List Card Murid Remedial -->
+          <div id="remedialListContainer" class="space-y-2.5 max-h-[420px] overflow-y-auto pr-1"></div>
         </div>
 
       </div>
 
-      <!-- Preview Soal 10 HOTS C4-C6 & Daftar Roster Aktif -->
-      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2 space-y-4" id="activeQuestionBankPreview"></div>
-
-        <div class="lms-card p-5 space-y-3">
-          <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Daftar Murid Terdaftar (<span id="rosterCountLabel">36</span>)</h4>
-            <span class="text-[10px] text-slate-500 font-semibold">Auto-fill Absen</span>
+      <!-- TABEL REKAPITULASI LENGKAP PRETEST & POSTTEST SELURUH SISWA -->
+      <div class="lms-card p-5 space-y-4 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+          <div>
+            <h4 class="text-sm font-black text-slate-900 flex items-center gap-2">
+              <span>📋</span>
+              <span>Tabel Rekapitulasi Nilai Pretest &amp; Posttest (Live Google Sheets)</span>
+            </h4>
+            <p class="text-xs text-slate-500">Data hasil belajar murid ditarik langsung secara murni dari Google Apps Script (GAS) / Google Sheets.</p>
           </div>
-          <div id="rosterPreviewList" class="space-y-1 max-h-80 overflow-y-auto pr-1"></div>
+
+          <!-- Filter & Search Bar -->
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- Search Input -->
+            <div class="relative">
+              <input type="text" id="searchRekapInput" placeholder="Cari nama / absen..." class="text-xs bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 pl-8 focus:outline-none focus:border-indigo-600 w-44">
+              <span class="absolute left-2.5 top-2 text-slate-400 text-xs">🔍</span>
+            </div>
+
+            <!-- Filter Kategori Tindak Lanjut -->
+            <select id="filterTindakLanjutSelect" class="text-xs font-bold bg-slate-50 border border-slate-300 text-slate-800 rounded-xl px-3 py-1.5 focus:outline-none focus:border-indigo-600 cursor-pointer">
+              <option value="ALL">Semua Murid Terdaftar</option>
+              <option value="SUDAH_KUIS">✅ Sudah Kuis / Mengisi</option>
+              <option value="BELUM_KUIS">⏳ Belum Kuis (Kosong)</option>
+              <option value="PENGAYAAN">🌟 Hanya Pengayaan</option>
+              <option value="REMEDIAL">⚠️ Hanya Remedial</option>
+            </select>
+
+            <button id="btnFetchGasRecords" type="button" class="px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer" title="Tarik rekap nilai terbaru dari Google Sheets">
+              <span>🔄</span>
+              <span>Tarik Data GAS</span>
+            </button>
+            <span id="gasLiveStatusBadge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+              ⚪ Menghubungkan GAS...
+            </span>
+            <button id="exportCsvBtn" type="button" class="px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-slate-700 text-xs font-bold transition flex items-center gap-1 cursor-pointer shadow-xs">
+              <span>📥</span>
+              <span>CSV</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Tabel Rekap -->
+        <div class="overflow-x-auto max-h-[460px] overflow-y-auto">
+          <table class="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr class="text-[11px] font-bold text-slate-600 uppercase tracking-wider border-b-2 border-slate-200 bg-slate-100/90 sticky top-0 z-10">
+                <th class="py-2.5 px-3">No. Absen</th>
+                <th class="py-2.5 px-3">Nama Lengkap Murid</th>
+                <th class="py-2.5 px-3 text-center">Skor Pretest</th>
+                <th class="py-2.5 px-3 text-center">Skor Posttest</th>
+                <th class="py-2.5 px-3 text-center">Peningkatan (Gain)</th>
+                <th class="py-2.5 px-3 text-center">Kategori Tindak Lanjut</th>
+                <th class="py-2.5 px-3 text-center">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="rekapNilaiTableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
         </div>
       </div>
+
+      <!-- GRAFIK KOGNITIF TAKSONOMI BLOOM (C1–C6) -->
+      <div class="lms-card p-5 space-y-3 rounded-2xl border border-slate-200 shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 pb-2.5">
+          <div>
+            <span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px] font-bold uppercase">Distribusi Kognitif</span>
+            <h4 class="text-sm font-bold text-slate-900 mt-1">Akurasi Jawaban Benar per Level Taksonomi Bloom (C1–C6)</h4>
+            <p class="text-xs text-slate-500">Memetakan penguasaan murid dari tingkat dasar (C1-C2), menengah (C3), hingga analisis dan perancangan (C4-C6).</p>
+          </div>
+        </div>
+        <div class="relative min-h-[260px] max-h-[300px]">
+          <canvas id="bloomChartCanvas"></canvas>
+        </div>
+      </div>
+
     </div>
 
-    <!-- ==================== TAB 5: SIMULATOR PSEUDOCODE (UJI RANCANGAN MURID) ==================== -->
+    <!-- ==================== TAB 2: SIMULATOR PSEUDOCODE (TERMINAL & PENGUJIAN GURU) ==================== -->
     <div id="simulatorTab" class="teacher-tab-panel hidden space-y-4">
       <!-- Header Bar Simulator Guru -->
-      <div class="lms-card p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 border-2 border-indigo-200 bg-indigo-50/70">
-        <div class="flex items-center gap-3.5">
-          <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-black shadow-xs shrink-0">
-            💻
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-200 text-indigo-900">
-                FITUR KHUSUS GURU
-              </span>
-              <span class="text-xs text-slate-500 font-medium">Uji Kinerja &amp; Demonstrasi Kelas</span>
+      <div class="lms-card p-4 sm:p-5 flex flex-col gap-3.5 border-2 border-indigo-200 bg-indigo-50/70 rounded-2xl shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="flex items-center gap-3.5">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-black shadow-xs shrink-0">
+              💻
             </div>
-            <h3 class="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">
-              Simulator Pseudocode — Pengujian Langsung Hasil Rancangan Murid
-            </h3>
-            <p class="text-xs text-slate-600">
-              Panggil dan uji alur algoritma yang dikirim oleh murid secara live di depan kelas.
-            </p>
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider bg-indigo-200 text-indigo-900">
+                  FITUR KHUSUS GURU
+                </span>
+                <span class="text-xs text-slate-500 font-medium">Uji Kinerja &amp; Demonstrasi Kelas</span>
+              </div>
+              <h3 class="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">
+                Uji Pseudocode Siswa — Pengujian Langsung Hasil Murid
+              </h3>
+              <p class="text-xs text-slate-600">
+                Panggil dan uji alur algoritma percabangan secara live di depan kelas dengan tempat input nilai dan layar output.
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" onclick="document.getElementById('adminSimulatorIframe').src='uji_pseudocode.html'" class="px-3.5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+              <span>▶️</span>
+              <span>Uji Pseudocode Murid</span>
+            </button>
+            <button type="button" onclick="document.getElementById('adminSimulatorIframe').src='simulasi_pseudocode.html'" class="px-3.5 py-2 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer">
+              <span>📝</span>
+              <span>Formulir Kiriman Siswa</span>
+            </button>
+            <a href="uji_pseudocode.html" target="_blank" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5">
+              <span>↗️</span>
+              <span>Buka Layar Penuh (Proyektor)</span>
+            </a>
           </div>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2">
-          <a href="simulasi_pseudocode.html" target="_blank" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold shadow-xs transition flex items-center gap-1.5">
-            <span>🖥️</span>
-            <span>Buka Layar Penuh (Proyektor) ↗</span>
-          </a>
+        <!-- Quick Select Group Row -->
+        <div class="pt-3 border-t border-indigo-200/70 flex flex-wrap items-center justify-between gap-2">
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-black text-indigo-950 uppercase tracking-wide">Pilih Cepat Kelompok (1-8):</span>
+            <div id="groupSimulatorButtons" class="flex flex-wrap items-center gap-1.5"></div>
+          </div>
+          <span class="text-[11px] text-slate-500 italic">Kode murid otomatis termuat untuk diuji langsung</span>
         </div>
       </div>
 
       <!-- Iframe Embedded Simulator -->
-      <div class="bg-white rounded-3xl shadow-md border border-slate-200 overflow-hidden min-h-[780px]">
-        <iframe id="adminSimulatorIframe" src="simulasi_pseudocode.html" class="w-full h-[800px] border-0" title="Simulator Pseudocode Guru"></iframe>
+      <div class="bg-white rounded-3xl shadow-md border border-slate-200 overflow-hidden min-h-[820px]">
+        <iframe id="adminSimulatorIframe" src="uji_pseudocode.html" class="w-full h-[840px] border-0" title="Uji &amp; Simulator Pseudocode Siswa"></iframe>
       </div>
     </div>
 
@@ -812,6 +441,37 @@ function getOrCreateSheet(ss, name, headers) {
   </footer>
 
   </div><!-- /adminAppContent -->
+
+  <!-- Modal Konfigurasi GAS -->
+  <div id="gasSettingsModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">⚙️</span>
+          <h3 class="text-sm font-black text-slate-900">Pengaturan Google Apps Script (GAS)</h3>
+        </div>
+        <button id="closeGasSettingsBtn" type="button" class="text-slate-400 hover:text-slate-600 text-lg font-bold cursor-pointer">&times;</button>
+      </div>
+      <p class="text-xs text-slate-500 leading-relaxed">
+        Seluruh data asesmen hanya ditarik dan disinkronkan secara murni melalui Web App Google Apps Script di bawah ini.
+      </p>
+      <div class="space-y-1.5">
+        <label for="gasUrlModalInput" class="block text-xs font-bold text-slate-700">URL Web App Deployment (GAS)</label>
+        <input id="gasUrlModalInput" type="text" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-mono focus:outline-none focus:border-indigo-600" placeholder="https://script.google.com/macros/s/.../exec">
+      </div>
+      <div id="gasModalStatusMsg" class="text-[11px] p-2.5 rounded-xl bg-slate-50 border border-slate-200 text-slate-600">
+        Status: Menunggu aksi pengguna.
+      </div>
+      <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
+        <button id="testGasModalBtn" type="button" class="px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer">
+          Tes Koneksi
+        </button>
+        <button id="saveGasModalBtn" type="button" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition cursor-pointer">
+          Simpan &amp; Tarik Data
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Container -->
   <div id="toastContainer" class="fixed bottom-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>

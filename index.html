@@ -219,7 +219,7 @@
             </div>
           </div>
 
-          <!-- CARD 4: STATUS VERIFIKASI ACC GURU (LAVENDER/PERIWINKLE SESUAI GAMBAR) -->
+          <!-- CARD 4: STATUS PROGRES BELAJAR (LAVENDER/PERIWINKLE) -->
           <div class="rounded-2xl p-4 sm:p-5 flex items-center gap-3.5 shadow-sm transition hover:shadow-md hover:scale-[1.01]" style="background-color: #b4a8e8;">
             <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-white/25 backdrop-blur-xs flex items-center justify-center text-white shrink-0 shadow-inner">
               <svg class="w-6 h-6 fill-none stroke-current" viewBox="0 0 24 24" stroke-width="2.5">
@@ -228,7 +228,7 @@
             </div>
             <div class="min-w-0">
               <div id="overviewActivity" class="text-base sm:text-lg lg:text-xl font-black text-white leading-tight truncate">Belum Kuis</div>
-              <div class="text-[11px] sm:text-xs font-semibold text-white/95 mt-1 truncate">Status ACC Guru</div>
+              <div class="text-[11px] sm:text-xs font-semibold text-white/95 mt-1 truncate">Status Progres Belajar</div>
             </div>
           </div>
         </div>
@@ -390,6 +390,10 @@
             <a href="simulasi_pseudocode.html" target="_blank" data-track-material="simulasi" class="px-5 py-2.5 rounded-full bg-[#10b981] hover:bg-[#059669] text-white font-black text-xs sm:text-sm shadow-md transition hover:scale-105 active:scale-95 flex items-center gap-1.5">
               <span>Buka Simulasi &amp; Kirim</span>
               <span>🚀</span>
+            </a>
+            <a href="uji_pseudocode.html" target="_blank" class="px-3.5 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-emerald-400 font-bold text-xs border border-slate-700 transition flex items-center gap-1.5 shadow-xs" title="Buka Pengujian Pseudocode">
+              <span>▶️</span>
+              <span>Uji Kode</span>
             </a>
             <button type="button" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400 transition" title="Opsi">
               &#8942;
@@ -924,14 +928,14 @@
       </div>
     </section>
 
-    <!-- ==================== VIEW 5: HASIL AKHIR & STATUS ACC ==================== -->
+    <!-- ==================== VIEW 5: HASIL AKHIR & SINKRONISASI ==================== -->
     <section id="viewResult" class="hidden p-4 sm:p-6 md:p-8 space-y-6 flex-1">
       <div class="max-w-4xl mx-auto lms-card p-6 sm:p-8 space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
             <span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider">Hasil Asesmen Tersimpan</span>
             <h2 id="resultStudentTitle" class="text-xl font-extrabold text-slate-900 mt-1">Laporan Hasil Belajar Siswa</h2>
-            <p class="text-xs text-slate-500">Nilai, pemetaan Taksonomi Bloom, dan status verifikasi ACC guru telah diperbarui.</p>
+            <p class="text-xs text-slate-500">Nilai, pemetaan Taksonomi Bloom, dan pencapaian kompetensi telah diperbarui serta disinkronkan ke server.</p>
           </div>
           <div class="flex gap-2">
             <button id="resultBackToDashboardBtn" type="button" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs transition">

@@ -17,7 +17,13 @@
     safeSetStorage(STORAGE_KEY_ROSTER, roster);
   }
   let questionBank = safeGetStorage(STORAGE_KEY_QUESTIONS, DEFAULT_QUESTION_BANK);
-  let teacherRecords = safeGetStorage(STORAGE_KEY_RECORDS, INITIAL_SAMPLE_RECORDS);
+  // Hapus data lokal lama: Data hanya berasal dari GAS
+  try {
+    localStorage.removeItem(STORAGE_KEY_RECORDS);
+    localStorage.removeItem('eduassess_teacher_records_v3');
+    localStorage.removeItem('eduassess_teacher_records_v2');
+  } catch (e) {}
+  let teacherRecords = [];
   let session = safeGetStorage(STORAGE_KEY_SESSION, createDefaultSession());
   if (!session.kelas || session.kelas === 'X - Informatika') {
     session.kelas = 'Informatika - X E7';
@@ -437,8 +443,6 @@
         nama: session.nama || 'Murid Posttest',
         kelas: session.kelas || 'Informatika - X E7',
         timestamp: timeStr,
-        accStatus: 'PENDING',
-        accTimestamp: null,
         checkin: Object.assign({}, session.checkin),
         posttestScore: evalPost.score,
         posttestCorrectCount: evalPost.correctCount,
@@ -476,12 +480,6 @@
     // Status KKM
     const isTuntas = postScore >= 75;
 
-    // Status ACC
-    const rec = teacherRecords.find(function (r) {
-      return Number(r.absen) === Number(session.absen);
-    });
-    const isAcc = rec && rec.accStatus === 'ACC';
-
     // 4 Metric Cards
     const metricsGrid = document.getElementById('resultMetricsGrid');
     if (metricsGrid) {
@@ -506,12 +504,12 @@
           '<div class="text-xs text-slate-500 font-medium pt-1">' + (isTuntas ? 'Memenuhi Standar KKM' : 'Perlu Ulasan Tambahan') + '</div>' +
         '</div>' +
 
-        '<div class="p-5 rounded-2xl border-2 ' + (isAcc ? 'border-emerald-200 bg-emerald-50/80' : 'border-amber-200 bg-amber-50/80') + ' shadow-xs text-center space-y-1">' +
-          '<div class="text-[11px] font-bold uppercase tracking-wider ' + (isAcc ? 'text-emerald-800' : 'text-amber-800') + '">Verifikasi Guru</div>' +
-          '<div class="text-xl sm:text-2xl font-black ' + (isAcc ? 'text-emerald-700' : 'text-amber-700') + ' mt-1">' +
-            (isAcc ? '✓ SUDAH DI-ACC' : '⏳ MENUNGGU ACC') +
+        '<div class="p-5 rounded-2xl border-2 border-emerald-200 bg-emerald-50/80 shadow-xs text-center space-y-1">' +
+          '<div class="text-[11px] font-bold uppercase tracking-wider text-emerald-800">Status Server (GAS)</div>' +
+          '<div class="text-xl sm:text-2xl font-black text-emerald-700 mt-1">' +
+            '✓ TERSINKRON GAS' +
           '</div>' +
-          '<div class="text-xs text-slate-500 font-medium pt-1">' + (isAcc ? 'Diverifikasi oleh Guru' : 'Sedang Diverifikasi Guru') + '</div>' +
+          '<div class="text-xs text-slate-500 font-medium pt-1">Tersimpan ke Google Sheets Guru</div>' +
         '</div>';
     }
 

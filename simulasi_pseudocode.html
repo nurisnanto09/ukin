@@ -146,6 +146,11 @@
                     <span>Rapor Siswa</span>
                 </a>
 
+                <a href="uji_pseudocode.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold transition">
+                    <span>▶️</span>
+                    <span>Uji Pseudocode</span>
+                </a>
+
                 <a href="admin.html" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition">
                     <span>🔒</span>
                     <span class="hidden sm:inline">Guru</span>
@@ -173,7 +178,7 @@
                     <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">👥 9 Kelompok Belajar</span>
                     <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">📝 3 Bagian Notasi Baku</span>
                     <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">⚡ Auto-Sync Google Sheets</span>
-                    <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">👨‍🏫 Verifikasi ACC Guru</span>
+                    <span class="px-2.5 py-1 rounded-lg bg-white/10 backdrop-blur-sm border border-white/15">🖥️ Demonstrasi Kelas Guru</span>
                 </div>
             </div>
 
@@ -191,7 +196,7 @@
                 </div>
                 <div class="p-3.5 sm:p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 shadow-md">
                     <div class="text-2xl sm:text-3xl font-black text-emerald-300">LIVE</div>
-                    <div class="text-[11px] font-extrabold text-white">SYNC GAS</div>
+                    <div class="text-[11px] font-extrabold text-white">DASBOR GURU</div>
                     <div class="text-[9px] text-emerald-200">Proyektor Kelas</div>
                 </div>
             </div>
@@ -285,7 +290,10 @@
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="text-amber-400 font-bold select-none shrink-0 text-xs">DEKLARASI:</span>
-                        <input type="text" id="prog-decl" class="w-full bg-slate-900 text-emerald-300 font-mono text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-amber-400 font-bold placeholder:text-slate-600 transition" placeholder="nama_variabel : tipe_data" autocomplete="off" spellcheck="false">
+                        <input type="text" id="prog-decl" class="w-full bg-slate-900 text-emerald-300 font-mono text-xs px-2.5 py-1.5 rounded-lg border border-slate-700 focus:outline-none focus:border-amber-400 font-bold placeholder:text-slate-600 transition" placeholder="contoh: jenis_sampah : string; berat_kg, total_poin : real" autocomplete="off" spellcheck="false">
+                    </div>
+                    <div class="text-[10px] text-slate-400 font-sans pl-1">
+                        💡 <b>Tips:</b> Gunakan tanda koma (<code>,</code>) jika tipe data sama, atau tanda titik koma (<code>;</code>) jika tipe data berbeda.
                     </div>
                 </div>
 
@@ -352,7 +360,7 @@
                         </span>
                         <div>
                             <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
-                                Pengiriman ke Guru (GAS)
+                                Pengiriman ke Guru
                             </span>
                             <h3 class="text-sm sm:text-base font-extrabold text-slate-900 mt-0.5">
                                 Kirim Rancangan Kelompok
@@ -368,7 +376,7 @@
                 <div class="bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 shadow-2xs space-y-3.5">
                     <div>
                         <label for="studentGroupSelect" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                            Pilih Kelompok (1 – 9) *
+                            Pilih Kelompok (1 – 8) *
                         </label>
                         <select id="studentGroupSelect" class="w-full bg-slate-50 border-2 border-emerald-400 text-emerald-950 font-black text-xs sm:text-sm rounded-xl px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-emerald-400 cursor-pointer shadow-2xs">
                             <option value="1">Kelompok 1</option>
@@ -379,7 +387,6 @@
                             <option value="6">Kelompok 6</option>
                             <option value="7">Kelompok 7</option>
                             <option value="8">Kelompok 8</option>
-                            <option value="9">Kelompok 9</option>
                         </select>
                     </div>
 
@@ -387,8 +394,8 @@
                         <label for="studentGroupMembersInput" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
                             Nama Anggota Kelompok *
                         </label>
-                        <input id="studentGroupMembersInput" type="text" placeholder="Nama Anggota (terisi otomatis dari kelompok)" class="w-full bg-slate-50 border border-slate-300 focus:border-emerald-500 text-slate-800 text-xs sm:text-sm font-semibold rounded-xl px-3.5 py-2.5 focus:outline-none shadow-2xs">
-                        <p class="text-[10px] text-slate-400 font-medium mt-1">Ketik atau sesuaikan nama anggota kelompok yang hadir hari ini.</p>
+                        <input id="studentGroupMembersInput" type="text" placeholder="Tuliskan nama anggota kelompokmu di sini..." class="w-full bg-slate-50 border border-slate-300 focus:border-emerald-500 text-slate-800 text-xs sm:text-sm font-semibold rounded-xl px-3.5 py-2.5 focus:outline-none shadow-2xs">
+                        <p class="text-[10px] text-slate-400 font-medium mt-1">Tuliskan nama anggota kelompokmu sendiri (contoh: Budi, Siti, Rian, Dewi).</p>
                     </div>
 
                     <!-- Checklist Validasi Notasi -->
@@ -424,11 +431,11 @@
             <div class="pt-3 border-t border-slate-200 space-y-2">
                 <button type="button" onclick="kirimRancanganKelompokKeGuru()" class="w-full bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-black py-3.5 px-4 rounded-xl shadow-lg shadow-emerald-600/25 text-sm sm:text-base transition hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer">
                     <span class="text-lg">🚀</span>
-                    <span>Kirim Rancangan ke Guru (GAS)</span>
+                    <span>Kirim Rancangan ke Dasbor Guru</span>
                 </button>
                 <div class="flex items-center justify-center gap-2 text-[11px] text-slate-500 text-center">
                     <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Tersinkronisasi ke Spreadsheet Guru &amp; Layar Proyektor Kelas</span>
+                    <span>Tersimpan langsung ke Dasbor &amp; Layar Terminal Guru</span>
                 </div>
             </div>
 
@@ -1980,7 +1987,7 @@
         }
 
         // ==========================================
-        // FITUR GURU: PANGGIL KODE HASIL KIRIMAN KELOMPOK (1 - 9)
+        // FITUR GURU: PANGGIL KODE HASIL KIRIMAN KELOMPOK (1 - 8)
         // ==========================================
         const DEFAULT_GROUPS = [
             { id: 1, nama: 'Kelompok 1' },
@@ -1990,8 +1997,7 @@
             { id: 5, nama: 'Kelompok 5' },
             { id: 6, nama: 'Kelompok 6' },
             { id: 7, nama: 'Kelompok 7' },
-            { id: 8, nama: 'Kelompok 8' },
-            { id: 9, nama: 'Kelompok 9' }
+            { id: 8, nama: 'Kelompok 8' }
         ];
 
         function populateGroupDropdown(showAlert = false) {
@@ -2024,7 +2030,7 @@
             if (curVal) sel.value = curVal;
 
             if (showAlert) {
-                statusText.innerHTML = "🔄 <b>Daftar kiriman Kelompok 1 - 9 berhasil dimuat ulang!</b> Silakan pilih nama kelompok dari dropdown untuk menguji kodenya.";
+                statusText.innerHTML = "🔄 <b>Daftar kiriman Kelompok 1 - 8 berhasil dimuat ulang!</b> Silakan pilih nama kelompok dari dropdown untuk menguji kodenya.";
             }
         }
         window.populateStudentDropdown = populateGroupDropdown;
@@ -2188,7 +2194,7 @@
                         <div><b>Program:</b> <code class="text-blue-700">${escapeHtml(sub.progName)}</code></div>
                         <div><b>Baris Algoritma:</b> ${sub.lines.length} Baris Logika</div>
                         <div class="text-[10px] text-slate-500 pt-1 border-t border-slate-200">
-                            ${gasSent ? '🟢 Tersinkron ke Google Sheets Guru (GAS)' : '💾 Tersimpan di Dasbor Guru Lokal'} • ${sub.submittedAt}
+                            💾 Tersimpan Langsung di Dasbor Guru • ${sub.submittedAt}
                         </div>
                     </div>
                     <button type="button" onclick="document.getElementById('modal-student-sent-sukses').remove()" class="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-black text-xs transition cursor-pointer shadow-md">
@@ -2213,28 +2219,27 @@
                 loadGroupSubmissionToSimulator(queryGroup);
             }
 
-            // Hubungkan pergantian Kelompok ke rekomendasi nama anggota
+            // Hubungkan pergantian Kelompok ke penyimpanan nama anggota yang diisi sendiri
             const studGroupSel = document.getElementById('studentGroupSelect');
-            if (studGroupSel) {
+            const membersInput = document.getElementById('studentGroupMembersInput');
+            if (studGroupSel && membersInput) {
+                function loadCustomMembers(gId) {
+                    const saved = localStorage.getItem('patbhe_group_members_' + gId) || '';
+                    membersInput.value = saved;
+                }
+
                 studGroupSel.addEventListener('change', function() {
                     const gId = parseInt(this.value, 10);
-                    const membersInput = document.getElementById('studentGroupMembersInput');
-                    if (membersInput && (!membersInput.value.trim() || membersInput.dataset.autoFilled === 'true')) {
-                        let roster = [];
-                        try {
-                            roster = JSON.parse(localStorage.getItem('eduassess_gas_roster_v3')) || (typeof DEFAULT_ROSTER !== 'undefined' ? DEFAULT_ROSTER : []);
-                        } catch(e) {
-                            roster = typeof DEFAULT_ROSTER !== 'undefined' ? DEFAULT_ROSTER : [];
-                        }
-                        const groupMembers = roster.filter(m => m.kelompok === 'Kelompok ' + gId || (Math.floor((m.absen - 1) / 4) + 1) === gId);
-                        if (groupMembers.length > 0) {
-                            membersInput.value = groupMembers.map(m => m.nama).join(', ');
-                            membersInput.dataset.autoFilled = 'true';
-                        }
-                    }
+                    loadCustomMembers(gId);
                 });
-                // Inisialisasi saran nama anggota awal jika masih kosong
-                studGroupSel.dispatchEvent(new Event('change'));
+
+                membersInput.addEventListener('input', function() {
+                    const gId = parseInt(studGroupSel.value, 10);
+                    localStorage.setItem('patbhe_group_members_' + gId, this.value.trim());
+                });
+
+                // Muat nama awal sesuai kelompok terpilih
+                loadCustomMembers(parseInt(studGroupSel.value, 10) || 1);
             }
         });
     </script>

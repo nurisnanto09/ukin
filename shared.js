@@ -30,42 +30,258 @@ function safeSetStorage(key, value) {
 
 // Default Student Roster (Daftar 36 Siswa Kelas X E7 Informatika: Absen 1 - 36, Kelompok 1 - 9)
 const DEFAULT_ROSTER = [
-  { absen: 1, nama: 'ADITYA ALLAY NUGRAHA', kelas: 'Informatika - X E7', nis: '24001', kelompok: 'Kelompok 1' },
-  { absen: 2, nama: 'ALEXANDER GIBRALTAR ADISYA SAP', kelas: 'Informatika - X E7', nis: '24002', kelompok: 'Kelompok 1' },
-  { absen: 3, nama: 'ANDI SALWA AYU FADHILAH GEMMY', kelas: 'Informatika - X E7', nis: '24003', kelompok: 'Kelompok 1' },
-  { absen: 4, nama: 'ANNABELA IKADEWI AZZAHRA', kelas: 'Informatika - X E7', nis: '24004', kelompok: 'Kelompok 1' },
-  { absen: 5, nama: 'ARIQAH NAHDAH ARBAIN', kelas: 'Informatika - X E7', nis: '24005', kelompok: 'Kelompok 2' },
-  { absen: 6, nama: 'ARUNINDYA ARDHANAYA', kelas: 'Informatika - X E7', nis: '24006', kelompok: 'Kelompok 2' },
-  { absen: 7, nama: 'ASTIKA PUTRI ARRAHMA', kelas: 'Informatika - X E7', nis: '24007', kelompok: 'Kelompok 2' },
-  { absen: 8, nama: 'ATNAN GASSANI ARHAB', kelas: 'Informatika - X E7', nis: '24008', kelompok: 'Kelompok 2' },
-  { absen: 9, nama: 'BIMO RIZKY PUTRA SETYAWAN', kelas: 'Informatika - X E7', nis: '24009', kelompok: 'Kelompok 3' },
-  { absen: 10, nama: 'DELLA VISTA MAHARANI', kelas: 'Informatika - X E7', nis: '24010', kelompok: 'Kelompok 3' },
-  { absen: 11, nama: 'DEMAS AVILA AZHAR', kelas: 'Informatika - X E7', nis: '24011', kelompok: 'Kelompok 3' },
-  { absen: 12, nama: 'DZIVARA OCHIVA ARDIANSYA', kelas: 'Informatika - X E7', nis: '24012', kelompok: 'Kelompok 3' },
-  { absen: 13, nama: 'FARHA HANANIA RAZIQ', kelas: 'Informatika - X E7', nis: '24013', kelompok: 'Kelompok 4' },
-  { absen: 14, nama: 'FATHIR MUHAMMAD GHAISAN', kelas: 'Informatika - X E7', nis: '24014', kelompok: 'Kelompok 4' },
-  { absen: 15, nama: 'FATHURRAHMAN', kelas: 'Informatika - X E7', nis: '24015', kelompok: 'Kelompok 4' },
-  { absen: 16, nama: 'GAJENDRA PADMA KUSUMO', kelas: 'Informatika - X E7', nis: '24016', kelompok: 'Kelompok 4' },
-  { absen: 17, nama: 'GAVIN RAKA SETIA PUTRA', kelas: 'Informatika - X E7', nis: '24017', kelompok: 'Kelompok 5' },
-  { absen: 18, nama: 'GHALIB RAFA ANINDITYA PUTRA', kelas: 'Informatika - X E7', nis: '24018', kelompok: 'Kelompok 5' },
-  { absen: 19, nama: 'HABIBI NEIL AUTHOR SYARIFUDIN', kelas: 'Informatika - X E7', nis: '24019', kelompok: 'Kelompok 5' },
-  { absen: 20, nama: 'HANAN AINUN NAJIB', kelas: 'Informatika - X E7', nis: '24020', kelompok: 'Kelompok 5' },
-  { absen: 21, nama: 'INNE DESVITA SARI', kelas: 'Informatika - X E7', nis: '24021', kelompok: 'Kelompok 6' },
-  { absen: 22, nama: 'JAGAD WAHYU KUNCORO', kelas: 'Informatika - X E7', nis: '24022', kelompok: 'Kelompok 6' },
-  { absen: 23, nama: 'JANEETA HANUN KHAIRINA SANTOSO', kelas: 'Informatika - X E7', nis: '24023', kelompok: 'Kelompok 6' },
-  { absen: 24, nama: 'KANYA BERLIANA', kelas: 'Informatika - X E7', nis: '24024', kelompok: 'Kelompok 6' },
-  { absen: 25, nama: 'KEOZA SIELO BANYU BIRU', kelas: 'Informatika - X E7', nis: '24025', kelompok: 'Kelompok 7' },
-  { absen: 26, nama: 'LAQUITHA ISHMA SARAH SALISA', kelas: 'Informatika - X E7', nis: '24026', kelompok: 'Kelompok 7' },
-  { absen: 27, nama: 'MIFA AFIFATURRAHMA', kelas: 'Informatika - X E7', nis: '24027', kelompok: 'Kelompok 7' },
-  { absen: 28, nama: 'MONICA NUR AZIZA', kelas: 'Informatika - X E7', nis: '24028', kelompok: 'Kelompok 7' },
-  { absen: 29, nama: 'MUHAMMAD ZIDANE BERLIAN SAPUTRO', kelas: 'Informatika - X E7', nis: '24029', kelompok: 'Kelompok 8' },
-  { absen: 30, nama: 'NI LUH KUSUMAWATI', kelas: 'Informatika - X E7', nis: '24030', kelompok: 'Kelompok 8' },
-  { absen: 31, nama: 'NUR AFIFAH', kelas: 'Informatika - X E7', nis: '24031', kelompok: 'Kelompok 8' },
-  { absen: 32, nama: 'NURCAHYONO DIKI ABDURRAHMAN', kelas: 'Informatika - X E7', nis: '24032', kelompok: 'Kelompok 8' },
-  { absen: 33, nama: 'SEILA PUSPA RAMADHANI', kelas: 'Informatika - X E7', nis: '24033', kelompok: 'Kelompok 9' },
-  { absen: 34, nama: 'TALITA ARKANA SAKHI', kelas: 'Informatika - X E7', nis: '24034', kelompok: 'Kelompok 9' },
-  { absen: 35, nama: 'VALEN ARSA RIFAI', kelas: 'Informatika - X E7', nis: '24035', kelompok: 'Kelompok 9' },
-  { absen: 36, nama: 'VANESYA ZAHRA ZAKIA', kelas: 'Informatika - X E7', nis: '24036', kelompok: 'Kelompok 9' }
+  {
+    "absen": 1,
+    "nama": "ADITYA ALLAY NUGRAHA",
+    "kelas": "Informatika - X E7",
+    "nis": "24001",
+    "kelompok": "Kelompok 1"
+  },
+  {
+    "absen": 2,
+    "nama": "ALEXANDER GIBRALTAR ADISYA SAP",
+    "kelas": "Informatika - X E7",
+    "nis": "24002",
+    "kelompok": "Kelompok 1"
+  },
+  {
+    "absen": 3,
+    "nama": "ANDI SALWA AYU FADHILAH GEMMY",
+    "kelas": "Informatika - X E7",
+    "nis": "24003",
+    "kelompok": "Kelompok 1"
+  },
+  {
+    "absen": 4,
+    "nama": "ANNABELA IKADEWI AZZAHRA",
+    "kelas": "Informatika - X E7",
+    "nis": "24004",
+    "kelompok": "Kelompok 1"
+  },
+  {
+    "absen": 5,
+    "nama": "ARIQAH NAHDAH ARBAIN",
+    "kelas": "Informatika - X E7",
+    "nis": "24005",
+    "kelompok": "Kelompok 1"
+  },
+  {
+    "absen": 6,
+    "nama": "ARUNINDYA ARDHANAYA",
+    "kelas": "Informatika - X E7",
+    "nis": "24006",
+    "kelompok": "Kelompok 2"
+  },
+  {
+    "absen": 7,
+    "nama": "ASTIKA PUTRI ARRAHMA",
+    "kelas": "Informatika - X E7",
+    "nis": "24007",
+    "kelompok": "Kelompok 2"
+  },
+  {
+    "absen": 8,
+    "nama": "ATNAN GASSANI ARHAB",
+    "kelas": "Informatika - X E7",
+    "nis": "24008",
+    "kelompok": "Kelompok 2"
+  },
+  {
+    "absen": 9,
+    "nama": "BIMO RIZKY PUTRA SETYAWAN",
+    "kelas": "Informatika - X E7",
+    "nis": "24009",
+    "kelompok": "Kelompok 2"
+  },
+  {
+    "absen": 10,
+    "nama": "DELLA VISTA MAHARANI",
+    "kelas": "Informatika - X E7",
+    "nis": "24010",
+    "kelompok": "Kelompok 2"
+  },
+  {
+    "absen": 11,
+    "nama": "DEMAS AVILA AZHAR",
+    "kelas": "Informatika - X E7",
+    "nis": "24011",
+    "kelompok": "Kelompok 3"
+  },
+  {
+    "absen": 12,
+    "nama": "DZIVARA OCHIVA ARDIANSYA",
+    "kelas": "Informatika - X E7",
+    "nis": "24012",
+    "kelompok": "Kelompok 3"
+  },
+  {
+    "absen": 13,
+    "nama": "FARHA HANANIA RAZIQ",
+    "kelas": "Informatika - X E7",
+    "nis": "24013",
+    "kelompok": "Kelompok 3"
+  },
+  {
+    "absen": 14,
+    "nama": "FATHIR MUHAMMAD GHAISAN",
+    "kelas": "Informatika - X E7",
+    "nis": "24014",
+    "kelompok": "Kelompok 3"
+  },
+  {
+    "absen": 15,
+    "nama": "FATHURRAHMAN",
+    "kelas": "Informatika - X E7",
+    "nis": "24015",
+    "kelompok": "Kelompok 3"
+  },
+  {
+    "absen": 16,
+    "nama": "GAJENDRA PADMA KUSUMO",
+    "kelas": "Informatika - X E7",
+    "nis": "24016",
+    "kelompok": "Kelompok 4"
+  },
+  {
+    "absen": 17,
+    "nama": "GAVIN RAKA SETIA PUTRA",
+    "kelas": "Informatika - X E7",
+    "nis": "24017",
+    "kelompok": "Kelompok 4"
+  },
+  {
+    "absen": 18,
+    "nama": "GHALIB RAFA ANINDITYA PUTRA",
+    "kelas": "Informatika - X E7",
+    "nis": "24018",
+    "kelompok": "Kelompok 4"
+  },
+  {
+    "absen": 19,
+    "nama": "HABIBI NEIL AUTHOR SYARIFUDIN",
+    "kelas": "Informatika - X E7",
+    "nis": "24019",
+    "kelompok": "Kelompok 4"
+  },
+  {
+    "absen": 20,
+    "nama": "HANAN AINUN NAJIB",
+    "kelas": "Informatika - X E7",
+    "nis": "24020",
+    "kelompok": "Kelompok 4"
+  },
+  {
+    "absen": 21,
+    "nama": "INNE DESVITA SARI",
+    "kelas": "Informatika - X E7",
+    "nis": "24021",
+    "kelompok": "Kelompok 5"
+  },
+  {
+    "absen": 22,
+    "nama": "JAGAD WAHYU KUNCORO",
+    "kelas": "Informatika - X E7",
+    "nis": "24022",
+    "kelompok": "Kelompok 5"
+  },
+  {
+    "absen": 23,
+    "nama": "JANEETA HANUN KHAIRINA SANTOSO",
+    "kelas": "Informatika - X E7",
+    "nis": "24023",
+    "kelompok": "Kelompok 5"
+  },
+  {
+    "absen": 24,
+    "nama": "KANYA BERLIANA",
+    "kelas": "Informatika - X E7",
+    "nis": "24024",
+    "kelompok": "Kelompok 5"
+  },
+  {
+    "absen": 25,
+    "nama": "KEOZA SIELO BANYU BIRU",
+    "kelas": "Informatika - X E7",
+    "nis": "24025",
+    "kelompok": "Kelompok 6"
+  },
+  {
+    "absen": 26,
+    "nama": "LAQUITHA ISHMA SARAH SALISA",
+    "kelas": "Informatika - X E7",
+    "nis": "24026",
+    "kelompok": "Kelompok 6"
+  },
+  {
+    "absen": 27,
+    "nama": "MIFA AFIFATURRAHMA",
+    "kelas": "Informatika - X E7",
+    "nis": "24027",
+    "kelompok": "Kelompok 6"
+  },
+  {
+    "absen": 28,
+    "nama": "MONICA NUR AZIZA",
+    "kelas": "Informatika - X E7",
+    "nis": "24028",
+    "kelompok": "Kelompok 6"
+  },
+  {
+    "absen": 29,
+    "nama": "MUHAMMAD ZIDANE BERLIAN SAPUTRO",
+    "kelas": "Informatika - X E7",
+    "nis": "24029",
+    "kelompok": "Kelompok 7"
+  },
+  {
+    "absen": 30,
+    "nama": "NI LUH KUSUMAWATI",
+    "kelas": "Informatika - X E7",
+    "nis": "24030",
+    "kelompok": "Kelompok 7"
+  },
+  {
+    "absen": 31,
+    "nama": "NUR AFIFAH",
+    "kelas": "Informatika - X E7",
+    "nis": "24031",
+    "kelompok": "Kelompok 7"
+  },
+  {
+    "absen": 32,
+    "nama": "NURCAHYONO DIKI ABDURRAHMAN",
+    "kelas": "Informatika - X E7",
+    "nis": "24032",
+    "kelompok": "Kelompok 7"
+  },
+  {
+    "absen": 33,
+    "nama": "SEILA PUSPA RAMADHANI",
+    "kelas": "Informatika - X E7",
+    "nis": "24033",
+    "kelompok": "Kelompok 8"
+  },
+  {
+    "absen": 34,
+    "nama": "TALITA ARKANA SAKHI",
+    "kelas": "Informatika - X E7",
+    "nis": "24034",
+    "kelompok": "Kelompok 8"
+  },
+  {
+    "absen": 35,
+    "nama": "VALEN ARSA RIFAI",
+    "kelas": "Informatika - X E7",
+    "nis": "24035",
+    "kelompok": "Kelompok 8"
+  },
+  {
+    "absen": 36,
+    "nama": "VANESYA ZAHRA ZAKIA",
+    "kelas": "Informatika - X E7",
+    "nis": "24036",
+    "kelompok": "Kelompok 8"
+  }
 ];
 
 // Opsi Check-In & Check-Out
@@ -825,165 +1041,8 @@ const ALT_QUESTION_BANK = {
   })
 };
 
-// Sample records guru awal dengan ACC Status (Topik Pseudocode)
-const INITIAL_SAMPLE_RECORDS = [
-  {
-    absen: 1,
-    nama: 'ADITYA ALLAY NUGRAHA',
-    kelas: 'Informatika - X E7',
-    timestamp: '08:15 WIB',
-    accStatus: 'ACC',
-    accTimestamp: '08:35 WIB',
-    checkin: {
-      mood: 'Semangat & Antusias',
-      energy: 'Energi Penuh (100%)',
-      style: 'Praktik Langsung',
-      factors: ['Koneksi Internet Lancar', 'Sudah Membaca Materi Awal'],
-      note: 'Siap mencoba soal logika pseudocode!'
-    },
-    checkout: {
-      understanding: 'Sangat Paham & Bisa Menjelaskan Ulang',
-      emotion: 'Lega & Percaya Diri',
-      needs: ['Tantangan Proyek Pengayaan (HOTS)'],
-      note: 'Notasi penugasan dan percabangan IF-ELSE sangat seru dan jelas.'
-    },
-    pretestScore: 90,
-    posttestScore: 90,
-    pretestBloomCorrect: { C1: 2, C2: 2, C3: 2, C4: 2, C5: 1, C6: 0 },
-    pretestBloomTotal: { C1: 0, C2: 0, C3: 0, C4: 4, C5: 2, C6: 4 },
-    posttestBloomCorrect: { C1: 2, C2: 2, C3: 2, C4: 2, C5: 1, C6: 0 }
-  },
-  {
-    absen: 2,
-    nama: 'ALEXANDER GIBRALTAR ADISYA SAP',
-    kelas: 'Informatika - X E7',
-    timestamp: '08:17 WIB',
-    accStatus: 'ACC',
-    accTimestamp: '08:36 WIB',
-    checkin: {
-      mood: 'Tenang & Fokus',
-      energy: 'Energi Penuh (100%)',
-      style: 'Visual & Notasi',
-      factors: ['Koneksi Internet Lancar', 'Alat Tulis & Catatan Siap'],
-      note: 'Suka materi yang ada kode semu dan alur logikanya.'
-    },
-    checkout: {
-      understanding: 'Sangat Paham & Bisa Menjelaskan Ulang',
-      emotion: 'Tertantang Soal HOTS',
-      needs: ['Tantangan Proyek Pengayaan (HOTS)'],
-      note: 'Sudah menguasai tracing variabel dan deteksi infinite loop.'
-    },
-    pretestScore: 80,
-    posttestScore: 100,
-    pretestBloomCorrect: { C1: 2, C2: 2, C3: 2, C4: 1, C5: 1, C6: 0 },
-    pretestBloomTotal: { C1: 0, C2: 0, C3: 0, C4: 4, C5: 2, C6: 4 },
-    posttestBloomCorrect: { C1: 2, C2: 2, C3: 2, C4: 2, C5: 1, C6: 1 }
-  },
-  {
-    absen: 3,
-    nama: 'ANDI SALWA AYU FADHILAH GEMMY',
-    kelas: 'Informatika - X E7',
-    timestamp: '08:20 WIB',
-    accStatus: 'PENDING',
-    accTimestamp: null,
-    checkin: {
-      mood: 'Penasaran',
-      energy: 'Cukup Siap (75%)',
-      style: 'Diskusi Kelompok',
-      factors: ['Alat Tulis & Catatan Siap', 'Suasana Kelas Kondusif'],
-      note: 'Ingin latihan penelusuran (tracing) perulangan.'
-    },
-    checkout: {
-      understanding: 'Paham Konsep Utama, Perlu Latihan Soal',
-      emotion: 'Lega & Percaya Diri',
-      needs: ['Pembahasan Soal C4–C6', 'Tantangan Proyek Pengayaan (HOTS)'],
-      note: 'Saat posttest jadi lebih paham tentang penukaran variabel dengan temp.'
-    },
-    pretestScore: 70,
-    posttestScore: 80,
-    pretestBloomCorrect: { C1: 2, C2: 2, C3: 2, C4: 1, C5: 0, C6: 0 },
-    pretestBloomTotal: { C1: 0, C2: 0, C3: 0, C4: 4, C5: 2, C6: 4 },
-    posttestBloomCorrect: { C1: 2, C2: 2, C3: 2, C4: 1, C5: 1, C6: 0 }
-  },
-  {
-    absen: 4,
-    nama: 'ANNABELA IKADEWI AZZAHRA',
-    kelas: 'Informatika - X E7',
-    timestamp: '08:22 WIB',
-    accStatus: 'PENDING',
-    accTimestamp: null,
-    checkin: {
-      mood: 'Sedikit Mengantuk',
-      energy: 'Perlu Pemanasan (50%)',
-      style: 'Penjelasan Terbimbing',
-      factors: ['Butuh Duduk di Depan'],
-      note: 'Masih agak bingung di bagian operator logika AND/OR.'
-    },
-    checkout: {
-      understanding: 'Baru Paham Sebagian Kecil Materi',
-      emotion: 'Perlu Bimbingan Lagi',
-      needs: ['Contoh Penerapan Praktis (C3)', 'Pembahasan Soal C4–C6'],
-      note: 'Masih perlu contoh simulasi langkah demi langkah untuk percabangan IF.'
-    },
-    pretestScore: 50,
-    posttestScore: 60,
-    pretestBloomCorrect: { C1: 2, C2: 2, C3: 1, C4: 0, C5: 0, C6: 0 },
-    pretestBloomTotal: { C1: 0, C2: 0, C3: 0, C4: 4, C5: 2, C6: 4 },
-    posttestBloomCorrect: { C1: 2, C2: 2, C3: 1, C4: 0, C5: 0, C6: 0 }
-  },
-  {
-    absen: 5,
-    nama: 'ARIQAH NAHDAH ARBAIN',
-    kelas: 'Informatika - X E7',
-    timestamp: '08:24 WIB',
-    accStatus: 'ACC',
-    accTimestamp: '08:40 WIB',
-    checkin: {
-      mood: 'Gugup / Cemas',
-      energy: 'Perlu Pemanasan (50%)',
-      style: 'Penjelasan Terbimbing',
-      factors: ['Alat Tulis & Catatan Siap'],
-      note: 'Khawatir waktu 30 detiknya cepat habis.'
-    },
-    checkout: {
-      understanding: 'Paham Konsep Utama, Perlu Latihan Soal',
-      emotion: 'Masih Penasaran',
-      needs: ['Pembahasan Soal C4–C6', 'Belajar Kelompok Sebaya'],
-      note: 'Setelah belajar LKPD nilai naik, soal C5 dan C6 sangat memicu logika.'
-    },
-    pretestScore: 60,
-    posttestScore: 80,
-    pretestBloomCorrect: { C1: 2, C2: 2, C3: 1, C4: 1, C5: 0, C6: 0 },
-    pretestBloomTotal: { C1: 0, C2: 0, C3: 0, C4: 4, C5: 2, C6: 4 },
-    posttestBloomCorrect: { C1: 2, C2: 2, C3: 2, C4: 2, C5: 0, C6: 0 }
-  },
-  {
-    absen: 6,
-    nama: 'ARUNINDYA ARDHANAYA',
-    kelas: 'Informatika - X E7',
-    timestamp: '08:26 WIB',
-    accStatus: 'PENDING',
-    accTimestamp: null,
-    checkin: {
-      mood: 'Kurang Fit / Lelah',
-      energy: 'Energi Rendah (<50%)',
-      style: 'Visual & Notasi',
-      factors: ['Butuh Duduk di Depan', 'Perangkat Berbagi dengan Teman'],
-      note: 'Semalam kurang tidur, mohon bimbingan bertahap.'
-    },
-    checkout: {
-      understanding: 'Masih Bingung & Butuh Bimbingan Guru',
-      emotion: 'Perlu Bimbingan Lagi',
-      needs: ['Ulasan Kembali Konsep Dasar (C1–C2)', 'Konsultasi Singkat dengan Guru'],
-      note: 'Perlu remidi pada bagian struktur perulangan WHILE.'
-    },
-    pretestScore: 40,
-    posttestScore: 50,
-    pretestBloomCorrect: { C1: 2, C2: 1, C3: 1, C4: 0, C5: 0, C6: 0 },
-    pretestBloomTotal: { C1: 0, C2: 0, C3: 0, C4: 4, C5: 2, C6: 4 },
-    posttestBloomCorrect: { C1: 2, C2: 2, C3: 1, C4: 0, C5: 0, C6: 0 }
-  }
-];
+// Sample records guru: Kosong (Data murni berasal dari Google Apps Script / GAS)
+const INITIAL_SAMPLE_RECORDS = [];
 
 // Inisialisasi Sesi Murid Baru
 function createDefaultSession() {

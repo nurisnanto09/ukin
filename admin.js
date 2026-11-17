@@ -1,7 +1,7 @@
 /**
  * admin.js - Logika Interaktif Page Admin & Dasbor Guru LMS
  * Menangani Analitik Pretest & Posttest, TaRL, Taksonomi Bloom (C1-C6), Chart.js, Filter Check-In/Out,
- * Unggah JSON Soal, Sinkronisasi GAS, dan Fitur ACC Langsung Guru.
+ * Unggah JSON Soal, Sinkronisasi Langsung GAS (Google Apps Script / Sheets).
  */
 
 (function () {
@@ -16,13 +16,73 @@
     }
   });
   let questionBank = safeGetStorage(STORAGE_KEY_QUESTIONS, DEFAULT_QUESTION_BANK);
-  let teacherRecords = safeGetStorage(STORAGE_KEY_RECORDS, INITIAL_SAMPLE_RECORDS);
-  teacherRecords.forEach(function (r) {
-    if (!r.kelas || r.kelas === 'X - Informatika') {
-      r.kelas = 'Informatika - X E7';
-    }
-  });
-  let activeTeacherTab = 'pretestTab';
+  // Bersihkan data lokal lama: Data HANYA berasal dari Google Apps Script (GAS)
+  try {
+    localStorage.removeItem(STORAGE_KEY_RECORDS);
+    localStorage.removeItem('eduassess_teacher_records_v3');
+    localStorage.removeItem('eduassess_teacher_records_v2');
+  } catch (e) {}
+
+  // Helper: Menggabungkan 36 Daftar Roster Murid Kelas X E7 dengan Data Respon dari Google Apps Script
+  function mergeRosterWithGasRecords(rosterList, gasList) {
+    if (!Array.isArray(gasList)) gasList = [];
+    const gasMapByAbsen = {};
+    const gasMapByName = {};
+
+    gasList.forEach(function (rec) {
+      if (!rec) return;
+      if (rec.absen !== undefined && rec.absen !== null && rec.absen !== '') {
+        gasMapByAbsen[Number(rec.absen)] = rec;
+      }
+      if (rec.nama) {
+        gasMapByName[String(rec.nama).trim().toLowerCase()] = rec;
+      }
+    });
+
+    const usedGasRecords = new Set();
+    const merged = rosterList.map(function (student) {
+      const match = gasMapByAbsen[Number(student.absen)] || gasMapByName[String(student.nama).trim().toLowerCase()];
+      if (match) {
+        usedGasRecords.add(match);
+        return Object.assign({}, student, match, {
+          absen: Number(student.absen),
+          nama: student.nama, // Gunakan nama baku roster
+          kelas: student.kelas || 'Informatika - X E7'
+        });
+      } else {
+        return {
+          absen: Number(student.absen),
+          nama: student.nama,
+          kelas: student.kelas || 'Informatika - X E7',
+          nis: student.nis || ('240' + String(student.absen).padStart(2, '0')),
+          kelompok: student.kelompok || ('Kelompok ' + Math.ceil(student.absen / 4)),
+          pretestScore: undefined,
+          posttestScore: undefined,
+          pretestBloomCorrect: { C1: 0, C2: 0, C3: 0, C4: 0, C5: 0, C6: 0 },
+          pretestBloomTotal: { C1: 2, C2: 2, C3: 2, C4: 2, C5: 1, C6: 1 },
+          checkin: null,
+          checkout: null,
+          status: 'Belum Mengerjakan'
+        };
+      }
+    });
+
+    // Jika ada respon dari GAS di luar 36 siswa resmi, tetap sertakan di akhir
+    gasList.forEach(function (rec) {
+      if (rec && !usedGasRecords.has(rec)) {
+        merged.push(rec);
+      }
+    });
+
+    merged.sort(function (a, b) {
+      return (Number(a.absen) || 999) - (Number(b.absen) || 999);
+    });
+
+    return merged;
+  }
+
+  let teacherRecords = mergeRosterWithGasRecords(roster, []); // Inisialisasi awal 36 murid utuh
+  let activeTeacherTab = 'rekapNilaiTab';
   let bloomChartInstance = null;
 
   function saveRecords() {
@@ -37,47 +97,74 @@
     safeSetStorage(STORAGE_KEY_ROSTER, roster);
   }
 
-  // ==================== FITUR ACC LANGSUNG (APPROVAL GURU) ====================
-  function toggleAccStatus(absenNum) {
-    const num = Number(absenNum);
-    const rec = teacherRecords.find(function (r) {
-      return Number(r.absen) === num;
-    });
-    if (!rec) return;
-
-    if (rec.accStatus === 'ACC') {
-      rec.accStatus = 'PENDING';
-      rec.accTimestamp = null;
-      showToast('Status ACC Murid #' + rec.absen + ' (' + rec.nama + ') dibatalkan.', 'warning');
-    } else {
-      rec.accStatus = 'ACC';
-      const now = new Date();
-      rec.accTimestamp = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ' WIB';
-      showToast('Berhasil ACC Murid #' + rec.absen + ' (' + rec.nama + ')!', 'success');
-    }
-
-    saveRecords();
-    renderAllAdminViews();
+  // ==================== INTEGRASI GAS (DATA MURNI DARI GOOGLE APPS SCRIPT) ====================
+  function getGasEndpointUrl() {
+    return localStorage.getItem('eduassess_gas_url_v2') || (typeof DEFAULT_GAS_URL !== 'undefined' ? DEFAULT_GAS_URL : 'https://script.google.com/macros/s/AKfycbwuYVpatjOrEPwjaSQMWy79qvKoy2dygctQMZM3YP8XOYXV9vsRK_yDDP-XKWeECSGc/exec');
   }
 
-  function batchAccAll() {
-    if (!teacherRecords.length) {
-      showToast('Tidak ada data murid untuk di-ACC.', 'warning');
+  function fetchRecordsFromGas(silent) {
+    const url = getGasEndpointUrl();
+    const badge = document.getElementById('gasLiveStatusBadge');
+    if (badge) {
+      badge.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300';
+      badge.innerHTML = '🔄 Menghubungi GAS...';
+    }
+
+    if (!url) {
+      teacherRecords = mergeRosterWithGasRecords(roster, []);
+      renderAllAdminViews();
+      if (badge) {
+        badge.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-300';
+        badge.innerHTML = '⚠️ URL GAS Kosong';
+      }
+      if (!silent) showToast('URL Google Apps Script belum diatur.', 'warning');
       return;
     }
-    const now = new Date();
-    const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0') + ' WIB';
-    let count = 0;
-    teacherRecords.forEach(function (r) {
-      if (r.accStatus !== 'ACC') {
-        r.accStatus = 'ACC';
-        r.accTimestamp = timeStr;
-        count += 1;
-      }
-    });
-    saveRecords();
-    renderAllAdminViews();
-    showToast(count + ' murid berhasil di-ACC sekaligus!', 'success');
+
+    const fetchUrl = url + (url.indexOf('?') === -1 ? '?action=getRecords' : '&action=getRecords') + '&_t=' + Date.now();
+
+    fetch(fetchUrl)
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function (payload) {
+        let list = [];
+        if (Array.isArray(payload)) {
+          list = payload;
+        } else if (payload && Array.isArray(payload.data)) {
+          list = payload.data;
+        } else if (payload && Array.isArray(payload.records)) {
+          list = payload.records;
+        }
+
+        // Gabungkan respon dari GAS dengan 36 Roster Murid Kelas X E7
+        teacherRecords = mergeRosterWithGasRecords(roster, list);
+        renderAllAdminViews();
+
+        if (badge) {
+          badge.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
+          badge.innerHTML = '🟢 GAS Terhubung (' + list.length + ' Respon Masuk • Total ' + roster.length + ' Murid)';
+        }
+
+        if (!silent) {
+          showToast('Berhasil menarik ' + list.length + ' data masuk dari Google Sheets (Total ' + roster.length + ' Murid)!', 'success');
+        }
+      })
+      .catch(function (err) {
+        console.warn('Gagal memuat data dari GAS:', err);
+        teacherRecords = mergeRosterWithGasRecords(roster, []);
+        renderAllAdminViews();
+
+        if (badge) {
+          badge.className = 'text-[11px] font-bold px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 border border-rose-300';
+          badge.innerHTML = '❌ Gagal Terhubung GAS';
+        }
+
+        if (!silent) {
+          showToast('Gagal menarik data dari Google Apps Script. Periksa koneksi internet.', 'danger');
+        }
+      });
   }
 
   // Export Data ke Format CSV
@@ -86,22 +173,20 @@
       showToast('Tidak ada data untuk diekspor.', 'warning');
       return;
     }
-    const headers = ['Absen', 'Nama', 'Kelas', 'Waktu Submit', 'Status ACC', 'Waktu ACC', 'Skor Pretest', 'Kelompok Pretest', 'Skor Posttest', 'Status Posttest', 'Mood CheckIn', 'Pemahaman CheckOut'];
+    const headers = ['Absen', 'Nama Murid', 'Kelas', 'Skor Pretest', 'Skor Posttest', 'Peningkatan (Gain)', 'Kategori Tindak Lanjut'];
     const rows = teacherRecords.map(function (r) {
       const kkm = Number(document.getElementById('kkmThresholdSelect')?.value || 75);
+      const pre = r.pretestScore !== undefined ? Number(r.pretestScore) : 0;
+      const post = r.posttestScore !== undefined ? Number(r.posttestScore) : 0;
+      const gain = post - pre;
       return [
         r.absen,
         '"' + (r.nama || '') + '"',
-        '"' + (r.kelas || '') + '"',
-        r.timestamp || '-',
-        r.accStatus || 'PENDING',
-        r.accTimestamp || '-',
-        r.pretestScore,
-        classifyPretestGroup(r.pretestScore),
-        r.posttestScore,
-        r.posttestScore >= kkm ? 'Pengayaan' : 'Remidi',
-        '"' + (r.checkin?.mood || '-') + '"',
-        '"' + (r.checkout?.understanding || '-') + '"'
+        '"' + (r.kelas || 'Informatika - X E7') + '"',
+        pre,
+        post,
+        gain >= 0 ? ('+' + gain) : gain,
+        post >= kkm ? 'Pengayaan' : 'Remedial'
       ].join(',');
     });
 
@@ -116,38 +201,59 @@
     showToast('Laporan CSV berhasil diunduh!', 'success');
   }
 
+  // Helper validasi nilai skor numerik
+  function hasValidScore(val) {
+    return val !== undefined && val !== null && val !== '' && val !== '-' && !isNaN(Number(val));
+  }
+
   // ==================== TOP KPI CARDS ====================
   function renderTeacherKpis() {
     const kkm = Number(document.getElementById('kkmThresholdSelect')?.value || 75);
     const total = teacherRecords.length;
-    const avgPre = total ? Math.round(teacherRecords.reduce(function (acc, r) { return acc + r.pretestScore; }, 0) / total) : 0;
-    const avgPost = total ? Math.round(teacherRecords.reduce(function (acc, r) { return acc + r.posttestScore; }, 0) / total) : 0;
-    const remidiCount = teacherRecords.filter(function (r) { return r.posttestScore < kkm; }).length;
-    const accCount = teacherRecords.filter(function (r) { return r.accStatus === 'ACC'; }).length;
+
+    const preRecords = teacherRecords.filter(function (r) { return hasValidScore(r.pretestScore); });
+    const postRecords = teacherRecords.filter(function (r) { return hasValidScore(r.posttestScore); });
+
+    const avgPre = preRecords.length ? Math.round(preRecords.reduce(function (sum, r) { return sum + Number(r.pretestScore); }, 0) / preRecords.length) : 0;
+    const avgPost = postRecords.length ? Math.round(postRecords.reduce(function (sum, r) { return sum + Number(r.posttestScore); }, 0) / postRecords.length) : 0;
+    const avgGain = (preRecords.length && postRecords.length) ? (avgPost - avgPre) : 0;
+
+    // Pengayaan & Remedial HANYA dihitung jika murid sudah mengumpulkan posttest
+    const enrichmentCount = teacherRecords.filter(function (r) {
+      return hasValidScore(r.posttestScore) && Number(r.posttestScore) >= kkm;
+    }).length;
+
+    const remedialCount = teacherRecords.filter(function (r) {
+      return hasValidScore(r.posttestScore) && Number(r.posttestScore) < kkm;
+    }).length;
 
     const kpiWrap = document.getElementById('teacherKpiCards');
     if (!kpiWrap) return;
 
     kpiWrap.innerHTML =
-      '<div class="lms-card p-4">' +
-        '<div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Murid Selesai</div>' +
-        '<div class="text-2xl font-extrabold text-slate-900 mt-1">' + total + ' <span class="text-xs font-normal text-slate-500">murid</span></div>' +
+      '<div class="lms-card p-4 bg-white rounded-2xl border border-slate-200 shadow-sm">' +
+        '<div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Total Murid Kelas X E7</div>' +
+        '<div class="text-2xl font-black text-slate-900 mt-1">' + total + ' <span class="text-xs font-normal text-slate-400">Siswa (' + postRecords.length + ' Selesai Posttest)</span></div>' +
       '</div>' +
-      '<div class="lms-card p-4">' +
-        '<div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Rata-Rata Pretest</div>' +
-        '<div class="text-2xl font-extrabold text-blue-600 mt-1">' + avgPre + ' <span class="text-xs font-normal text-slate-400">/ 100</span></div>' +
+      '<div class="lms-card p-4 bg-blue-50/40 rounded-2xl border border-blue-200 shadow-sm">' +
+        '<div class="text-[11px] font-bold uppercase tracking-wider text-blue-700">Rata-Rata Pretest</div>' +
+        '<div class="text-2xl font-black text-blue-700 mt-1">' + (preRecords.length ? avgPre : '-') + ' <span class="text-xs font-normal text-blue-400">/ 100 (' + preRecords.length + ' Mengisi)</span></div>' +
       '</div>' +
-      '<div class="lms-card p-4">' +
-        '<div class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Rata-Rata Posttest</div>' +
-        '<div class="text-2xl font-extrabold text-emerald-600 mt-1">' + avgPost + ' <span class="text-xs font-normal text-slate-400">/ 100</span></div>' +
+      '<div class="lms-card p-4 bg-emerald-50/40 rounded-2xl border border-emerald-200 shadow-sm">' +
+        '<div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Rata-Rata Posttest</div>' +
+        '<div class="text-2xl font-black text-emerald-700 mt-1">' + (postRecords.length ? avgPost : '-') + ' <span class="text-xs font-normal text-emerald-500">/ 100 (' + postRecords.length + ' Mengisi)</span></div>' +
       '</div>' +
-      '<div class="lms-card p-4 border-rose-200">' +
-        '<div class="text-[11px] font-bold uppercase tracking-wider text-rose-600">Posttest: Remidi</div>' +
-        '<div class="text-2xl font-extrabold text-rose-600 mt-1">' + remidiCount + ' <span class="text-xs font-normal text-slate-400">(&lt;' + kkm + ')</span></div>' +
+      '<div class="lms-card p-4 bg-emerald-50/70 border-2 border-emerald-300 rounded-2xl shadow-sm">' +
+        '<div class="text-[11px] font-black uppercase tracking-wider text-emerald-800 flex items-center justify-between">' +
+          '<span>🌟 Pengayaan</span><span class="text-[10px] bg-emerald-200 text-emerald-900 px-1.5 py-0.2 rounded font-bold">&ge; ' + kkm + '</span>' +
+        '</div>' +
+        '<div class="text-2xl font-black text-emerald-800 mt-1">' + enrichmentCount + ' <span class="text-xs font-normal text-emerald-700">Murid Tuntas</span></div>' +
       '</div>' +
-      '<div class="lms-card p-4 border-emerald-200 col-span-2 lg:col-span-1">' +
-        '<div class="text-[11px] font-bold uppercase tracking-wider text-emerald-700">Status ACC Guru</div>' +
-        '<div class="text-2xl font-extrabold text-emerald-700 mt-1">' + accCount + '/' + total + ' <span class="text-xs font-normal text-slate-400">ter-ACC</span></div>' +
+      '<div class="lms-card p-4 bg-rose-50/70 border-2 border-rose-300 rounded-2xl shadow-sm col-span-2 sm:col-span-1">' +
+        '<div class="text-[11px] font-black uppercase tracking-wider text-rose-800 flex items-center justify-between">' +
+          '<span>⚠️ Remedial</span><span class="text-[10px] bg-rose-200 text-rose-900 px-1.5 py-0.2 rounded font-bold">&lt; ' + kkm + '</span>' +
+        '</div>' +
+        '<div class="text-2xl font-black text-rose-800 mt-1">' + remedialCount + ' <span class="text-xs font-normal text-rose-700">Murid Pendampingan</span></div>' +
       '</div>';
   }
 
@@ -192,12 +298,11 @@
         const listHtml = members.length
           ? members.map(function (m) {
               const c46 = (m.pretestBloomCorrect.C4 || 0) + (m.pretestBloomCorrect.C5 || 0) + (m.pretestBloomCorrect.C6 || 0);
-              const isAcc = m.accStatus === 'ACC';
-              return '<div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 text-xs">' +
+                            return '<div class="p-2.5 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2 text-xs">' +
                 '<div>' +
                   '<div class="flex items-center gap-1.5">' +
                     '<span class="font-bold text-slate-900">#' + m.absen + ' ' + m.nama + '</span>' +
-                    (isAcc ? '<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded">✓ ACC</span>' : '') +
+                    '' +
                   '</div>' +
                   '<div class="text-[11px] text-slate-500">LOTS: ' +
                     ((m.pretestBloomCorrect.C1 || 0) + (m.pretestBloomCorrect.C2 || 0) + (m.pretestBloomCorrect.C3 || 0)) + '/6 • HOTS: ' + c46 + '/4</div>' +
@@ -223,13 +328,10 @@
     // 2. Filter Tabel Hasil Pretest
     const groupFilter = document.getElementById('filterPretestGroupSelect')?.value || 'ALL';
     const bloomFilter = document.getElementById('filterBloomFocusSelect')?.value || 'ALL';
-    const accFilter = document.getElementById('filterAccSelect')?.value || 'ALL';
-
+    
     const filtered = teacherRecords.filter(function (r) {
       if (groupFilter !== 'ALL' && classifyPretestGroup(r.pretestScore) !== groupFilter) return false;
-      if (accFilter === 'ACC' && r.accStatus !== 'ACC') return false;
-      if (accFilter === 'PENDING' && r.accStatus === 'ACC') return false;
-
+            
       const bc = r.pretestBloomCorrect || {};
       const bt = r.pretestBloomTotal || { C1: 2, C2: 2, C3: 2, C4: 2, C5: 1, C6: 1 };
       if (bloomFilter === 'LOTS') {
@@ -265,8 +367,7 @@
             : 'bg-rose-50 text-rose-700 border-rose-200';
         const bc = r.pretestBloomCorrect || {};
         const bt = r.pretestBloomTotal || { C1: 2, C2: 2, C3: 2, C4: 2, C5: 1, C6: 1 };
-        const isAcc = r.accStatus === 'ACC';
-
+        
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-slate-50 transition-colors border-b border-slate-100 text-xs';
         tr.innerHTML =
@@ -289,18 +390,11 @@
             '<span class="px-2 py-0.5 rounded-full text-[11px] font-bold border ' + grpBadge + '">' + grp + '</span>' +
           '</td>' +
           '<td class="py-2.5 px-3 text-center">' +
-            (isAcc
-              ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">✓ Ter-ACC</span>'
-              : '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">⏳ Belum ACC</span>') +
+            ('') +
           '</td>' +
           '<td class="py-2.5 px-3 text-center">' +
             '<div class="flex items-center justify-center gap-1.5">' +
-              '<button type="button" data-acc-btn="' + r.absen + '" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition ' +
-                (isAcc
-                  ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200'
-                  : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs') + '">' +
-                (isAcc ? 'Batal ACC' : 'ACC Langsung') +
-              '</button>' +
+              '' +
               '<button type="button" onclick="openStudentInSimulator(' + r.absen + ')" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition flex items-center gap-1 shadow-2xs" title="Uji Pseudocode Murid Ini di Simulator">' +
                 '<span>💻</span><span>Uji Kode</span>' +
               '</button>' +
@@ -310,7 +404,7 @@
         const btn = tr.querySelector('[data-acc-btn]');
         if (btn) {
           btn.addEventListener('click', function () {
-            toggleAccStatus(r.absen);
+            // acc removed
           });
         }
         tbody.appendChild(tr);
@@ -555,13 +649,13 @@
               const t = (r.pretestBloomTotal && r.pretestBloomTotal[lvl]) || 1;
               return c < t;
             });
-            const isAcc = r.accStatus === 'ACC';
+            
             return '<div class="p-3.5 rounded-xl border border-rose-200 bg-rose-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">' +
               '<div class="space-y-1">' +
                 '<div class="flex items-center gap-2">' +
                   '<span class="px-2 py-0.5 rounded bg-rose-600 text-white font-bold">#' + r.absen + '</span>' +
                   '<span class="font-bold text-slate-900">' + r.nama + '</span>' +
-                  (isAcc ? '<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded">✓ ACC</span>' : '') +
+                  ('') +
                 '</div>' +
                 '<p class="text-slate-600">Refleksi: ' + (r.checkout?.understanding || '-') + '</p>' +
                 '<p class="text-rose-700 font-semibold">Fokus Remidi: ' + (weakLevels.join(', ') || 'C3–C6') + '</p>' +
@@ -571,10 +665,7 @@
                   '<div class="text-[10px] text-slate-400">Skor Posttest</div>' +
                   '<div class="text-xl font-extrabold text-rose-600 leading-none">' + r.posttestScore + '</div>' +
                 '</div>' +
-                '<button type="button" data-posttest-acc="' + r.absen + '" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition ' +
-                  (isAcc ? 'bg-rose-100 text-rose-800' : 'bg-emerald-600 text-white') + '">' +
-                  (isAcc ? 'Batal' : 'ACC') +
-                '</button>' +
+                '' +
               '</div>' +
             '</div>';
           }).join('')
@@ -582,7 +673,7 @@
 
       remWrap.querySelectorAll('[data-posttest-acc]').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          toggleAccStatus(btn.getAttribute('data-posttest-acc'));
+          // acc removed);
         });
       });
     }
@@ -592,13 +683,13 @@
         ? enrichmentStudents.map(function (r) {
             const gain = r.posttestScore - r.pretestScore;
             const gainText = gain >= 0 ? ('+' + gain + ' poin') : (gain + ' poin');
-            const isAcc = r.accStatus === 'ACC';
+            
             return '<div class="p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/40 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">' +
               '<div class="space-y-1">' +
                 '<div class="flex items-center gap-2">' +
                   '<span class="px-2 py-0.5 rounded bg-emerald-600 text-white font-bold">#' + r.absen + '</span>' +
                   '<span class="font-bold text-slate-900">' + r.nama + '</span>' +
-                  (isAcc ? '<span class="text-[10px] font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded">✓ ACC</span>' : '') +
+                  ('') +
                 '</div>' +
                 '<p class="text-slate-600">Refleksi: ' + (r.checkout?.understanding || '-') + '</p>' +
                 '<p class="text-emerald-700 font-semibold">Progres: ' + gainText + ' • Siap Pengayaan</p>' +
@@ -608,10 +699,7 @@
                   '<div class="text-[10px] text-slate-400">Skor Posttest</div>' +
                   '<div class="text-xl font-extrabold text-emerald-700 leading-none">' + r.posttestScore + '</div>' +
                 '</div>' +
-                '<button type="button" data-posttest-acc="' + r.absen + '" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition ' +
-                  (isAcc ? 'bg-rose-100 text-rose-800' : 'bg-emerald-600 text-white') + '">' +
-                  (isAcc ? 'Batal' : 'ACC') +
-                '</button>' +
+                '' +
               '</div>' +
             '</div>';
           }).join('')
@@ -619,7 +707,7 @@
 
       enrWrap.querySelectorAll('[data-posttest-acc]').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          toggleAccStatus(btn.getAttribute('data-posttest-acc'));
+          // acc removed);
         });
       });
     }
@@ -700,8 +788,8 @@
       if (energyVal !== 'ALL' && r.checkin?.energy !== energyVal) return false;
       if (styleVal !== 'ALL' && r.checkin?.style !== styleVal) return false;
       if (checkoutVal !== 'ALL' && r.checkout?.understanding !== checkoutVal) return false;
-      if (accFilter === 'ACC' && r.accStatus !== 'ACC') return false;
-      if (accFilter === 'PENDING' && r.accStatus === 'ACC') return false;
+      
+      
       return true;
     });
 
@@ -715,7 +803,7 @@
             const needsHtml = (r.checkout?.needs || []).map(function (n) {
               return '<span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[10px]">' + n + '</span>';
             }).join('');
-            const isAcc = r.accStatus === 'ACC';
+            
 
             return '<div class="lms-card p-4 space-y-3 flex flex-col justify-between text-xs">' +
               '<div class="space-y-2">' +
@@ -746,14 +834,9 @@
                 '</div>' +
                 '<div class="flex items-center justify-between gap-2 pt-1.5 border-t border-slate-100">' +
                   '<div>' +
-                    (isAcc
-                      ? '<span class="text-[11px] font-bold text-emerald-700">✓ Ter-ACC</span>'
-                      : '<span class="text-[11px] font-semibold text-amber-600">⏳ Belum ACC</span>') +
+                    ('') +
                   '</div>' +
-                  '<button type="button" data-checkin-acc="' + r.absen + '" class="px-2.5 py-1 rounded-lg text-[11px] font-bold transition ' +
-                    (isAcc ? 'bg-rose-50 text-rose-700 border border-rose-200' : 'bg-emerald-600 text-white') + '">' +
-                    (isAcc ? 'Batal' : 'ACC') +
-                  '</button>' +
+                  '' +
                 '</div>' +
               '</div>' +
             '</div>';
@@ -762,7 +845,7 @@
 
       grid.querySelectorAll('[data-checkin-acc]').forEach(function (btn) {
         btn.addEventListener('click', function () {
-          toggleAccStatus(btn.getAttribute('data-checkin-acc'));
+          // acc removed);
         });
       });
     }
@@ -831,13 +914,173 @@
     }
   }
 
-  function renderAllAdminViews() {
+    // ==================== TAB 1: REKAPITULASI PRETEST & POSTTEST (PENGAYAAN VS REMEDIAL) ====================
+  function renderTeacherRekapNilaiTab() {
+    const kkm = Number(document.getElementById('kkmThresholdSelect')?.value || 75);
+    
+    // Update KKM labels
+    document.querySelectorAll('.kkm-label').forEach(function (el) {
+      el.textContent = kkm;
+    });
+
+    // PENTING: Pengayaan dan Remedial HANYA dihitung jika murid SUDAH ada nilai posttest
+    const enrichmentStudents = teacherRecords.filter(function (r) {
+      return hasValidScore(r.posttestScore) && Number(r.posttestScore) >= kkm;
+    });
+    const remedialStudents = teacherRecords.filter(function (r) {
+      return hasValidScore(r.posttestScore) && Number(r.posttestScore) < kkm;
+    });
+
+    // Update Banner & Badges
+    const bEnr = document.getElementById('bannerEnrichmentCount');
+    if (bEnr) bEnr.textContent = enrichmentStudents.length;
+    const bRem = document.getElementById('bannerRemedialCount');
+    if (bRem) bRem.textContent = remedialStudents.length;
+
+    const enrBadge = document.getElementById('enrichmentCountBadge');
+    if (enrBadge) enrBadge.textContent = enrichmentStudents.length;
+    const remBadge = document.getElementById('remedialCountBadge');
+    if (remBadge) remBadge.textContent = remedialStudents.length;
+
+    // 1. Render Kolom Pengayaan (Hanya murid yang tuntas posttest)
+    const enrWrap = document.getElementById('enrichmentListContainer');
+    if (enrWrap) {
+      enrWrap.innerHTML = enrichmentStudents.length
+        ? enrichmentStudents.map(function (r) {
+            const preVal = hasValidScore(r.pretestScore) ? Number(r.pretestScore) : 0;
+            const postVal = Number(r.posttestScore);
+            const gain = postVal - preVal;
+            return '<div class="p-3 rounded-xl border border-emerald-200 bg-white hover:bg-emerald-50/50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs shadow-2xs">' +
+              '<div class="space-y-0.5">' +
+                '<div class="flex items-center gap-1.5">' +
+                  '<span class="w-6 h-6 rounded-lg bg-emerald-600 text-white font-black text-[11px] flex items-center justify-center shrink-0">#' + r.absen + '</span>' +
+                  '<span class="font-bold text-slate-900">' + escapeHtml(r.nama) + '</span>' +
+                '</div>' +
+                '<div class="text-[11px] text-slate-500 pl-7">' +
+                  'Pretest: <b class="text-blue-700">' + (hasValidScore(r.pretestScore) ? r.pretestScore : '-') + '</b> &rarr; Posttest: <b class="text-emerald-700 text-sm">' + postVal + '</b> ' +
+                  '<span class="font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded-full">(+' + gain + ' Poin)</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="flex items-center gap-2 self-end sm:self-auto shrink-0">' +
+                '<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-100 text-emerald-800 border border-emerald-300">🌟 Pengayaan</span>' +
+              '</div>' +
+            '</div>';
+          }).join('')
+        : '<div class="p-6 text-center text-xs text-slate-400 italic font-medium">Belum ada murid di kelompok pengayaan (belum ada nilai posttest masuk dari GAS).</div>';
+    }
+
+    // 2. Render Kolom Remedial (Hanya murid yang posttest-nya sudah masuk dan di bawah KKM)
+    const remWrap = document.getElementById('remedialListContainer');
+    if (remWrap) {
+      remWrap.innerHTML = remedialStudents.length
+        ? remedialStudents.map(function (r) {
+            const postVal = Number(r.posttestScore);
+            const def = kkm - postVal;
+            return '<div class="p-3 rounded-xl border border-rose-200 bg-white hover:bg-rose-50/50 transition flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs shadow-2xs">' +
+              '<div class="space-y-0.5">' +
+                '<div class="flex items-center gap-1.5">' +
+                  '<span class="w-6 h-6 rounded-lg bg-rose-600 text-white font-black text-[11px] flex items-center justify-center shrink-0">#' + r.absen + '</span>' +
+                  '<span class="font-bold text-slate-900">' + escapeHtml(r.nama) + '</span>' +
+                '</div>' +
+                '<div class="text-[11px] text-slate-500 pl-7">' +
+                  'Pretest: <b class="text-blue-700">' + (hasValidScore(r.pretestScore) ? r.pretestScore : '-') + '</b> &rarr; Posttest: <b class="text-rose-600 text-sm">' + postVal + '</b> ' +
+                  '<span class="font-bold text-rose-700 bg-rose-100 px-1.5 py-0.2 rounded-full">(Kurang ' + def + ' Poin ke KKM)</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="flex items-center gap-2 self-end sm:self-auto shrink-0">' +
+                '<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-300">⚠️ Remedial</span>' +
+              '</div>' +
+            '</div>';
+          }).join('')
+        : '<div class="p-6 text-center text-xs text-slate-400 italic font-medium">Belum ada murid di kelompok remedial (belum ada nilai posttest masuk dari GAS).</div>';
+    }
+
+    // 3. Render Tabel Rekapitulasi Lengkap
+    const tbody = document.getElementById('rekapNilaiTableBody');
+    if (tbody) {
+      tbody.innerHTML = '';
+      
+      const searchVal = (document.getElementById('searchRekapInput')?.value || '').trim().toLowerCase();
+      const filterTindak = document.getElementById('filterTindakLanjutSelect')?.value || 'ALL';
+
+      const filtered = teacherRecords.filter(function (r) {
+        // Search filter
+        if (searchVal) {
+          const nameMatch = (r.nama || '').toLowerCase().includes(searchVal);
+          const absenMatch = String(r.absen || '').includes(searchVal);
+          if (!nameMatch && !absenMatch) return false;
+        }
+
+        const hasPost = hasValidScore(r.posttestScore);
+        const hasPre = hasValidScore(r.pretestScore);
+        const isPengayaan = hasPost && Number(r.posttestScore) >= kkm;
+        const isRemedial = hasPost && Number(r.posttestScore) < kkm;
+
+        if (filterTindak === 'PENGAYAAN' && !isPengayaan) return false;
+        if (filterTindak === 'REMEDIAL' && !isRemedial) return false;
+        if (filterTindak === 'SUDAH_KUIS' && !hasPost && !hasPre) return false;
+        if (filterTindak === 'BELUM_KUIS' && (hasPost || hasPre)) return false;
+
+        return true;
+      });
+
+      if (!filtered.length) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-slate-400 py-8 italic font-medium">Tidak ada data murid yang memenuhi kriteria filter.</td></tr>';
+      } else {
+        filtered.forEach(function (r) {
+          const hasPre = hasValidScore(r.pretestScore);
+          const hasPost = hasValidScore(r.posttestScore);
+          const preScoreDisplay = hasPre ? Number(r.pretestScore) : '-';
+          const postScoreDisplay = hasPost ? Number(r.posttestScore) : '-';
+
+          let gainDisplay = '-';
+          if (hasPre && hasPost) {
+            const gain = Number(r.posttestScore) - Number(r.pretestScore);
+            gainDisplay = gain >= 0 ? ('+' + gain) : String(gain);
+          }
+
+          let tindakLanjutBadge = '';
+          if (hasPost) {
+            if (Number(r.posttestScore) >= kkm) {
+              tindakLanjutBadge = '<span class="px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-black border border-emerald-300">🌟 Pengayaan</span>';
+            } else {
+              tindakLanjutBadge = '<span class="px-2.5 py-1 rounded-full bg-rose-100 text-rose-800 text-[10px] font-black border border-rose-300">⚠️ Remedial</span>';
+            }
+          } else if (hasPre) {
+            tindakLanjutBadge = '<span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-bold border border-blue-200">Pretest Selesai</span>';
+          } else {
+            tindakLanjutBadge = '<span class="px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 text-[10px] font-semibold border border-slate-200">⏳ Belum Kuis</span>';
+          }
+
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-slate-50/80 transition-colors text-xs ' + (hasPost && Number(r.posttestScore) < kkm ? 'bg-rose-50/20' : '');
+          tr.innerHTML =
+            '<td class="py-2.5 px-3 font-bold text-slate-600 font-mono">#' + r.absen + '</td>' +
+            '<td class="py-2.5 px-3">' +
+              '<div class="font-bold text-slate-900">' + escapeHtml(r.nama) + '</div>' +
+              '<div class="text-[10px] text-slate-400 font-mono">' + escapeHtml(r.kelas || 'Informatika - X E7') + '</div>' +
+            '</td>' +
+            '<td class="py-2.5 px-3 text-center font-bold text-blue-700 font-mono text-sm">' + preScoreDisplay + '</td>' +
+            '<td class="py-2.5 px-3 text-center font-black font-mono text-sm ' + (hasPost ? (Number(r.posttestScore) >= kkm ? 'text-emerald-700' : 'text-rose-600') : 'text-slate-400') + '">' + postScoreDisplay + '</td>' +
+            '<td class="py-2.5 px-3 text-center font-bold font-mono text-xs ' + (gainDisplay.startsWith('+') ? 'text-emerald-700' : gainDisplay.startsWith('-') && gainDisplay !== '-' ? 'text-rose-600' : 'text-slate-400') + '">' + gainDisplay + '</td>' +
+            '<td class="py-2.5 px-3 text-center">' + tindakLanjutBadge + '</td>' +
+            '<td class="py-2.5 px-3 text-center">' +
+              '<button type="button" onclick="openStudentInSimulator(' + r.absen + ')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition inline-flex items-center gap-1 shadow-2xs" title="Uji Pseudocode Murid Ini di Simulator">' +
+                '<span>💻</span><span>Uji Kode</span>' +
+              '</button>' +
+            '</td>';
+
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    renderBloomChart();
+  }
+
+    function renderAllAdminViews() {
     renderTeacherKpis();
-    renderTeacherPretestTab();
-    renderTeacherDrawGroupTab();
-    renderTeacherPosttestTab();
-    renderTeacherCheckinTab();
-    renderTeacherUploadJsonTab();
+    renderTeacherRekapNilaiTab();
   }
 
   // ==================== BINDING EVENT LISTENERS ====================
@@ -861,26 +1104,90 @@
       });
     });
 
-    const batchAccBtn = document.getElementById('batchAccAllBtn');
-    if (batchAccBtn) batchAccBtn.addEventListener('click', batchAccAll);
-
     const exportCsvBtn = document.getElementById('exportCsvBtn');
     if (exportCsvBtn) exportCsvBtn.addEventListener('click', exportRecordsToCsv);
 
-    const filterPretestGroupSelect = document.getElementById('filterPretestGroupSelect');
-    if (filterPretestGroupSelect) filterPretestGroupSelect.addEventListener('change', renderTeacherPretestTab);
+    const searchRekapInput = document.getElementById('searchRekapInput');
+    if (searchRekapInput) searchRekapInput.addEventListener('input', renderTeacherRekapNilaiTab);
 
-    const filterBloomFocusSelect = document.getElementById('filterBloomFocusSelect');
-    if (filterBloomFocusSelect) filterBloomFocusSelect.addEventListener('change', renderTeacherPretestTab);
+    const filterTindakLanjutSelect = document.getElementById('filterTindakLanjutSelect');
+    if (filterTindakLanjutSelect) filterTindakLanjutSelect.addEventListener('change', renderTeacherRekapNilaiTab);
 
-    const filterAccSelect = document.getElementById('filterAccSelect');
-    if (filterAccSelect) filterAccSelect.addEventListener('change', renderTeacherPretestTab);
+    // Tombol Tarik Data GAS
+    const btnFetchGasRecords = document.getElementById('btnFetchGasRecords');
+    if (btnFetchGasRecords) {
+      btnFetchGasRecords.addEventListener('click', function () {
+        fetchRecordsFromGas(false);
+      });
+    }
+
+    const syncGasBtnHeader = document.getElementById('syncGasBtnHeader');
+    if (syncGasBtnHeader) {
+      syncGasBtnHeader.addEventListener('click', function () {
+        fetchRecordsFromGas(false);
+      });
+    }
+
+    // Modal Pengaturan GAS
+    const openGasSettingsBtn = document.getElementById('openGasSettingsBtn');
+    const closeGasSettingsBtn = document.getElementById('closeGasSettingsBtn');
+    const gasSettingsModal = document.getElementById('gasSettingsModal');
+    const gasUrlModalInput = document.getElementById('gasUrlModalInput');
+    const gasModalStatusMsg = document.getElementById('gasModalStatusMsg');
+    const testGasModalBtn = document.getElementById('testGasModalBtn');
+    const saveGasModalBtn = document.getElementById('saveGasModalBtn');
+
+    if (openGasSettingsBtn && gasSettingsModal) {
+      openGasSettingsBtn.addEventListener('click', function () {
+        if (gasUrlModalInput) gasUrlModalInput.value = getGasEndpointUrl();
+        if (gasModalStatusMsg) gasModalStatusMsg.textContent = 'Status: Siap menghubungkan Web App GAS.';
+        gasSettingsModal.classList.remove('hidden');
+      });
+    }
+
+    if (closeGasSettingsBtn && gasSettingsModal) {
+      closeGasSettingsBtn.addEventListener('click', function () {
+        gasSettingsModal.classList.add('hidden');
+      });
+    }
+
+    if (testGasModalBtn && gasUrlModalInput) {
+      testGasModalBtn.addEventListener('click', function () {
+        const url = gasUrlModalInput.value.trim();
+        if (!url) {
+          if (gasModalStatusMsg) gasModalStatusMsg.textContent = '⚠️ Masukkan URL GAS terlebih dahulu.';
+          return;
+        }
+        if (gasModalStatusMsg) gasModalStatusMsg.textContent = '🔄 Menguji koneksi ke Google Apps Script...';
+        fetch(url + (url.indexOf('?') === -1 ? '?action=test' : '&action=test') + '&_t=' + Date.now())
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (gasModalStatusMsg) gasModalStatusMsg.textContent = '✅ Koneksi Sukses: ' + (data.message || 'Endpoint aktif!');
+          })
+          .catch(function () {
+            if (gasModalStatusMsg) gasModalStatusMsg.textContent = '❌ Gagal terhubung. Pastikan Web App GAS dideploy dengan akses Anyone.';
+          });
+      });
+    }
+
+    if (saveGasModalBtn && gasUrlModalInput) {
+      saveGasModalBtn.addEventListener('click', function () {
+        const url = gasUrlModalInput.value.trim();
+        if (!url) {
+          showToast('Masukkan URL Web App GAS.', 'warning');
+          return;
+        }
+        localStorage.setItem('eduassess_gas_url_v2', url);
+        if (gasSettingsModal) gasSettingsModal.classList.add('hidden');
+        showToast('URL Google Apps Script disimpan! Menarik data...', 'success');
+        fetchRecordsFromGas(false);
+      });
+    }
 
     const kkmThresholdSelect = document.getElementById('kkmThresholdSelect');
     if (kkmThresholdSelect) {
       kkmThresholdSelect.addEventListener('change', function () {
-        renderTeacherKpis();
-        renderTeacherPosttestTab();
+        renderAllAdminViews();
       });
     }
 
@@ -1141,11 +1448,11 @@
           .then(function (res) { return res.json(); })
           .then(function (payload) {
             const list = Array.isArray(payload) ? payload : (payload.data || []);
-            teacherRecords = list;
+            teacherRecords = mergeRosterWithGasRecords(roster, list);
             saveRecords();
             renderAllAdminViews();
-            document.getElementById('gasStatusText').innerHTML = '✅ <b>Rekap Nilai Diperbarui:</b> ' + list.length + ' data masuk (' + new Date().toLocaleTimeString('id-ID') + ')';
-            showToast('Berhasil menarik ' + list.length + ' rekap nilai dari Google Sheets!', 'success');
+            document.getElementById('gasStatusText').innerHTML = '✅ <b>Rekap Nilai Diperbarui:</b> ' + list.length + ' respon masuk dari ' + roster.length + ' murid (' + new Date().toLocaleTimeString('id-ID') + ')';
+            showToast('Berhasil menarik ' + list.length + ' data masuk dari Google Sheets (Total ' + roster.length + ' Murid)!', 'success');
           })
           .catch(function () {
             showToast('Gagal menarik rekap nilai dari Google Sheets.', 'danger');
@@ -1157,11 +1464,11 @@
     const clearLocalRecordsBtn = document.getElementById('clearLocalRecordsBtn');
     if (clearLocalRecordsBtn) {
       clearLocalRecordsBtn.addEventListener('click', function () {
-        if (confirm('Yakin ingin mengosongkan seluruh rekap nilai pada browser ini? (Catatan: Baris di Google Spreadsheet tidak ikut terhapus).')) {
-          teacherRecords = [];
+        if (confirm('Yakin ingin mereset seluruh rekap nilai kuis pada browser ini ke 36 murid awal? (Catatan: Baris di Google Spreadsheet tidak ikut terhapus).')) {
+          teacherRecords = mergeRosterWithGasRecords(roster, []);
           saveRecords();
           renderAllAdminViews();
-          showToast('Rekap nilai lokal guru telah dikosongkan (0 data).', 'info');
+          showToast('Rekap nilai lokal guru telah di-reset ke 36 murid (nilai kuis kosong).', 'info');
         }
       });
     }
@@ -1263,14 +1570,7 @@
         // Otomatis push perubahan ke Google Sheets
         const curGasUrl = (typeof gasUrlInput !== 'undefined' && gasUrlInput) ? gasUrlInput.value.trim() : (typeof DEFAULT_GAS_URL !== 'undefined' ? DEFAULT_GAS_URL : '');
         if (curGasUrl) {
-          fetch(curGasUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({
-              action: 'saveRoster',
-              roster: roster
-            })
-          }).catch(function() {});
+          try { fetch(curGasUrl, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }).catch(function(){}); } catch(e){}
         }
         showToast('💾 Susunan Kelompok 1 - 9 berhasil disimpan dan tersinkron ke Spreadsheet!', 'success');
       });
@@ -1377,6 +1677,7 @@
 
     ensureAdminEvents();
     renderAllAdminViews();
+    fetchRecordsFromGas(true);
   }
 
   function ensureAdminEvents() {
@@ -1454,31 +1755,53 @@
     }
     const iframe = document.getElementById('adminSimulatorIframe');
     if (iframe) {
-      iframe.src = 'simulasi_pseudocode.html?kelompok=' + groupNum;
+      iframe.src = 'uji_pseudocode.html?kelompok=' + groupNum;
     }
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    showToast('Memanggil rancangan pseudocode Kelompok ' + groupNum + ' ke simulator...', 'info');
+    showToast('Memanggil rancangan pseudocode Kelompok ' + groupNum + ' ke terminal pengujian...', 'info');
 
     // Update active state on group buttons
     document.querySelectorAll('#groupSimulatorButtons button').forEach(function(b, idx) {
       if (idx + 1 === Number(groupNum)) {
         b.className = 'px-3 py-1.5 rounded-xl bg-indigo-600 text-white font-black text-xs shadow-xs transition';
       } else {
-        b.className = 'px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold text-xs border border-indigo-200 transition shadow-2xs';
+        b.className = 'px-3 py-1.5 rounded-xl bg-white hover:bg-indigo-50 text-indigo-800 font-bold text-xs border border-indigo-200 transition shadow-2xs cursor-pointer';
       }
     });
   };
-  window.openStudentInSimulator = window.openGroupInSimulator;
+
+  window.openStudentInSimulator = function (absen) {
+    const rec = teacherRecords.find(function(r) { return r.absen === Number(absen); });
+    let groupNum = 1;
+    if (rec && rec.kelompok) {
+      const match = String(rec.kelompok).match(/\d+/);
+      if (match) groupNum = parseInt(match[0], 10);
+    } else {
+      groupNum = ((Number(absen) - 1) % 8) + 1;
+    }
+    window.openGroupInSimulator(groupNum);
+  };
 
   function renderGroupSimulatorButtons() {
     const container = document.getElementById('groupSimulatorButtons');
     if (!container) return;
     container.innerHTML = '';
-    for (let i = 1; i <= 9; i++) {
+    for (let i = 1; i <= 8; i++) {
+      const isFilled = (i === 1 || i === 8);
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'px-3 py-1.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 text-indigo-800 font-bold text-xs border border-indigo-200 transition shadow-2xs cursor-pointer';
-      btn.textContent = 'Kelompok ' + i;
+      btn.className = isFilled
+        ? 'px-3 py-1.5 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs border border-emerald-300 transition shadow-2xs cursor-pointer flex items-center gap-1.5'
+        : 'px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-500 font-medium text-xs border border-slate-200 transition shadow-2xs cursor-pointer flex items-center gap-1 opacity-75';
+      
+      let label = 'Kelompok ' + i;
+      if (i === 1) label = 'Kelompok 1 (Habibi)';
+      else if (i === 8) label = 'Kelompok 8 (Jeje)';
+
+      btn.innerHTML = isFilled
+        ? '<span class="text-emerald-600 font-black">✓</span> <span>' + label + '</span>'
+        : '<span class="text-amber-500">⏳</span> <span>Kelompok ' + i + '</span>';
+      btn.title = isFilled ? (label + ' - Sudah Diisi Sesuai Adegan UKIN') : ('Kelompok ' + i + ' - Menunggu Kiriman GAS');
       btn.onclick = (function (n) {
         return function () {
           window.openGroupInSimulator(n);

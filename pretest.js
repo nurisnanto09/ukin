@@ -16,7 +16,13 @@
     safeSetStorage(STORAGE_KEY_ROSTER, roster);
   }
   let questionBank = safeGetStorage(STORAGE_KEY_QUESTIONS, DEFAULT_QUESTION_BANK);
-  let teacherRecords = safeGetStorage(STORAGE_KEY_RECORDS, INITIAL_SAMPLE_RECORDS);
+  // Hapus data lokal lama: Data hanya berasal dari GAS
+  try {
+    localStorage.removeItem(STORAGE_KEY_RECORDS);
+    localStorage.removeItem('eduassess_teacher_records_v3');
+    localStorage.removeItem('eduassess_teacher_records_v2');
+  } catch (e) {}
+  let teacherRecords = [];
   let session = safeGetStorage(STORAGE_KEY_SESSION, createDefaultSession());
   if (!session.kelas || session.kelas === 'X - Informatika') {
     session.kelas = 'Informatika - X E7';
@@ -454,8 +460,6 @@
         nama: session.nama || 'Murid Pretest',
         kelas: session.kelas || 'Informatika - X E7',
         timestamp: timeStr,
-        accStatus: 'PENDING',
-        accTimestamp: null,
         checkin: Object.assign({}, session.checkin),
         pretestScore: evalPre.score,
         pretestCorrectCount: evalPre.correctCount,

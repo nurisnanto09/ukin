@@ -13,7 +13,13 @@
     safeSetStorage(STORAGE_KEY_ROSTER, roster);
   }
   let questionBank = safeGetStorage(STORAGE_KEY_QUESTIONS, DEFAULT_QUESTION_BANK);
-  let teacherRecords = safeGetStorage(STORAGE_KEY_RECORDS, INITIAL_SAMPLE_RECORDS);
+  // Hapus data lokal lama: Data hanya berasal dari Google Apps Script (GAS)
+  try {
+    localStorage.removeItem(STORAGE_KEY_RECORDS);
+    localStorage.removeItem('eduassess_teacher_records_v3');
+    localStorage.removeItem('eduassess_teacher_records_v2');
+  } catch (e) {}
+  let teacherRecords = [];
   let session = safeGetStorage(STORAGE_KEY_SESSION, createDefaultSession());
   if (!session.kelas || session.kelas === 'X - Informatika') {
     session.kelas = 'Informatika - X E7';
@@ -254,16 +260,14 @@
       avgScore = qScore;
     }
 
-    // 4. STATUS ACC GURU
-    let accStatusText = 'Belum Kuis';
-    if (accStatus === 'ACC') {
-      accStatusText = 'Sudah di-ACC ✓';
-    } else if (hasPostDone) {
-      accStatusText = 'Menunggu ACC';
+    // 4. STATUS PROGRES BELAJAR
+    let progressStatusText = 'Belum Kuis';
+    if (hasPostDone) {
+      progressStatusText = 'Posttest Selesai';
     } else if (hasPreDone) {
-      accStatusText = 'Pretest Selesai';
+      progressStatusText = 'Pretest Selesai';
     } else if (completedModules > 0) {
-      accStatusText = 'Dalam Proses';
+      progressStatusText = 'Dalam Proses';
     }
 
     const openRateEl = document.getElementById('overviewOpenRate');
@@ -276,9 +280,9 @@
     if (scoreEl) scoreEl.textContent = avgScore;
 
     const activityEl = document.getElementById('overviewActivity');
-    if (activityEl) activityEl.textContent = accStatusText;
+    if (activityEl) activityEl.textContent = progressStatusText;
 
-    // Kartu Status Live Murid & ACC
+    // Kartu Status Live Murid & Server
     const liveStatsCard = document.getElementById('studentLiveStatsCard');
     if (liveStatsCard) {
       const displayScorePre = rec ? rec.pretestScore : (session.step > 2 ? evalPre.score : '-');
@@ -298,14 +302,12 @@
             '<div class="text-2xl font-black text-emerald-700 mt-0.5">' + displayScorePost + '</div>' +
             '<div class="text-[10px] text-slate-500 font-medium truncate">' + (displayScorePost !== '-' ? 'Benar ' + (postCorrect !== null ? postCorrect : '-') + ' / 10' : 'Belum Kuis') + '</div>' +
           '</div>' +
-          '<div class="p-3.5 rounded-2xl bg-amber-50/70 border border-amber-100 col-span-2 text-center">' +
-            '<div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status Verifikasi Guru</div>' +
+          '<div class="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-100 col-span-2 text-center">' +
+            '<div class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status Sinkronisasi Server</div>' +
             '<div class="mt-1.5 flex items-center justify-center gap-2">' +
-              (accStatus === 'ACC'
-                ? '<span class="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-xs">✓ Sudah di-ACC Guru</span>'
-                : '<span class="px-3 py-1 rounded-full bg-amber-500 text-white text-xs font-bold shadow-xs">⏳ Menunggu ACC Guru</span>') +
+              '<span class="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold shadow-xs">✓ Tersinkron ke GAS</span>' +
             '</div>' +
-            '<p class="text-[10px] text-slate-500 mt-1">Diverifikasi langsung oleh guru di Laman Admin.</p>' +
+            '<p class="text-[10px] text-slate-500 mt-1">Data hasil belajar tersinkron langsung ke Google Sheets guru.</p>' +
           '</div>' +
         '</div>';
     }
@@ -453,8 +455,6 @@
         nama: session.nama,
         kelas: session.kelas,
         timestamp: timeStr,
-        accStatus: 'PENDING',
-        accTimestamp: null,
         checkin: Object.assign({}, session.checkin),
         pretestScore: evalPre.score,
         pretestCorrectCount: evalPre.correctCount,
@@ -1170,10 +1170,10 @@
           '<div class="text-xs font-bold uppercase opacity-80">Status Kelulusan</div>' +
           '<div class="text-base font-black mt-1">' + postStatus + '</div>' +
         '</div>' +
-        '<div class="p-4 rounded-2xl border ' + (accStatus === 'ACC' ? 'bg-indigo-50 border-indigo-200 text-indigo-950' : 'bg-amber-50 border-amber-200 text-amber-950') + ' text-center">' +
-          '<div class="text-xs font-bold uppercase opacity-80">Status Verifikasi Guru</div>' +
+        '<div class="p-4 rounded-2xl border bg-emerald-50 border-emerald-200 text-emerald-950 text-center">' +
+          '<div class="text-xs font-bold uppercase opacity-80">Sinkronisasi Server (GAS)</div>' +
           '<div class="text-base font-bold mt-1">' +
-            (accStatus === 'ACC' ? '<span class="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold">✓ Sudah di-ACC</span>' : '<span class="px-3 py-1 rounded-full bg-amber-500 text-white text-xs font-bold">⏳ Menunggu ACC</span>') +
+            '<span class="px-3 py-1 rounded-full bg-emerald-600 text-white text-xs font-bold">✓ Tersimpan ke Sheets</span>' +
           '</div>' +
         '</div>';
     }
@@ -1508,8 +1508,6 @@
           nama: session.nama,
           kelas: session.kelas,
           timestamp: timeStr,
-          accStatus: 'PENDING',
-          accTimestamp: null,
           checkin: Object.assign({}, session.checkin),
           checkout: Object.assign({}, session.checkout),
           pretestScore: evalPre.score,
@@ -1525,8 +1523,6 @@
           return Number(r.absen) === Number(session.absen);
         });
         if (existingIdx !== -1) {
-          newRecord.accStatus = teacherRecords[existingIdx].accStatus || 'PENDING';
-          newRecord.accTimestamp = teacherRecords[existingIdx].accTimestamp || null;
           teacherRecords[existingIdx] = newRecord;
         } else {
           teacherRecords.unshift(newRecord);

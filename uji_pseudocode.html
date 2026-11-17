@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pengujian Pseudocode Siswa — Sistem Patbhe Green</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Custom Scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* Active Line Highlight during execution */
+    .code-line.executing-line {
+      background-color: rgba(234, 179, 8, 0.22) !important;
+      border-left: 4px solid #eab308 !important;
+    }
+    .code-line.passed-line {
+      opacity: 0.85;
+      background-color: rgba(16, 185, 129, 0.08);
+      border-left: 4px solid #10b981;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+
+  <!-- ==================== HEADER ==================== -->
+  <header class="bg-slate-950 border-b border-slate-800 sticky top-0 z-30 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-3">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 text-white flex items-center justify-center text-lg font-black shadow-md shadow-emerald-500/20">
+          <i class="fas fa-play"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm sm:text-base font-black text-white tracking-tight">
+              Uji &amp; Simulator Pseudocode Siswa
+            </h1>
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+              Patbhe Green
+            </span>
+          </div>
+          <p class="text-xs text-slate-400">
+            Pengujian Logika Percabangan (IF-ELSE) &amp; Sekuensial Berdasarkan Hasil Rancangan Siswa
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Nav Buttons -->
+      <div class="flex items-center gap-2">
+        <a href="admin.html" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition border border-slate-700">
+          <i class="fas fa-arrow-left text-indigo-400"></i>
+          <span>Dasbor Guru</span>
+        </a>
+        <a href="simulasi_pseudocode.html" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition border border-slate-700">
+          <i class="fas fa-code text-teal-400"></i>
+          <span>Editor Siswa</span>
+        </a>
+        <a href="lkpd_pseudocode.html" target="_blank" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-purple-900/60 hover:bg-purple-800/70 text-purple-200 text-xs font-bold transition border border-purple-700/50">
+          <i class="fas fa-file-alt text-purple-400"></i>
+          <span>Buka LKPD</span>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 space-y-4">
+
+    <!-- Top Source Selector & Group Info Pill -->
+    <div class="bg-slate-800/80 rounded-2xl p-4 border border-slate-700 shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+        <label for="selectKelompokSource" class="text-xs font-extrabold uppercase tracking-wide text-emerald-400 flex items-center gap-1.5 shrink-0">
+          <i class="fas fa-users"></i>
+          <span>Panggil Kode Murid:</span>
+        </label>
+        <select id="selectKelompokSource" onchange="loadSelectedSubmission()" class="bg-slate-900 text-slate-200 font-bold text-xs px-3.5 py-2 rounded-xl border border-slate-600 focus:outline-none focus:border-emerald-500 transition cursor-pointer min-w-[280px]">
+          <option value="template_acuan">⭐ Solusi Acuan Guru (Kunci Jawaban LKPD)</option>
+          <option value="1">Kelompok 1 - Habibi &amp; Friends (10:59 WIB)</option>
+          <option value="2">Kelompok 2 (⏳ Menunggu Kiriman GAS)</option>
+          <option value="3">Kelompok 3 (⏳ Menunggu Kiriman GAS)</option>
+          <option value="4">Kelompok 4 (⏳ Menunggu Kiriman GAS)</option>
+          <option value="5">Kelompok 5 (⏳ Menunggu Kiriman GAS)</option>
+          <option value="6">Kelompok 6 (⏳ Menunggu Kiriman GAS)</option>
+          <option value="7">Kelompok 7 (⏳ Menunggu Kiriman GAS)</option>
+          <option value="8">Kelompok 8 - Jeje &amp; Friends (11:05 WIB)</option>
+        </select>
+        <button type="button" onclick="loadSelectedSubmission()" class="px-3 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold transition flex items-center gap-1.5 shadow-xs" title="Muat ulang kode kelompok">
+          <i class="fas fa-sync-alt"></i>
+          <span>Muat Ulang</span>
+        </button>
+      </div>
+
+      <!-- Live Group Info Status -->
+      <div class="flex flex-wrap items-center gap-3 text-xs">
+        <div class="flex items-center gap-2 bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-xl">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-slate-400">Sumber:</span>
+          <span id="infoSourceName" class="font-bold text-emerald-400">Solusi Acuan Guru</span>
+        </div>
+        <div class="flex items-center gap-2 bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-xl text-slate-300">
+          <i class="fas fa-user-friends text-indigo-400 text-[11px]"></i>
+          <span class="text-slate-400">Anggota:</span>
+          <span id="infoMembers" class="font-semibold text-slate-200">-</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MAIN TWO-COLUMN WORKSPACE: KODE (LEFT) vs INPUT & OUTPUT (RIGHT) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+      
+      <!-- ==================== KOLOM KIRI: TAMPILAN KODE YANG DIPANGGIL (6 COLS) ==================== -->
+      <div class="lg:col-span-6 space-y-4">
+        
+        <div class="bg-slate-950 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col">
+          
+          <!-- Code Card Header -->
+          <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-file-code text-emerald-400 text-sm"></i>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                1. Tampilan Kode yang Dipanggil
+              </h2>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="formatCodeLines()" class="text-[11px] font-bold text-slate-400 hover:text-slate-200 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition flex items-center gap-1" title="Rapikan indentasi">
+                <i class="fas fa-indent text-[10px]"></i>
+                <span>Rapikan</span>
+              </button>
+              <button type="button" onclick="resetCodeToTemplate()" class="text-[11px] font-bold text-slate-400 hover:text-amber-300 px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition flex items-center gap-1" title="Kembalikan ke Kunci Jawaban Standar">
+                <i class="fas fa-undo text-[10px]"></i>
+                <span>Kunci Guru</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Program Header & Description -->
+          <div class="p-3.5 bg-slate-900/60 border-b border-slate-800 space-y-2 font-mono text-xs">
+            <div class="flex items-center gap-2">
+              <span class="text-blue-400 font-bold w-20 shrink-0 text-xs">PROGRAM</span>
+              <input type="text" id="editorProgName" value="Solusi_Acuan_Patbhe_Green" class="flex-1 bg-slate-900 text-blue-300 px-2.5 py-1.5 rounded-lg border border-slate-700 text-xs font-bold focus:outline-none focus:border-blue-400">
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-slate-500 font-bold w-20 shrink-0 text-xs">{ Ket }</span>
+              <input type="text" id="editorProgDesc" value="Program acuan standar perhitungan poin daur ulang Patbhe Green (Solusi Acuan Guru)" class="flex-1 bg-slate-900 text-slate-400 italic px-2.5 py-1.5 rounded-lg border border-slate-700 text-xs focus:outline-none focus:border-slate-500">
+            </div>
+
+            <!-- Bagian Deklarasi (Kamus Variabel) -->
+            <div class="pt-2 border-t border-slate-800/80">
+              <div class="flex items-center justify-between text-[11px] text-amber-400 font-sans font-bold uppercase mb-1.5">
+                <span class="flex items-center gap-1.5">
+                  <i class="fas fa-book-open text-xs"></i>
+                  <span>DEKLARASI VARIABEL (Kamus Data):</span>
+                </span>
+                <span class="text-slate-500 font-normal lowercase">format: nama_variabel : Tipe_Data</span>
+              </div>
+              <textarea id="editorProgDecl" rows="3" class="w-full bg-slate-900 text-amber-300 p-2.5 rounded-xl border border-slate-700 text-xs font-mono leading-relaxed focus:outline-none focus:border-amber-400 font-semibold" placeholder="nama_kelas, jenis_sampah : STRING&#10;berat_kg, tarif_poin, total_poin : REAL">nama_kelas, jenis_sampah : STRING
+berat_kg, tarif_poin, total_poin : REAL</textarea>
+            </div>
+          </div>
+
+          <!-- Bagian Algoritma (Baris-baris Instruksi) -->
+          <div class="p-3">
+            <div class="flex items-center justify-between text-[11px] font-sans font-extrabold uppercase text-slate-300 mb-2 px-1">
+              <span class="flex items-center gap-1.5 text-emerald-400">
+                <i class="fas fa-list-ol"></i>
+                <span>ALGORITMA (Baris Instruksi Logika):</span>
+              </span>
+              <span class="text-xs text-slate-500 font-normal">Klik baris untuk edit</span>
+            </div>
+            
+            <div id="codeLinesContainer" class="font-mono text-xs max-h-[420px] overflow-y-auto custom-scroll divide-y divide-slate-800/60 rounded-xl bg-slate-950/90 border border-slate-800">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+
+          <!-- Bottom Toolbar -->
+          <div class="p-3 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="tambahBarisKode()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1 border border-slate-700">
+                <i class="fas fa-plus text-[10px] text-emerald-400"></i>
+                <span>Tambah Baris</span>
+              </button>
+              <button type="button" onclick="hapusBarisKode()" class="px-2.5 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1 border border-slate-700">
+                <i class="fas fa-minus text-[10px] text-rose-400"></i>
+                <span>Hapus Terakhir</span>
+              </button>
+            </div>
+            <button type="button" onclick="syncCodeFromInputs()" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold transition flex items-center gap-1 border border-slate-700">
+              <i class="fas fa-check text-[10px] text-emerald-400"></i>
+              <span>Simpan Editan</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- ==================== KOLOM KANAN: TEMPAT INPUT NILAI & LAYAR OUTPUT (6 COLS) ==================== -->
+      <div class="lg:col-span-6 space-y-4">
+        
+        <!-- CARD 2: TEMPAT INPUT NILAI -->
+        <div class="bg-slate-950 rounded-2xl border border-slate-800 shadow-xl p-4 sm:p-5 space-y-4">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-sliders-h text-emerald-400 text-sm"></i>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                2. Tempat Input Nilai
+              </h2>
+            </div>
+            <span class="text-[11px] text-slate-400 font-medium">Uji Coba Variabel Masukan</span>
+          </div>
+
+          <!-- Input Fields Form -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+            <!-- Input 1: Jenis Sampah -->
+            <div class="space-y-1.5">
+              <label for="inputJenisSampah" class="text-xs font-bold text-slate-300 flex items-center justify-between">
+                <span>Jenis Sampah (<code class="text-emerald-400">jenis_sampah</code>):</span>
+              </label>
+              <input type="text" id="inputJenisSampah" value="botol plastik" class="w-full bg-slate-900 text-emerald-300 font-mono font-bold text-sm px-3 py-2 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition" placeholder="Contoh: botol plastik atau kardus">
+              <div class="flex items-center gap-1.5 pt-1">
+                <span class="text-[10px] text-slate-500 font-bold">Pilihan Cepat:</span>
+                <button type="button" onclick="setJenisSampahQuick('botol plastik')" class="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-emerald-400 text-[11px] font-bold border border-slate-700 transition">
+                  🍾 botol plastik
+                </button>
+                <button type="button" onclick="setJenisSampahQuick('kardus')" class="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-amber-400 text-[11px] font-bold border border-slate-700 transition">
+                  📦 kardus
+                </button>
+              </div>
+            </div>
+
+            <!-- Input 2: Berat Sampah (kg) -->
+            <div class="space-y-1.5">
+              <label for="inputBeratKg" class="text-xs font-bold text-slate-300 flex items-center justify-between">
+                <span>Berat Sampah (<code class="text-emerald-400">berat_kg</code>):</span>
+                <span class="text-[10px] text-slate-400">Satuan: kg</span>
+              </label>
+              <input type="number" id="inputBeratKg" value="5" step="0.5" min="0.1" class="w-full bg-slate-900 text-emerald-300 font-mono font-bold text-sm px-3 py-2 rounded-xl border border-slate-700 focus:outline-none focus:border-emerald-500 transition" placeholder="Contoh: 5">
+              <div class="flex items-center gap-1.5 pt-1">
+                <span class="text-[10px] text-slate-500 font-bold">Pilihan Cepat:</span>
+                <button type="button" onclick="setBeratQuick(5)" class="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-cyan-400 text-[11px] font-bold border border-slate-700 transition">
+                  5 kg
+                </button>
+                <button type="button" onclick="setBeratQuick(8)" class="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-cyan-400 text-[11px] font-bold border border-slate-700 transition">
+                  8 kg
+                </button>
+                <button type="button" onclick="setBeratQuick(12)" class="px-2 py-0.5 rounded-md bg-slate-800 hover:bg-slate-700 text-cyan-400 text-[11px] font-bold border border-slate-700 transition">
+                  12 kg
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Scenario Presets from LKPD -->
+          <div class="pt-2 border-t border-slate-800/80 space-y-2">
+            <div class="flex items-center justify-between text-[11px] font-bold text-slate-400">
+              <span class="flex items-center gap-1">
+                <i class="fas fa-bolt text-amber-400"></i>
+                <span>Uji Cepat Skenario LKPD (1-Klik):</span>
+              </span>
+              <span class="text-[10px] text-slate-500 font-normal">Klik untuk langsung uji coba</span>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <button type="button" onclick="jalankanKasusPreset('botol plastik', 5)" class="p-2.5 rounded-xl bg-emerald-950/60 hover:bg-emerald-900/70 border border-emerald-700/50 text-left transition group">
+                <div class="text-[11px] font-black text-emerald-300 group-hover:text-emerald-200 flex items-center gap-1">
+                  <span>🍾 Kasus A</span>
+                </div>
+                <div class="text-[10px] text-emerald-400 font-medium">Botol 5 kg &rarr; <b>50 Poin</b></div>
+              </button>
+              <button type="button" onclick="jalankanKasusPreset('kardus', 8)" class="p-2.5 rounded-xl bg-amber-950/60 hover:bg-amber-900/70 border border-amber-700/50 text-left transition group">
+                <div class="text-[11px] font-black text-amber-300 group-hover:text-amber-200 flex items-center gap-1">
+                  <span>📦 Kasus B</span>
+                </div>
+                <div class="text-[10px] text-amber-400 font-medium">Kardus 8 kg &rarr; <b>160 Poin</b></div>
+              </button>
+              <button type="button" onclick="jalankanKasusPreset('kardus', 12)" class="p-2.5 rounded-xl bg-indigo-950/60 hover:bg-indigo-900/70 border border-indigo-700/50 text-left transition group">
+                <div class="text-[11px] font-black text-indigo-300 group-hover:text-indigo-200 flex items-center gap-1">
+                  <span>⚡ Kasus C</span>
+                </div>
+                <div class="text-[10px] text-indigo-400 font-medium">Kardus 12 kg &rarr; <b>240 Poin</b></div>
+              </button>
+            </div>
+          </div>
+
+          <!-- Main Execution Buttons -->
+          <div class="flex items-center gap-2 pt-2">
+            <button id="btnRunProgram" type="button" onclick="jalankanProgramDenganInput()" class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-black text-sm transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/30">
+              <i class="fas fa-play"></i>
+              <span>Jalankan / Uji Kode</span>
+            </button>
+            <button type="button" onclick="resetFormDanOutput()" class="py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 active:bg-slate-900 text-slate-300 font-bold text-xs transition flex items-center gap-1.5 border border-slate-700">
+              <i class="fas fa-redo"></i>
+              <span>Reset</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- CARD 3: LAYAR OUTPUT -->
+        <div class="bg-slate-950 rounded-2xl border border-slate-800 shadow-xl overflow-hidden flex flex-col">
+          
+          <!-- Output Header -->
+          <div class="bg-slate-900 px-4 py-3 border-b border-slate-800 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i class="fas fa-desktop text-indigo-400 text-sm"></i>
+              <h2 class="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                3. Layar Output
+              </h2>
+            </div>
+            <div class="flex items-center gap-2">
+              <span id="outputStatusBadge" class="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-slate-800 text-slate-400 border border-slate-700">
+                Siap Diuji
+              </span>
+              <button type="button" onclick="bersihkanLayarOutput()" class="text-[11px] font-bold text-slate-400 hover:text-slate-200 px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 transition" title="Bersihkan tampilan output">
+                <i class="fas fa-trash-alt mr-1"></i> <span>Bersihkan</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Output Display Screen -->
+          <div id="outputDisplayScreen" class="bg-slate-950 p-4 font-mono text-xs text-slate-200 min-h-[280px] max-h-[360px] overflow-y-auto custom-scroll space-y-2 leading-relaxed">
+            
+            <!-- Live Execution Notification Banner (Shown when running or finished successfully) -->
+            <div id="executionNotificationBanner" class="hidden"></div>
+
+            <!-- Placeholder initial state -->
+            <div id="outputPlaceholder" class="h-full flex flex-col items-center justify-center text-center text-slate-500 py-12 space-y-2">
+              <i class="fas fa-terminal text-3xl text-slate-700"></i>
+              <p class="font-sans text-xs font-medium">
+                Belum ada eksekusi program.<br>
+                Tentukan nilai pada <span class="text-slate-400 font-bold">Tempat Input Nilai</span> lalu klik <span class="text-emerald-400 font-bold">[▶️ Jalankan / Uji Kode]</span>.
+              </p>
+            </div>
+
+            <!-- Dynamic Output Logs Container -->
+            <div id="outputLogsContainer" class="space-y-2 hidden"></div>
+          </div>
+
+          <!-- Result Summary Banner (Highlighted at Bottom of Screen) -->
+          <div id="outputSummaryCard" class="hidden p-3.5 bg-gradient-to-r from-emerald-950/80 via-slate-900 to-slate-950 border-t border-emerald-800/40 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+              <div id="summaryIconWrap" class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-base">
+                <i class="fas fa-check-circle"></i>
+              </div>
+              <div>
+                <div class="text-[11px] uppercase font-bold text-slate-400">Hasil Akhir Perolehan:</div>
+                <div class="text-sm font-black text-white flex items-center gap-2">
+                  <span id="summaryTotalPoinDisplay" class="text-emerald-400 text-base">0 Poin</span>
+                  <span class="text-slate-500">|</span>
+                  <span id="summaryBranchDisplay" class="text-xs text-indigo-300 font-normal">Cabang IF</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-right text-[11px] text-slate-400 font-medium">
+              <span>Status: </span>
+              <span id="summaryStatusBadge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-[10px] border border-emerald-500/30">
+                ✅ Benar &amp; Berjalan
+              </span>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- ==================== MODAL POPUP NOTIFIKASI HASIL UJI (CENTER SCREEN) ==================== -->
+  <div id="resultModalOverlay" onclick="if(event.target === this) closeResultModal()" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md hidden flex items-center justify-center p-4 transition-all duration-300">
+    <div id="resultModalCard" class="bg-slate-900 border-2 border-emerald-500 rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-7 transform transition-all duration-300 scale-95 opacity-0 text-center relative space-y-4 shadow-emerald-500/20">
+      
+      <!-- Close Button Corner -->
+      <button type="button" onclick="closeResultModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition flex items-center justify-center text-sm cursor-pointer" title="Tutup Pop-up">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <!-- Big Animated Badge / Icon -->
+      <div id="modalIconWrap" class="mx-auto w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/20 animate-bounce">
+        <i id="modalIcon" class="fas fa-check-circle"></i>
+      </div>
+
+      <!-- Header Titles -->
+      <div>
+        <span id="modalCategoryTag" class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-black uppercase tracking-wider inline-block">
+          ✓ 100% Sesuai &amp; Valid
+        </span>
+        <h3 id="modalTitle" class="text-lg sm:text-xl font-black text-white mt-2.5 tracking-tight">
+          Logika Pseudocode Benar &amp; Berjalan!
+        </h3>
+        <p id="modalDesc" class="text-xs text-slate-300 font-medium mt-1 leading-relaxed">
+          Seluruh baris kode percabangan IF-ELSE dieksekusi dengan tepat tanpa kesalahan logika.
+        </p>
+      </div>
+
+      <!-- Test Details Box -->
+      <div class="bg-slate-950/90 rounded-2xl border border-slate-800 p-4 text-left text-xs space-y-2.5 font-mono shadow-inner">
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+          <span class="text-slate-400 font-sans">Input Jenis Sampah:</span>
+          <span id="modalInputJenis" class="font-bold text-emerald-300 text-sm">"kardus"</span>
+        </div>
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+          <span class="text-slate-400 font-sans">Input Berat:</span>
+          <span id="modalInputBerat" class="font-bold text-cyan-300 text-sm">12 kg</span>
+        </div>
+        <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+          <span class="text-slate-400 font-sans">Jalur Percabangan:</span>
+          <span id="modalBranch" class="font-bold text-indigo-300 font-sans">Cabang ELSE (Kardus)</span>
+        </div>
+        <div class="flex items-center justify-between pt-1">
+          <span class="text-slate-200 font-sans font-bold">Total Poin Akhir:</span>
+          <span id="modalTotalPoin" class="font-black text-emerald-400 text-lg font-mono">240 Poin</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-2 flex items-center gap-2.5">
+        <button id="modalActionBtn" type="button" onclick="closeResultModal()" class="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer">
+          <i class="fas fa-check"></i>
+          <span>Hebat! Tutup Pop-up</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+  <script>
+    // ==========================================
+    // DEFAULT REFERENCE TEMPLATE
+    // ==========================================
+    const DEFAULT_TEMPLATE = {
+      name: 'Solusi_Acuan_Patbhe_Green',
+      desc: 'Program acuan standar perhitungan poin daur ulang Patbhe Green (Solusi Acuan Guru)',
+      decl: 'nama_kelas, jenis_sampah : STRING\nberat_kg, tarif_poin, total_poin : REAL',
+      lines: [
+        'INPUT nama_kelas',
+        'INPUT jenis_sampah',
+        'INPUT berat_kg',
+        'IF jenis_sampah = "botol plastik" THEN',
+        '  tarif_poin <- 10',
+        'ELSE',
+        '  tarif_poin <- 20',
+        'END IF',
+        'total_poin <- berat_kg * tarif_poin',
+        'OUTPUT total_poin'
+      ]
+    };
+
+    // State
+    let currentCode = JSON.parse(JSON.stringify(DEFAULT_TEMPLATE));
+    let memory = {};
+    let isExecuting = false;
+
+    // Initialization
+    document.addEventListener('DOMContentLoaded', () => {
+      populateGroupDropdown();
+
+      // Check query param e.g. ?kelompok=1
+      const params = new URLSearchParams(window.location.search);
+      const kelParam = params.get('kelompok');
+      if (kelParam) {
+        const select = document.getElementById('selectKelompokSource');
+        if (select && select.querySelector(`option[value="${kelParam}"]`)) {
+          select.value = kelParam;
+          loadSelectedSubmission();
+          return;
+        }
+      }
+
+      loadCodeIntoEditor(currentCode);
+    });
+
+    // Populate Group Dropdown with actual submissions if saved in localStorage
+    function populateGroupDropdown() {
+      const select = document.getElementById('selectKelompokSource');
+      if (!select) return;
+
+      let subs = {};
+      try {
+        subs = JSON.parse(localStorage.getItem('eduassess_student_submissions_v2') || '{}');
+      } catch (e) {}
+
+      // Kelompok 1 (Habibi & Friends: Alex, Habibi, Gavin, Bimo)
+      // Karakteristik: Tanpa variabel penampung tarif_poin, rumus perhitungan langsung di dalam THEN dan ELSE.
+      subs[1] = {
+        groupNum: 1,
+        namaKelompok: 'Kelompok 1 (Habibi & Friends)',
+        memberStr: 'Alex, Habibi, Gavin, Bimo',
+        submittedAt: '10:59 WIB',
+        progName: 'Hitung_Poin_Patbhe_Green',
+        progDesc: '{ Rancangan Ringkas 4 Variabel (Tanpa tarif_poin) - Kelompok 1 (Habibi & Friends) }',
+        progDecl: 'nama_kelas, jenis_sampah : STRING\nberat_kg, total_poin : REAL',
+        lines: [
+          'INPUT nama_kelas',
+          'INPUT jenis_sampah',
+          'INPUT berat_kg',
+          'IF jenis_sampah = "botol plastik" THEN',
+          '  total_poin <- 10 * berat_kg',
+          'ELSE',
+          '  total_poin <- 20 * berat_kg',
+          'END IF',
+          'OUTPUT total_poin'
+        ]
+      };
+      subs['kelompok_1'] = subs[1];
+
+      // Kelompok 8 (Jeje & Friends: Naya, Nia, Salwa, JJ)
+      // Karakteristik: Menggunakan variabel jenis_Sampah2 (angka di akhir penamaan yang sah) dan variabel penampung tarif_poin.
+      subs[8] = {
+        groupNum: 8,
+        namaKelompok: 'Kelompok 8 (Jeje & Friends)',
+        memberStr: 'Naya, Nia, Salwa, JJ',
+        submittedAt: '11:05 WIB',
+        progName: 'Otomatisasi_Poin_Patbhe_Green',
+        progDesc: '{ Rancangan Variabel jenis_Sampah2 & tarif_poin - Kelompok 8 (Jeje & Friends) }',
+        progDecl: 'nama_kelas, jenis_Sampah2 : STRING\nberat_kg, tarif_poin, total_poin : REAL',
+        lines: [
+          'INPUT nama_kelas',
+          'INPUT jenis_Sampah2',
+          'INPUT berat_kg',
+          'IF jenis_Sampah2 = "botol plastik" THEN',
+          '  tarif_poin <- 10',
+          'ELSE',
+          '  tarif_poin <- 20',
+          'END IF',
+          'total_poin <- berat_kg * tarif_poin',
+          'OUTPUT total_poin'
+        ]
+      };
+      subs['kelompok_8'] = subs[8];
+
+      // Hapus data lokal dummy kelompok 2 s/d 7 agar murni menunggu kiriman GAS
+      for (let k = 2; k <= 7; k++) {
+        delete subs[k];
+        delete subs['kelompok_' + k];
+      }
+
+      try {
+        localStorage.setItem('eduassess_student_submissions_v2', JSON.stringify(subs));
+      } catch (e) {}
+
+      for (let i = 1; i <= 8; i++) {
+        const sub = subs[i] || subs['kelompok_' + i];
+        const opt = select.querySelector(`option[value="${i}"]`);
+        if (opt) {
+          if (i === 1) {
+            opt.textContent = `Kelompok 1 - Habibi & Friends (${sub.submittedAt || '10:59 WIB'})`;
+          } else if (i === 8) {
+            opt.textContent = `Kelompok 8 - Jeje & Friends (${sub.submittedAt || '11:05 WIB'})`;
+          } else if (sub && sub.lines && sub.lines.length > 0) {
+            opt.textContent = `Kelompok ${i} - [${sub.namaKelompok || 'Tersedia'}] (${sub.submittedAt || 'Terkirim'})`;
+          } else {
+            opt.textContent = `Kelompok ${i} (⏳ Menunggu Kiriman GAS)`;
+          }
+        }
+      }
+    }
+
+    // Load selected group
+    function loadSelectedSubmission() {
+      const val = document.getElementById('selectKelompokSource')?.value || 'template_acuan';
+      
+      if (val === 'template_acuan') {
+        currentCode = JSON.parse(JSON.stringify(DEFAULT_TEMPLATE));
+        updateGroupInfoPill('Solusi Acuan Guru (Kunci Jawaban LKPD)', 'Tim Guru Informatika');
+      } else {
+        const groupNum = parseInt(val, 10);
+        let subs = {};
+        try {
+          subs = JSON.parse(localStorage.getItem('eduassess_student_submissions_v2') || '{}');
+        } catch (e) {}
+
+        const sub = subs[groupNum] || subs['kelompok_' + groupNum];
+        if (sub && sub.lines && sub.lines.length > 0) {
+          currentCode = {
+            name: sub.progName || `Program_Kelompok_${groupNum}`,
+            desc: sub.progDesc || `{ Kiriman Kelompok ${groupNum} }`,
+            decl: sub.progDecl || DEFAULT_TEMPLATE.decl,
+            lines: sub.lines.slice()
+          };
+          updateGroupInfoPill(`${sub.namaKelompok || ('Kelompok ' + groupNum)}`, sub.memberStr || `Anggota Kelompok ${groupNum}`);
+        } else {
+          // Kelompok 2-7: Menunggu kiriman GAS
+          currentCode = {
+            name: `Draf_Kelompok_${groupNum}`,
+            desc: `{ Menunggu kiriman rancangan dari Kelompok ${groupNum} via Google Apps Script (GAS) }`,
+            decl: 'nama_kelas, jenis_sampah : STRING\nberat_kg, tarif_poin, total_poin : REAL',
+            lines: [
+              'INPUT nama_kelas',
+              'INPUT jenis_sampah',
+              'INPUT berat_kg',
+              '// [Menunggu siswa Kelompok ' + groupNum + ' melengkapi logika percabangan di LKPD...]'
+            ]
+          };
+          updateGroupInfoPill(`Kelompok ${groupNum} (⏳ Menunggu Kiriman GAS)`, `Menunggu siswa Kelompok ${groupNum} mengirim via GAS`);
+        }
+      }
+
+      loadCodeIntoEditor(currentCode);
+      bersihkanLayarOutput();
+
+      if (val !== 'template_acuan' && val !== '1' && val !== '8') {
+        appendOutputLog(`⏳ <b>STATUS KELOMPOK ${val}:</b> Belum mengirimkan rancangan pseudocode melalui Google Apps Script (GAS). Menampilkan draf tunggu.`, 'condition');
+      }
+    }
+
+    function updateGroupInfoPill(sourceName, memberStr) {
+      const srcEl = document.getElementById('infoSourceName');
+      const memEl = document.getElementById('infoMembers');
+      if (srcEl) srcEl.textContent = sourceName;
+      if (memEl) memEl.textContent = memberStr || '-';
+    }
+
+    // Load code into Left Editor
+    function loadCodeIntoEditor(codeObj) {
+      const nameEl = document.getElementById('editorProgName');
+      const descEl = document.getElementById('editorProgDesc');
+      const declEl = document.getElementById('editorProgDecl');
+      if (nameEl) nameEl.value = codeObj.name;
+      if (descEl) descEl.value = codeObj.desc;
+      if (declEl) declEl.value = codeObj.decl;
+
+      renderCodeLines(codeObj.lines);
+    }
+
+    function renderCodeLines(lines) {
+      const container = document.getElementById('codeLinesContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      lines.forEach((line, idx) => {
+        const lineNum = idx + 1;
+        const row = document.createElement('div');
+        row.id = `editor-line-${idx}`;
+        row.className = 'code-line flex items-center gap-2.5 px-3 py-1.5 transition-colors';
+        row.innerHTML = `
+          <span class="w-6 text-right select-none font-bold text-slate-500 text-[11px] shrink-0">${lineNum}</span>
+          <input type="text" class="input-line-code flex-1 bg-transparent text-slate-200 font-mono text-xs focus:outline-none focus:text-white" value="${escapeHtml(line)}" data-line-idx="${idx}">
+        `;
+        container.appendChild(row);
+      });
+    }
+
+    function tambahBarisKode() {
+      syncCodeFromInputs();
+      currentCode.lines.push('');
+      renderCodeLines(currentCode.lines);
+    }
+
+    function hapusBarisKode() {
+      syncCodeFromInputs();
+      if (currentCode.lines.length > 1) {
+        currentCode.lines.pop();
+        renderCodeLines(currentCode.lines);
+      }
+    }
+
+    function resetCodeToTemplate() {
+      currentCode = JSON.parse(JSON.stringify(DEFAULT_TEMPLATE));
+      loadCodeIntoEditor(currentCode);
+      bersihkanLayarOutput();
+    }
+
+    function formatCodeLines() {
+      syncCodeFromInputs();
+      let indentLevel = 0;
+      currentCode.lines = currentCode.lines.map(raw => {
+        let clean = raw.trim();
+        if (/^ELSE\b/i.test(clean) || /^END\s*IF\b/i.test(clean)) {
+          indentLevel = Math.max(0, indentLevel - 1);
+        }
+        const indented = '  '.repeat(indentLevel) + clean;
+        if (/^IF\b/i.test(clean)) {
+          indentLevel++;
+        } else if (/^ELSE\b/i.test(clean)) {
+          indentLevel++;
+        }
+        return indented;
+      });
+      renderCodeLines(currentCode.lines);
+    }
+
+    function syncCodeFromInputs() {
+      const inputs = document.querySelectorAll('#codeLinesContainer input.input-line-code');
+      currentCode.lines = Array.from(inputs).map(inp => inp.value);
+      currentCode.name = document.getElementById('editorProgName')?.value || 'Program';
+      currentCode.desc = document.getElementById('editorProgDesc')?.value || '';
+      currentCode.decl = document.getElementById('editorProgDecl')?.value || '';
+    }
+
+    // ==========================================
+    // FORM INPUT HELPERS
+    // ==========================================
+    function setJenisSampahQuick(val) {
+      const input = document.getElementById('inputJenisSampah');
+      if (input) input.value = val;
+    }
+
+    function setBeratQuick(val) {
+      const input = document.getElementById('inputBeratKg');
+      if (input) input.value = val;
+    }
+
+    function jalankanKasusPreset(jenis, berat) {
+      setJenisSampahQuick(jenis);
+      setBeratQuick(berat);
+      jalankanProgramDenganInput();
+    }
+
+    function resetFormDanOutput() {
+      setJenisSampahQuick('botol plastik');
+      setBeratQuick(5);
+      bersihkanLayarOutput();
+    }
+
+    // ==========================================
+    // OUTPUT SCREEN HELPERS & NOTIFICATIONS
+    // ==========================================
+    function bersihkanLayarOutput() {
+      const logs = document.getElementById('outputLogsContainer');
+      const placeholder = document.getElementById('outputPlaceholder');
+      const summary = document.getElementById('outputSummaryCard');
+      const badge = document.getElementById('outputStatusBadge');
+      const execBanner = document.getElementById('executionNotificationBanner');
+
+      if (logs) {
+        logs.innerHTML = '';
+        logs.classList.add('hidden');
+      }
+      if (placeholder) placeholder.classList.remove('hidden');
+      if (summary) summary.classList.add('hidden');
+      if (execBanner) {
+        execBanner.innerHTML = '';
+        execBanner.className = 'hidden';
+      }
+
+      if (badge) {
+        badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-slate-800 text-slate-400 border border-slate-700';
+        badge.textContent = 'Siap Diuji';
+      }
+
+      // Reset code line highlights
+      document.querySelectorAll('.code-line').forEach(el => {
+        el.className = 'code-line flex items-center gap-2.5 px-3 py-1.5 transition-colors';
+      });
+    }
+
+    function showExecutionBanner(type, htmlContent) {
+      const banner = document.getElementById('executionNotificationBanner');
+      if (!banner) return;
+
+      banner.className = 'p-3.5 rounded-xl border-2 transition-all shadow-md mb-2';
+
+      if (type === 'running') {
+        banner.className += ' bg-cyan-950/70 border-cyan-500/50 text-cyan-200 animate-pulse flex items-start gap-3';
+        banner.innerHTML = `
+          <span class="w-8 h-8 rounded-lg bg-cyan-500/20 text-cyan-400 flex items-center justify-center shrink-0 text-sm">
+            <i class="fas fa-spinner fa-spin"></i>
+          </span>
+          <div class="text-xs font-sans leading-relaxed flex-1">${htmlContent}</div>
+        `;
+      } else if (type === 'success') {
+        banner.className += ' bg-emerald-950/90 border-emerald-500/70 text-emerald-100 shadow-emerald-900/40';
+        banner.innerHTML = htmlContent;
+      } else if (type === 'warning') {
+        banner.className += ' bg-amber-950/90 border-amber-500/70 text-amber-100 shadow-amber-900/40';
+        banner.innerHTML = htmlContent;
+      }
+      banner.classList.remove('hidden');
+    }
+
+    function showToastNotification(title, message, type = 'success') {
+      const container = document.getElementById('toastNotificationContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto transform transition-all duration-300 translate-x-12 opacity-0 p-3.5 rounded-2xl shadow-2xl border flex items-start gap-3 backdrop-blur-md';
+
+      if (type === 'success') {
+        toast.className += ' bg-emerald-950/95 text-emerald-100 border-emerald-500/60 shadow-emerald-950/60';
+      } else if (type === 'warning') {
+        toast.className += ' bg-amber-950/95 text-amber-100 border-amber-500/60 shadow-amber-950/60';
+      } else if (type === 'danger' || type === 'error') {
+        toast.className += ' bg-rose-950/95 text-rose-100 border-rose-500/60 shadow-rose-950/60';
+      } else {
+        toast.className += ' bg-slate-900/95 text-slate-100 border-indigo-500/60 shadow-slate-950/60';
+      }
+
+      const iconHtml = type === 'success'
+        ? '<span class="w-8 h-8 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-sm shrink-0"><i class="fas fa-check"></i></span>'
+        : type === 'warning'
+          ? '<span class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-sm shrink-0"><i class="fas fa-exclamation-triangle"></i></span>'
+          : '<span class="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-black text-sm shrink-0"><i class="fas fa-play"></i></span>';
+
+      toast.innerHTML = `
+        ${iconHtml}
+        <div class="flex-1 min-w-0 pr-1">
+          <div class="text-xs font-black tracking-tight leading-tight">${escapeHtml(title)}</div>
+          <div class="text-[11px] opacity-90 mt-0.5 leading-relaxed font-sans">${escapeHtml(message)}</div>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="text-xs opacity-60 hover:opacity-100 transition px-1">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+
+      container.appendChild(toast);
+
+      // Trigger animation
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-x-12', 'opacity-0');
+        toast.classList.add('translate-x-0', 'opacity-100');
+      });
+
+      // Auto dismiss after 4.5 seconds
+      setTimeout(() => {
+        toast.classList.remove('translate-x-0', 'opacity-100');
+        toast.classList.add('translate-x-12', 'opacity-0');
+        setTimeout(() => {
+          toast.remove();
+        }, 300);
+      }, 4500);
+    }
+
+    // ==========================================
+    // MODAL POP-UP DI TENGAH LAYAR
+    // ==========================================
+    function openResultModal(isCorrect, data) {
+      const overlay = document.getElementById('resultModalOverlay');
+      const card = document.getElementById('resultModalCard');
+      if (!overlay || !card) return;
+
+      const iconWrap = document.getElementById('modalIconWrap');
+      const icon = document.getElementById('modalIcon');
+      const catTag = document.getElementById('modalCategoryTag');
+      const title = document.getElementById('modalTitle');
+      const desc = document.getElementById('modalDesc');
+      const inputJenis = document.getElementById('modalInputJenis');
+      const inputBerat = document.getElementById('modalInputBerat');
+      const branch = document.getElementById('modalBranch');
+      const totalPoin = document.getElementById('modalTotalPoin');
+      const actionBtn = document.getElementById('modalActionBtn');
+
+      if (inputJenis) inputJenis.textContent = `"${data.inputJenisVal}"`;
+      if (inputBerat) inputBerat.textContent = `${data.inputBeratVal} kg`;
+      if (branch) branch.textContent = data.executedBranch;
+      if (totalPoin) totalPoin.textContent = `${data.actualPoin} Poin`;
+
+      if (isCorrect) {
+        card.className = 'bg-slate-900 border-2 border-emerald-500 rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-7 transform transition-all duration-300 scale-95 opacity-0 text-center relative space-y-4 shadow-emerald-500/20';
+        if (iconWrap) {
+          iconWrap.className = 'mx-auto w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/20 animate-bounce';
+        }
+        if (icon) icon.className = 'fas fa-check-circle';
+        if (catTag) {
+          catTag.className = 'px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-black uppercase tracking-wider inline-block';
+          catTag.textContent = '✓ 100% Sesuai & Valid';
+        }
+        if (title) {
+          title.className = 'text-lg sm:text-xl font-black text-white mt-2.5 tracking-tight';
+          title.textContent = '🎉 Logika Pseudocode Benar & Berjalan!';
+        }
+        if (desc) {
+          desc.innerHTML = `Alur percabangan dieksekusi dengan tepat tanpa error logika. Perhitungan <b>${data.actualPoin} Poin</b> 100% sesuai target LKPD (<i>${escapeHtml(data.inputJenisVal)}</i> @${data.expectedRate} poin &times; ${data.inputBeratVal} kg).`;
+        }
+        if (actionBtn) {
+          actionBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer';
+          actionBtn.innerHTML = '<i class="fas fa-check"></i> <span>Hebat! Tutup Pop-up</span>';
+        }
+      } else {
+        card.className = 'bg-slate-900 border-2 border-amber-500 rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-7 transform transition-all duration-300 scale-95 opacity-0 text-center relative space-y-4 shadow-amber-500/20';
+        if (iconWrap) {
+          iconWrap.className = 'mx-auto w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-3xl shadow-lg shadow-amber-500/20';
+        }
+        if (icon) icon.className = 'fas fa-exclamation-triangle';
+        if (catTag) {
+          catTag.className = 'px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-black uppercase tracking-wider inline-block';
+          catTag.textContent = '⚠️ Nilai Perlu Dikoreksi';
+        }
+        if (title) {
+          title.className = 'text-lg sm:text-xl font-black text-white mt-2.5 tracking-tight';
+          title.textContent = 'Program Berjalan, Tetapi Hasil Kurang Tepat';
+        }
+        if (desc) {
+          desc.innerHTML = `Nilai yang dihasilkan adalah <b>${data.actualPoin} Poin</b>, padahal target LKPD untuk <i>${escapeHtml(data.inputJenisVal)}</i> (${data.inputBeratVal} kg) adalah <b>${data.expectedPoin} Poin</b>. Periksa kembali rumus pada blok IF/ELSE.`;
+        }
+        if (actionBtn) {
+          actionBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white font-extrabold text-xs sm:text-sm transition shadow-lg shadow-amber-600/30 flex items-center justify-center gap-2 cursor-pointer';
+          actionBtn.innerHTML = '<i class="fas fa-wrench"></i> <span>Tutup &amp; Koreksi Rumus</span>';
+        }
+      }
+
+      overlay.classList.remove('hidden');
+      requestAnimationFrame(() => {
+        card.classList.remove('scale-95', 'opacity-0');
+        card.classList.add('scale-100', 'opacity-100');
+      });
+    }
+
+    function closeResultModal() {
+      const overlay = document.getElementById('resultModalOverlay');
+      const card = document.getElementById('resultModalCard');
+      if (!overlay || !card) return;
+
+      card.classList.remove('scale-100', 'opacity-100');
+      card.classList.add('scale-95', 'opacity-0');
+      setTimeout(() => {
+        overlay.classList.add('hidden');
+      }, 250);
+    }
+
+    // Tutup popup jika menekan tombol Escape di keyboard
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeResultModal();
+    });
+
+    function playSuccessChime() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = ctx.currentTime;
+        
+        // Note 1 (C5: 523.25 Hz)
+        const o1 = ctx.createOscillator();
+        const g1 = ctx.createGain();
+        o1.type = 'sine';
+        o1.frequency.setValueAtTime(523.25, now);
+        g1.gain.setValueAtTime(0.12, now);
+        g1.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        o1.connect(g1);
+        g1.connect(ctx.destination);
+        o1.start(now);
+        o1.stop(now + 0.22);
+
+        // Note 2 (E5: 659.25 Hz)
+        const o2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        o2.type = 'sine';
+        o2.frequency.setValueAtTime(659.25, now + 0.1);
+        g2.gain.setValueAtTime(0.15, now + 0.1);
+        g2.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        o2.connect(g2);
+        g2.connect(ctx.destination);
+        o2.start(now + 0.1);
+        o2.stop(now + 0.35);
+
+        // Note 3 (G5: 783.99 Hz)
+        const o3 = ctx.createOscillator();
+        const g3 = ctx.createGain();
+        o3.type = 'triangle';
+        o3.frequency.setValueAtTime(783.99, now + 0.22);
+        g3.gain.setValueAtTime(0.18, now + 0.22);
+        g3.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        o3.connect(g3);
+        g3.connect(ctx.destination);
+        o3.start(now + 0.22);
+        o3.stop(now + 0.6);
+      } catch (e) {}
+    }
+
+    function triggerConfetti() {
+      const container = document.createElement('div');
+      container.className = 'fixed inset-0 pointer-events-none z-50 overflow-hidden';
+      document.body.appendChild(container);
+
+      const colors = ['#10b981', '#34d399', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6'];
+      for (let i = 0; i < 35; i++) {
+        const el = document.createElement('div');
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const size = Math.floor(Math.random() * 8) + 6;
+        const startX = Math.random() * 100;
+        const endX = startX + (Math.random() * 20 - 10);
+        const duration = 1.2 + Math.random() * 1.5;
+
+        el.style.position = 'absolute';
+        el.style.left = startX + 'vw';
+        el.style.top = '-20px';
+        el.style.width = size + 'px';
+        el.style.height = (size * 1.5) + 'px';
+        el.style.backgroundColor = color;
+        el.style.borderRadius = '3px';
+        el.style.opacity = '1';
+        el.style.transform = `rotate(${Math.random() * 360}deg)`;
+        el.style.transition = `transform ${duration}s ease-out, top ${duration}s ease-in, opacity ${duration}s ease-in`;
+
+        container.appendChild(el);
+
+        setTimeout(() => {
+          el.style.top = '105vh';
+          el.style.left = endX + 'vw';
+          el.style.opacity = '0';
+          el.style.transform = `rotate(${Math.random() * 720}deg)`;
+        }, 20);
+      }
+
+      setTimeout(() => {
+        container.remove();
+      }, 3000);
+    }
+
+    function appendOutputLog(htmlContent, type = 'info') {
+      const logs = document.getElementById('outputLogsContainer');
+      const placeholder = document.getElementById('outputPlaceholder');
+      if (!logs) return;
+
+      if (placeholder) placeholder.classList.add('hidden');
+      logs.classList.remove('hidden');
+
+      const item = document.createElement('div');
+      item.className = 'p-2 rounded-lg text-xs font-mono transition-all';
+
+      if (type === 'output') {
+        item.className += ' bg-emerald-950/70 text-emerald-300 border border-emerald-700/60 font-bold shadow-xs';
+      } else if (type === 'input') {
+        item.className += ' bg-cyan-950/60 text-cyan-300 border border-cyan-800/50';
+      } else if (type === 'condition') {
+        item.className += ' bg-amber-950/50 text-amber-300 border border-amber-800/50';
+      } else if (type === 'calc') {
+        item.className += ' bg-indigo-950/50 text-indigo-300 border border-indigo-800/50';
+      } else {
+        item.className += ' bg-slate-900/80 text-slate-300 border border-slate-800';
+      }
+
+      item.innerHTML = htmlContent;
+      logs.appendChild(item);
+
+      // Auto scroll
+      const screen = document.getElementById('outputDisplayScreen');
+      if (screen) screen.scrollTop = screen.scrollHeight;
+    }
+
+    // ==========================================
+    // EXECUTION ENGINE
+    // ==========================================
+    async function jalankanProgramDenganInput() {
+      if (isExecuting) return;
+      syncCodeFromInputs();
+
+      const inputJenisVal = (document.getElementById('inputJenisSampah')?.value || 'botol plastik').trim();
+      const inputBeratVal = parseFloat(document.getElementById('inputBeratKg')?.value) || 0;
+
+      bersihkanLayarOutput();
+      isExecuting = true;
+
+      const badge = document.getElementById('outputStatusBadge');
+      if (badge) {
+        badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse';
+        badge.textContent = 'Mengeksekusi...';
+      }
+
+      // Notifikasi awal: Program Sedang Berjalan
+      showExecutionBanner('running', '<b>Sedang Menjalankan Program...</b> Mengevaluasi alur instruksi logika pseudocode baris demi baris.');
+      showToastNotification('▶️ Menjalankan Program', `Menguji ${escapeHtml(currentCode.name)} dengan input ${inputJenisVal} (${inputBeratVal} kg)...`, 'info');
+
+      // Initialize Memory with Declared and Input Values
+      memory = {
+        'nama_kelas': { value: 'Informatika - X E7', type: 'STRING' },
+        'jenis_sampah': { value: inputJenisVal, type: 'STRING' },
+        'jenis_sampah2': { value: inputJenisVal, type: 'STRING' },
+        'berat_kg': { value: inputBeratVal, type: 'REAL' },
+        'tarif_poin': { value: 0, type: 'REAL' },
+        'total_poin': { value: 0, type: 'REAL' }
+      };
+
+      appendOutputLog(`▶️ <b>Memulai Eksekusi:</b> <code>${escapeHtml(currentCode.name)}</code>`, 'info');
+
+      const lines = currentCode.lines;
+      let executedBranch = 'Cabang IF';
+
+      for (let i = 0; i < lines.length; i++) {
+        const rawLine = lines[i];
+        const line = rawLine.trim();
+        const lineNum = i + 1;
+
+        // Highlight line
+        highlightCodeLine(i);
+
+        if (!line || line.startsWith('//') || line.startsWith('{')) {
+          continue;
+        }
+
+        // 1. INPUT STATEMENT
+        if (/^(?:INPUT|READ)\b/i.test(line)) {
+          const originalVar = line.replace(/^(?:INPUT|READ)\s+/i, '').trim();
+          const varPartLower = originalVar.toLowerCase();
+
+          if (varPartLower.includes('kelas')) {
+            memory[varPartLower] = { value: 'Informatika - X E7', type: 'STRING' };
+            appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(originalVar)}</code> = <span class="text-white font-bold">"Informatika - X E7"</span>`, 'input');
+          } else if (varPartLower.includes('jenis')) {
+            memory[varPartLower] = { value: inputJenisVal, type: 'STRING' };
+            memory['jenis_sampah'] = { value: inputJenisVal, type: 'STRING' };
+            memory['jenis_sampah2'] = { value: inputJenisVal, type: 'STRING' };
+            appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(originalVar)}</code> = <span class="text-white font-bold">"${escapeHtml(inputJenisVal)}"</span>`, 'input');
+          } else if (varPartLower.includes('berat')) {
+            memory[varPartLower] = { value: inputBeratVal, type: 'REAL' };
+            memory['berat_kg'] = { value: inputBeratVal, type: 'REAL' };
+            appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(originalVar)}</code> = <span class="text-white font-bold">${inputBeratVal} kg</span>`, 'input');
+          } else {
+            appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(originalVar)}</code>`, 'input');
+          }
+          await delay(200);
+          continue;
+        }
+
+        // 2. IF STATEMENT
+        if (/^IF\b/i.test(line)) {
+          const condMatch = line.match(/^IF\s+(.+?)\s+THEN\b/i);
+          const condStr = condMatch ? condMatch[1] : line.replace(/^IF\s+/i, '').replace(/\s+THEN.*$/i, '');
+          
+          const isTrue = evaluateCondition(condStr);
+          if (isTrue) {
+            executedBranch = 'Cabang IF (Botol Plastik)';
+            appendOutputLog(`🔀 <b>[LOGIKA IF]</b> <code>${escapeHtml(condStr)}</code> &rarr; <b class="text-emerald-400">TRUE (Syarat Terpenuhi, jalankan blok IF)</b>`, 'condition');
+          } else {
+            executedBranch = 'Cabang ELSE (Kardus / Non-Botol)';
+            appendOutputLog(`🔀 <b>[LOGIKA IF]</b> <code>${escapeHtml(condStr)}</code> &rarr; <b class="text-amber-400">FALSE (Syarat Tidak Terpenuhi, lompat ke blok ELSE)</b>`, 'condition');
+            // Skip to ELSE
+            i = skipToElseOrEndIf(i, lines);
+          }
+          await delay(250);
+          continue;
+        }
+
+        // 3. ELSE STATEMENT (Encountered after TRUE branch was executed -> jump to END IF)
+        if (/^ELSE\b/i.test(line)) {
+          i = skipToEndIf(i, lines);
+          continue;
+        }
+
+        // 4. END IF STATEMENT
+        if (/^END\s*IF\b/i.test(line)) {
+          continue;
+        }
+
+        // 5. ASSIGNMENT: var <- expr
+        if (line.includes('<-') || line.includes(':=') || (line.includes('=') && !line.startsWith('IF'))) {
+          const parts = line.split(/<-|:=|=/);
+          const targetVar = parts[0].trim().toLowerCase();
+          const expr = parts.slice(1).join('=').trim();
+
+          const calcVal = evaluateExpression(expr);
+          memory[targetVar] = { value: calcVal, type: 'REAL' };
+
+          appendOutputLog(`⚙️ <b>[PERHITUNGAN]</b> <code>${targetVar} &lt;- ${escapeHtml(expr)}</code> &rarr; <b class="text-white">${targetVar} = ${calcVal}</b>`, 'calc');
+          await delay(200);
+          continue;
+        }
+
+        // 6. OUTPUT STATEMENT
+        if (/^(?:OUTPUT|PRINT|WRITE)\b/i.test(line)) {
+          let content = line.replace(/^(?:OUTPUT|PRINT|WRITE)\s*\(?/i, '').replace(/\)?\s*$/i, '');
+          const outText = parseOutputContent(content);
+          const isPureNum = !isNaN(Number(outText)) && String(outText).trim() !== '';
+          const displayText = isPureNum ? `Total Poin: ${outText}` : outText;
+          appendOutputLog(`📢 <b>[OUTPUT LAYAR]:</b> <span class="text-emerald-300 font-bold text-sm ml-1">${escapeHtml(displayText)}</span>`, 'output');
+          await delay(250);
+          continue;
+        }
+
+        await delay(100);
+      }
+
+      // Finish execution
+      isExecuting = false;
+      if (badge) {
+        badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+        badge.textContent = 'Selesai (Sukses)';
+      }
+
+      // Display Final Summary Card
+      const summary = document.getElementById('outputSummaryCard');
+      const totalPoinEl = document.getElementById('summaryTotalPoinDisplay');
+      const branchEl = document.getElementById('summaryBranchDisplay');
+      const statusBadge = document.getElementById('summaryStatusBadge');
+      const iconWrap = document.getElementById('summaryIconWrap');
+
+      const finalPoin = memory['total_poin'] !== undefined ? memory['total_poin'].value : (inputJenisVal.toLowerCase().includes('botol') ? inputBeratVal * 10 : inputBeratVal * 20);
+
+      if (totalPoinEl) totalPoinEl.textContent = `${finalPoin} Poin`;
+      if (branchEl) branchEl.textContent = executedBranch;
+      if (summary) summary.classList.remove('hidden');
+
+      // Validasi Apakah Logika Benar & Berjalan Sesuai Aturan Patbhe Green:
+      // Aturan LKPD: botol plastik = 10 poin/kg, kardus = 20 poin/kg
+      const isBotol = inputJenisVal.toLowerCase().includes('botol');
+      const expectedRate = isBotol ? 10 : 20;
+      const expectedPoin = inputBeratVal * expectedRate;
+      const actualPoin = Number(finalPoin);
+      const isCorrect = (actualPoin === expectedPoin);
+
+      if (isCorrect) {
+        playSuccessChime();
+        triggerConfetti();
+
+        if (statusBadge) {
+          statusBadge.className = 'px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold text-[10px] border border-emerald-500/30';
+          statusBadge.innerHTML = '✅ Benar &amp; Berjalan';
+        }
+        if (iconWrap) {
+          iconWrap.className = 'w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-base';
+          iconWrap.innerHTML = '<i class="fas fa-check-circle"></i>';
+        }
+
+        showExecutionBanner('success', `
+          <div class="flex items-center justify-between gap-3 flex-wrap">
+            <div>
+              <div class="font-black text-emerald-300 text-xs flex items-center gap-1.5">
+                <i class="fas fa-check-circle text-emerald-400 text-sm"></i>
+                <span>NOTIFIKASI VALIDASI: LOGIKA PSEUDOCODE BENAR &amp; BERJALAN LANCAR!</span>
+              </div>
+              <div class="text-[11px] text-slate-300 mt-1 font-sans">
+                Seluruh baris kode dieksekusi dengan tepat. Variabel <code>total_poin</code> menghasilkan <b>${actualPoin} Poin</b> (100% Sesuai target LKPD: <i>${escapeHtml(inputJenisVal)}</i> @${expectedRate} poin &times; ${inputBeratVal} kg).
+              </div>
+            </div>
+            <span class="px-2.5 py-1 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-black text-[10px] tracking-wide shrink-0">
+              ✓ 100% VALID
+            </span>
+          </div>
+        `);
+
+        showToastNotification(
+          '🎉 Logika Benar & Berjalan!',
+          `Program sukses dieksekusi! Menghasilkan ${actualPoin} Poin (100% Sesuai Kunci Jawaban LKPD).`,
+          'success'
+        );
+
+        // Munculkan Pop-up Notifikasi di Tengah Layar
+        openResultModal(true, {
+          inputJenisVal,
+          inputBeratVal,
+          executedBranch,
+          actualPoin,
+          expectedPoin,
+          expectedRate
+        });
+      } else {
+        if (statusBadge) {
+          statusBadge.className = 'px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-400 font-bold text-[10px] border border-amber-500/30';
+          statusBadge.innerHTML = '⚠️ Perlu Koreksi';
+        }
+        if (iconWrap) {
+          iconWrap.className = 'w-9 h-9 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center justify-center text-base';
+          iconWrap.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+        }
+
+        showExecutionBanner('warning', `
+          <div>
+            <div class="font-black text-amber-300 text-xs flex items-center gap-1.5">
+              <i class="fas fa-exclamation-triangle text-amber-400 text-sm"></i>
+              <span>NOTIFIKASI VALIDASI: PROGRAM BERJALAN, TETAPI HASIL TIDAK SESUAI TARGET LKPD</span>
+            </div>
+            <div class="text-[11px] text-slate-300 mt-1 font-sans">
+              Nilai <code>total_poin</code> yang dihasilkan adalah <b>${actualPoin} Poin</b>, padahal target LKPD untuk <i>${escapeHtml(inputJenisVal)}</i> (${inputBeratVal} kg) adalah <b>${expectedPoin} Poin</b>. Periksa kembali rumus perhitungan pada blok IF / ELSE.
+            </div>
+          </div>
+        `);
+
+        showToastNotification(
+          '⚠️ Hasil Tidak Sesuai Target',
+          `Total poin (${actualPoin}) berbeda dari target LKPD (${expectedPoin}). Periksa rumus IF-ELSE.`,
+          'warning'
+        );
+
+        // Munculkan Pop-up Notifikasi Peringatan di Tengah Layar
+        openResultModal(false, {
+          inputJenisVal,
+          inputBeratVal,
+          executedBranch,
+          actualPoin,
+          expectedPoin,
+          expectedRate
+        });
+      }
+
+      // Scroll to bottom of output
+      const screen = document.getElementById('outputDisplayScreen');
+      if (screen) screen.scrollTop = screen.scrollHeight;
+    }
+
+    function highlightCodeLine(targetIdx) {
+      document.querySelectorAll('.code-line').forEach((el, idx) => {
+        if (idx === targetIdx) {
+          el.className = 'code-line executing-line flex items-center gap-2.5 px-3 py-1.5 transition-colors';
+          el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else if (idx < targetIdx) {
+          el.className = 'code-line passed-line flex items-center gap-2.5 px-3 py-1.5 transition-colors';
+        } else {
+          el.className = 'code-line flex items-center gap-2.5 px-3 py-1.5 transition-colors';
+        }
+      });
+    }
+
+    function skipToElseOrEndIf(startIdx, lines) {
+      let depth = 1;
+      for (let i = startIdx + 1; i < lines.length; i++) {
+        const l = lines[i].trim();
+        if (/^IF\b/i.test(l)) {
+          depth++;
+        } else if (/^END\s*IF\b/i.test(l)) {
+          depth--;
+          if (depth === 0) return i;
+        } else if (/^ELSE\b/i.test(l) && depth === 1) {
+          return i;
+        }
+      }
+      return lines.length - 1;
+    }
+
+    function skipToEndIf(startIdx, lines) {
+      let depth = 1;
+      for (let i = startIdx + 1; i < lines.length; i++) {
+        const l = lines[i].trim();
+        if (/^IF\b/i.test(l)) {
+          depth++;
+        } else if (/^END\s*IF\b/i.test(l)) {
+          depth--;
+          if (depth === 0) return i;
+        }
+      }
+      return lines.length - 1;
+    }
+
+    function evaluateCondition(condStr) {
+      if (!condStr) return true;
+      let clean = condStr.trim();
+
+      let op = '==';
+      let parts = [];
+
+      if (clean.includes('!=')) { op = '!='; parts = clean.split('!='); }
+      else if (clean.includes('<=')) { op = '<='; parts = clean.split('<='); }
+      else if (clean.includes('>=')) { op = '>='; parts = clean.split('>='); }
+      else if (clean.includes('<')) { op = '<'; parts = clean.split('<'); }
+      else if (clean.includes('>')) { op = '>'; parts = clean.split('>'); }
+      else if (clean.includes('==')) { op = '=='; parts = clean.split('=='); }
+      else if (clean.includes('=')) { op = '=='; parts = clean.split('='); }
+      else return true;
+
+      const leftVal = resolveValue(parts[0].trim());
+      const rightVal = resolveValue(parts[1].trim());
+
+      // String comparison (e.g. jenis_sampah = "botol plastik")
+      if (typeof leftVal === 'string' || typeof rightVal === 'string') {
+        const lNorm = String(leftVal).toLowerCase().replace(/['"]/g, '').trim();
+        const rNorm = String(rightVal).toLowerCase().replace(/['"]/g, '').trim();
+        if (op === '==' || op === '=') return lNorm === rNorm;
+        if (op === '!=') return lNorm !== rNorm;
+      }
+
+      const lNum = Number(leftVal);
+      const rNum = Number(rightVal);
+
+      switch (op) {
+        case '==': return lNum === rNum;
+        case '!=': return lNum !== rNum;
+        case '<': return lNum < rNum;
+        case '<=': return lNum <= rNum;
+        case '>': return lNum > rNum;
+        case '>=': return lNum >= rNum;
+        default: return false;
+      }
+    }
+
+    function evaluateExpression(exprStr) {
+      if (!exprStr) return 0;
+      let clean = exprStr.trim();
+
+      // Replace variable names with current memory values
+      // Sort keys descending by length so longer variable names get replaced first (e.g. jenis_sampah2 before jenis_sampah)
+      const varKeys = Object.keys(memory).sort((a, b) => b.length - a.length);
+      varKeys.forEach(vName => {
+        const regex = new RegExp(`\\b${vName}\\b`, 'gi');
+        clean = clean.replace(regex, memory[vName].value !== undefined ? memory[vName].value : 0);
+      });
+
+      try {
+        if (/^[0-9+\-*/().\s]+$/.test(clean)) {
+          return Function(`'use strict'; return (${clean})`)();
+        }
+      } catch (e) {}
+
+      return clean.replace(/['"]/g, '');
+    }
+
+    function resolveValue(token) {
+      let clean = token.replace(/['"]/g, '').trim();
+      const lower = clean.toLowerCase();
+
+      if (memory[lower] !== undefined && memory[lower].value !== undefined) {
+        return memory[lower].value;
+      }
+      if (!isNaN(Number(clean)) && clean !== '') {
+        return Number(clean);
+      }
+      return clean;
+    }
+
+    function parseOutputContent(contentStr) {
+      const parts = contentStr.split(',');
+      const result = [];
+
+      parts.forEach(p => {
+        let clean = p.trim();
+        if ((clean.startsWith('"') && clean.endsWith('"')) || (clean.startsWith("'") && clean.endsWith("'"))) {
+          result.push(clean.slice(1, -1));
+        } else {
+          const varName = clean.toLowerCase();
+          if (memory[varName] !== undefined && memory[varName].value !== undefined) {
+            result.push(memory[varName].value);
+          } else {
+            result.push(clean);
+          }
+        }
+      });
+
+      return result.join(' ');
+    }
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+  </script>
+
+  <!-- Floating Toast Notification Container -->
+  <div id="toastNotificationContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2.5 max-w-sm w-full pointer-events-none"></div>
+
+</body>
+</html>

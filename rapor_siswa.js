@@ -16,7 +16,14 @@
     safeSetStorage(STORAGE_KEY_ROSTER, roster);
   }
 
-  let teacherRecords = safeGetStorage(STORAGE_KEY_RECORDS, INITIAL_SAMPLE_RECORDS);
+  // Hapus seluruh data lokal: Data asesmen murid murni berasal dari Google Apps Script (GAS)
+  try {
+    localStorage.removeItem(STORAGE_KEY_RECORDS);
+    localStorage.removeItem('eduassess_teacher_records_v3');
+    localStorage.removeItem('eduassess_teacher_records_v2');
+  } catch (e) {}
+
+  let teacherRecords = [];
   let session = safeGetStorage(STORAGE_KEY_SESSION, createDefaultSession());
   if (!session.kelas || session.kelas === 'X - Informatika') {
     session.kelas = 'Informatika - X E7';
@@ -386,20 +393,40 @@
       });
     }
 
+    function fetchGasRecords(onDone) {
+      const gasUrl = localStorage.getItem('eduassess_gas_url_v2') || (typeof DEFAULT_GAS_URL !== 'undefined' ? DEFAULT_GAS_URL : '');
+      if (!gasUrl) {
+        if (typeof onDone === 'function') onDone();
+        return;
+      }
+      fetch(gasUrl + (gasUrl.indexOf('?') === -1 ? '?action=getRecords' : '&action=getRecords') + '&_t=' + Date.now())
+        .then(function (res) { return res.json(); })
+        .then(function (payload) {
+          const list = Array.isArray(payload) ? payload : (payload.data || payload.records || []);
+          teacherRecords = list;
+          const currentAbsen = inputAbsen ? Number(inputAbsen.value) : (selectAbsen ? Number(selectAbsen.value) : initialAbsen);
+          renderStudentReport(currentAbsen);
+          if (typeof onDone === 'function') onDone();
+        })
+        .catch(function () {
+          if (typeof onDone === 'function') onDone();
+        });
+    }
+
     // Tombol Sinkronkan
     const btnSyncReport = document.getElementById('btnSyncReport');
     if (btnSyncReport) {
       btnSyncReport.addEventListener('click', function () {
-        teacherRecords = safeGetStorage(STORAGE_KEY_RECORDS, INITIAL_SAMPLE_RECORDS);
-        session = safeGetStorage(STORAGE_KEY_SESSION, createDefaultSession());
-        const currentAbsen = inputAbsen ? Number(inputAbsen.value) : initialAbsen;
-        renderStudentReport(currentAbsen);
-        showToast('Data capaian berhasil disinkronkan!', 'success');
+        showToast('Menghubungi Google Apps Script untuk menarik data...', 'info');
+        fetchGasRecords(function () {
+          showToast('Data berhasil disinkronkan dari Google Sheets!', 'success');
+        });
       });
     }
 
-    // Render pertama
+    // Render pertama & tarik data dari GAS
     renderStudentReport(initialAbsen);
+    fetchGasRecords();
   });
 
 })();
