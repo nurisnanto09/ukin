@@ -35,6 +35,16 @@
       background-color: rgba(16, 185, 129, 0.08);
       border-left: 4px solid #10b981;
     }
+    .code-line.error-line {
+      background-color: rgba(244, 63, 94, 0.28) !important;
+      border-left: 4px solid #f43f5e !important;
+      box-shadow: inset 0 0 12px rgba(244, 63, 94, 0.25);
+      animation: pulse-error 1.5s infinite ease-in-out;
+    }
+    @keyframes pulse-error {
+      0%, 100% { background-color: rgba(244, 63, 94, 0.25); }
+      50% { background-color: rgba(244, 63, 94, 0.45); }
+    }
   </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
@@ -416,7 +426,7 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
       </div>
 
       <!-- Test Details Box -->
-      <div class="bg-slate-950/90 rounded-2xl border border-slate-800 p-4 text-left text-xs space-y-2.5 font-mono shadow-inner">
+      <div id="modalDetailsContainer" class="bg-slate-950/90 rounded-2xl border border-slate-800 p-4 text-left text-xs space-y-2.5 font-mono shadow-inner">
         <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
           <span class="text-slate-400 font-sans">Input Jenis Sampah:</span>
           <span id="modalInputJenis" class="font-bold text-emerald-300 text-sm">"kardus"</span>
@@ -788,6 +798,9 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
       } else if (type === 'warning') {
         banner.className += ' bg-amber-950/90 border-amber-500/70 text-amber-100 shadow-amber-900/40';
         banner.innerHTML = htmlContent;
+      } else if (type === 'error' || type === 'danger') {
+        banner.className += ' bg-rose-950/90 border-rose-500/70 text-rose-100 shadow-rose-900/40';
+        banner.innerHTML = htmlContent;
       }
       banner.classList.remove('hidden');
     }
@@ -813,7 +826,9 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
         ? '<span class="w-8 h-8 rounded-xl bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-sm shrink-0"><i class="fas fa-check"></i></span>'
         : type === 'warning'
           ? '<span class="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-black text-sm shrink-0"><i class="fas fa-exclamation-triangle"></i></span>'
-          : '<span class="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-black text-sm shrink-0"><i class="fas fa-play"></i></span>';
+          : (type === 'error' || type === 'danger')
+            ? '<span class="w-8 h-8 rounded-xl bg-rose-500 text-white flex items-center justify-center font-black text-sm shrink-0"><i class="fas fa-times"></i></span>'
+            : '<span class="w-8 h-8 rounded-xl bg-indigo-500 text-white flex items-center justify-center font-black text-sm shrink-0"><i class="fas fa-play"></i></span>';
 
       toast.innerHTML = `
         ${iconHtml}
@@ -847,7 +862,7 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
     // ==========================================
     // MODAL POP-UP DI TENGAH LAYAR
     // ==========================================
-    function openResultModal(isCorrect, data) {
+    function openResultModal(mode, data) {
       const overlay = document.getElementById('resultModalOverlay');
       const card = document.getElementById('resultModalCard');
       if (!overlay || !card) return;
@@ -857,58 +872,128 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
       const catTag = document.getElementById('modalCategoryTag');
       const title = document.getElementById('modalTitle');
       const desc = document.getElementById('modalDesc');
-      const inputJenis = document.getElementById('modalInputJenis');
-      const inputBerat = document.getElementById('modalInputBerat');
-      const branch = document.getElementById('modalBranch');
-      const totalPoin = document.getElementById('modalTotalPoin');
+      const detailsBox = document.getElementById('modalDetailsContainer');
       const actionBtn = document.getElementById('modalActionBtn');
 
-      if (inputJenis) inputJenis.textContent = `"${data.inputJenisVal}"`;
-      if (inputBerat) inputBerat.textContent = `${data.inputBeratVal} kg`;
-      if (branch) branch.textContent = data.executedBranch;
-      if (totalPoin) totalPoin.textContent = `${data.actualPoin} Poin`;
-
-      if (isCorrect) {
-        card.className = 'bg-slate-900 border-2 border-emerald-500 rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-7 transform transition-all duration-300 scale-95 opacity-0 text-center relative space-y-4 shadow-emerald-500/20';
+      if (mode === 'error' || mode === 'syntax_error') {
+        card.className = 'bg-slate-900 border-2 border-rose-500 rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-7 transform transition-all duration-300 scale-95 opacity-0 text-center relative space-y-4 shadow-rose-500/25';
         if (iconWrap) {
-          iconWrap.className = 'mx-auto w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/20 animate-bounce';
+          iconWrap.className = 'mx-auto w-16 h-16 rounded-2xl bg-rose-500/20 text-rose-400 border border-rose-500/40 flex items-center justify-center text-3xl shadow-lg shadow-rose-500/20 animate-pulse';
         }
-        if (icon) icon.className = 'fas fa-check-circle';
+        if (icon) icon.className = 'fas fa-times-circle';
         if (catTag) {
-          catTag.className = 'px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-black uppercase tracking-wider inline-block';
-          catTag.textContent = '✓ 100% Sesuai & Valid';
+          catTag.className = 'px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[11px] font-black uppercase tracking-wider inline-block';
+          catTag.textContent = '❌ SYNTAX ERROR — PENAMAAN VARIABEL';
         }
         if (title) {
           title.className = 'text-lg sm:text-xl font-black text-white mt-2.5 tracking-tight';
-          title.textContent = '🎉 Logika Pseudocode Benar & Berjalan!';
+          title.textContent = 'Eksekusi Terhenti: Aturan Variabel Dilanggar!';
         }
         if (desc) {
-          desc.innerHTML = `Alur percabangan dieksekusi dengan tepat tanpa error logika. Perhitungan <b>${data.actualPoin} Poin</b> 100% sesuai target LKPD (<i>${escapeHtml(data.inputJenisVal)}</i> @${data.expectedRate} poin &times; ${data.inputBeratVal} kg).`;
+          desc.innerHTML = `Program dihentikan interpreter pada <b>Baris ${data.lineNum}</b>.<br><span class="text-rose-200 text-xs">${data.message}</span><br><div class="text-[11px] text-amber-200 bg-amber-950/40 border border-amber-800/40 p-2.5 rounded-xl text-left font-sans mt-2">${data.pedagogy}</div>`;
+        }
+        if (detailsBox) {
+          detailsBox.innerHTML = `
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <span class="text-slate-400 font-sans">Lokasi Kesalahan:</span>
+              <span class="font-bold text-rose-400 text-xs">Baris ${data.lineNum}</span>
+            </div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <span class="text-slate-400 font-sans">Kode Pseudocode:</span>
+              <code class="font-bold text-amber-300 text-xs font-mono">${escapeHtml(data.lineText)}</code>
+            </div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <span class="text-slate-400 font-sans">Variabel Salah:</span>
+              <span class="font-black text-rose-400 text-sm font-mono">${escapeHtml(data.varName)}</span>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-slate-200 font-sans font-bold">Status Eksekusi:</span>
+              <span class="font-black text-rose-400 text-xs uppercase tracking-wide">❌ Terhenti (Gagal)</span>
+            </div>
+          `;
         }
         if (actionBtn) {
-          actionBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer';
-          actionBtn.innerHTML = '<i class="fas fa-check"></i> <span>Hebat! Tutup Pop-up</span>';
+          actionBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-rose-600 hover:bg-rose-500 active:bg-rose-700 text-white font-extrabold text-xs sm:text-sm transition shadow-lg shadow-rose-600/30 flex items-center justify-center gap-2 cursor-pointer';
+          actionBtn.innerHTML = `<i class="fas fa-edit"></i> <span>Tutup &amp; Koreksi Baris ${data.lineNum}</span>`;
+          actionBtn.onclick = () => {
+            closeResultModal();
+            highlightErrorLine(data.lineIdx);
+            const inputEl = document.querySelector(`#editor-line-${data.lineIdx} input`);
+            if (inputEl) {
+              inputEl.focus();
+              inputEl.select();
+            }
+          };
         }
       } else {
-        card.className = 'bg-slate-900 border-2 border-amber-500 rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-7 transform transition-all duration-300 scale-95 opacity-0 text-center relative space-y-4 shadow-amber-500/20';
-        if (iconWrap) {
-          iconWrap.className = 'mx-auto w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-3xl shadow-lg shadow-amber-500/20';
-        }
-        if (icon) icon.className = 'fas fa-exclamation-triangle';
-        if (catTag) {
-          catTag.className = 'px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-black uppercase tracking-wider inline-block';
-          catTag.textContent = '⚠️ Nilai Perlu Dikoreksi';
-        }
-        if (title) {
-          title.className = 'text-lg sm:text-xl font-black text-white mt-2.5 tracking-tight';
-          title.textContent = 'Program Berjalan, Tetapi Hasil Kurang Tepat';
-        }
-        if (desc) {
-          desc.innerHTML = `Nilai yang dihasilkan adalah <b>${data.actualPoin} Poin</b>, padahal target LKPD untuk <i>${escapeHtml(data.inputJenisVal)}</i> (${data.inputBeratVal} kg) adalah <b>${data.expectedPoin} Poin</b>. Periksa kembali rumus pada blok IF/ELSE.`;
-        }
+        // Mode Normal: Sukses atau Evaluasi Formula
         if (actionBtn) {
-          actionBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white font-extrabold text-xs sm:text-sm transition shadow-lg shadow-amber-600/30 flex items-center justify-center gap-2 cursor-pointer';
-          actionBtn.innerHTML = '<i class="fas fa-wrench"></i> <span>Tutup &amp; Koreksi Rumus</span>';
+          actionBtn.onclick = () => closeResultModal();
+        }
+
+        if (detailsBox) {
+          detailsBox.innerHTML = `
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <span class="text-slate-400 font-sans">Input Jenis Sampah:</span>
+              <span id="modalInputJenis" class="font-bold text-emerald-300 text-sm">"${escapeHtml(data.inputJenisVal)}"</span>
+            </div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <span class="text-slate-400 font-sans">Input Berat:</span>
+              <span id="modalInputBerat" class="font-bold text-cyan-300 text-sm">${data.inputBeratVal} kg</span>
+            </div>
+            <div class="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <span class="text-slate-400 font-sans">Jalur Percabangan:</span>
+              <span id="modalBranch" class="font-bold text-indigo-300 font-sans">${escapeHtml(data.executedBranch)}</span>
+            </div>
+            <div class="flex items-center justify-between pt-1">
+              <span class="text-slate-200 font-sans font-bold">Total Poin Akhir:</span>
+              <span id="modalTotalPoin" class="font-black ${mode === true ? 'text-emerald-400' : 'text-amber-400'} text-lg font-mono">${data.actualPoin} Poin</span>
+            </div>
+          `;
+        }
+
+        if (mode === true || mode === 'success') {
+          card.className = 'bg-slate-900 border-2 border-emerald-500 rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-7 transform transition-all duration-300 scale-95 opacity-0 text-center relative space-y-4 shadow-emerald-500/20';
+          if (iconWrap) {
+            iconWrap.className = 'mx-auto w-16 h-16 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/20 animate-bounce';
+          }
+          if (icon) icon.className = 'fas fa-check-circle';
+          if (catTag) {
+            catTag.className = 'px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[11px] font-black uppercase tracking-wider inline-block';
+            catTag.textContent = '✓ 100% Sesuai & Valid';
+          }
+          if (title) {
+            title.className = 'text-lg sm:text-xl font-black text-white mt-2.5 tracking-tight';
+            title.textContent = '🎉 Logika Pseudocode Benar & Berjalan!';
+          }
+          if (desc) {
+            desc.innerHTML = `Alur percabangan dieksekusi dengan tepat tanpa error logika. Perhitungan <b>${data.actualPoin} Poin</b> 100% sesuai target LKPD (<i>${escapeHtml(data.inputJenisVal)}</i> @${data.expectedRate} poin &times; ${data.inputBeratVal} kg).`;
+          }
+          if (actionBtn) {
+            actionBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white font-extrabold text-xs sm:text-sm transition shadow-lg shadow-emerald-600/30 flex items-center justify-center gap-2 cursor-pointer';
+            actionBtn.innerHTML = '<i class="fas fa-check"></i> <span>Hebat! Tutup Pop-up</span>';
+          }
+        } else {
+          card.className = 'bg-slate-900 border-2 border-amber-500 rounded-3xl max-w-md w-full shadow-2xl p-6 sm:p-7 transform transition-all duration-300 scale-95 opacity-0 text-center relative space-y-4 shadow-amber-500/20';
+          if (iconWrap) {
+            iconWrap.className = 'mx-auto w-16 h-16 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center text-3xl shadow-lg shadow-amber-500/20';
+          }
+          if (icon) icon.className = 'fas fa-exclamation-triangle';
+          if (catTag) {
+            catTag.className = 'px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[11px] font-black uppercase tracking-wider inline-block';
+            catTag.textContent = '⚠️ Nilai Perlu Dikoreksi';
+          }
+          if (title) {
+            title.className = 'text-lg sm:text-xl font-black text-white mt-2.5 tracking-tight';
+            title.textContent = 'Program Berjalan, Tetapi Hasil Kurang Tepat';
+          }
+          if (desc) {
+            desc.innerHTML = `Nilai yang dihasilkan adalah <b>${data.actualPoin} Poin</b>, padahal target LKPD untuk <i>${escapeHtml(data.inputJenisVal)}</i> (${data.inputBeratVal} kg) adalah <b>${data.expectedPoin} Poin</b>. Periksa kembali rumus pada blok IF/ELSE.`;
+          }
+          if (actionBtn) {
+            actionBtn.className = 'flex-1 py-3 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-white font-extrabold text-xs sm:text-sm transition shadow-lg shadow-amber-600/30 flex items-center justify-center gap-2 cursor-pointer';
+            actionBtn.innerHTML = '<i class="fas fa-wrench"></i> <span>Tutup &amp; Koreksi Rumus</span>';
+          }
         }
       }
 
@@ -917,6 +1002,249 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
         card.classList.remove('scale-95', 'opacity-0');
         card.classList.add('scale-100', 'opacity-100');
       });
+    }
+
+    // ==========================================
+    // VARIABLE VALIDATION ENGINE & AUDIO HELPERS
+    // ==========================================
+    function findInvalidIdentifiersStartingWithDigit(text) {
+      if (!text) return [];
+      const withoutStrings = text.replace(/["'“‘].*?["'”’]/g, ' ');
+      const matches = withoutStrings.match(/\b[0-9]+[a-zA-Z_][a-zA-Z0-9_]*\b/g) || [];
+      return matches;
+    }
+
+    function validateVariableName(token) {
+      if (!token) return { valid: true };
+      const clean = token.trim();
+      
+      if ((clean.startsWith('"') && clean.endsWith('"')) || (clean.startsWith("'") && clean.endsWith("'"))) {
+        return { valid: true, isLiteral: true };
+      }
+      if (!isNaN(Number(clean)) && clean !== '') {
+        return { valid: true, isLiteral: true };
+      }
+
+      // Aturan 1: Tidak boleh diawali angka (contoh: 2berat_kg, 2jenis_sampah, 1total)
+      if (/^[0-9]+[a-zA-Z_]/.test(clean)) {
+        const digitMatch = clean.match(/^[0-9]+/);
+        const startDigits = digitMatch ? digitMatch[0] : '';
+        const validPart = clean.replace(/^[0-9]+/, '');
+        return {
+          valid: false,
+          varName: clean,
+          errorType: 'STARTS_WITH_NUMBER',
+          title: 'Nama Variabel Diawali Angka',
+          message: `Nama variabel <code>"${escapeHtml(clean)}"</code> <b>tidak valid karena diawali dengan angka (${startDigits})</b>.`,
+          pedagogy: `Sesuai aturan penamaan variabel yang dipelajari pada Aktivitas 1, nama variabel <b>TIDAK BOLEH</b> diawali dengan angka. Angka hanya sah diletakkan di tengah atau di belakang variabel (contoh yang sah: <code>${escapeHtml(validPart)}${startDigits}</code> atau <code>${escapeHtml(validPart)}2</code>).`
+        };
+      }
+
+      // Aturan 2: Tidak boleh mengandung spasi (contoh: berat kg, jenis sampah)
+      if (/\s/.test(clean)) {
+        const suggestion = clean.replace(/\s+/g, '_');
+        return {
+          valid: false,
+          varName: clean,
+          errorType: 'CONTAINS_SPACE',
+          title: 'Nama Variabel Mengandung Spasi',
+          message: `Nama variabel <code>"${escapeHtml(clean)}"</code> tidak valid karena <b>mengandung spasi</b>.`,
+          pedagogy: `Nama variabel dalam pseudocode harus berupa satu kata utuh tanpa spasi.<br><br>💡 <b>Saran Perbaikan:</b> Gunakan pemisah garis bawah (underscore): <code>${escapeHtml(suggestion)}</code>.`
+        };
+      }
+
+      // Aturan 3: Hanya boleh huruf, angka, dan underscore
+      if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(clean)) {
+        return {
+          valid: false,
+          varName: clean,
+          errorType: 'INVALID_CHARACTERS',
+          title: 'Karakter Khusus Tidak Sah',
+          message: `Nama variabel <code>"${escapeHtml(clean)}"</code> mengandung simbol khusus yang dilarang.`,
+          pedagogy: `Nama variabel hanya boleh tersusun dari kombinasi huruf (a-z, A-Z), angka (0-9), dan garis bawah (underscore <code>_</code>).`
+        };
+      }
+
+      // Aturan 4: Tidak boleh kata kunci terlarang (Reserved Keywords)
+      const reserved = ['IF', 'THEN', 'ELSE', 'END', 'ENDIF', 'INPUT', 'READ', 'OUTPUT', 'PRINT', 'WRITE', 'PROGRAM', 'DEKLARASI', 'ALGORITMA', 'INTEGER', 'REAL', 'STRING', 'BOOLEAN', 'TRUE', 'FALSE'];
+      if (reserved.includes(clean.toUpperCase())) {
+        return {
+          valid: false,
+          varName: clean,
+          errorType: 'RESERVED_KEYWORD',
+          title: 'Menggunakan Kata Kunci Sistem',
+          message: `Kata <code>"${escapeHtml(clean)}"</code> adalah kata kunci baku pseudocode dan tidak boleh digunakan sebagai nama variabel.`,
+          pedagogy: `Gunakan nama lain yang mendeskripsikan data, misalnya <code>nama_${clean.toLowerCase()}</code>.`
+        };
+      }
+
+      return { valid: true };
+    }
+
+    function extractDeclaredVariables(declText) {
+      if (!declText) return [];
+      const lines = declText.split(/\n/);
+      const vars = [];
+      for (const l of lines) {
+        const clean = l.replace(/^DEKLARASI\s*:?\s*/i, '').trim();
+        if (!clean || clean.startsWith('//') || clean.startsWith('{')) continue;
+        const colonIdx = clean.indexOf(':');
+        const varPart = colonIdx !== -1 ? clean.substring(0, colonIdx) : clean;
+        const parts = varPart.split(',');
+        for (let p of parts) {
+          let v = p.trim();
+          if (v) vars.push(v);
+        }
+      }
+      return vars;
+    }
+
+    function highlightErrorLine(targetIdx) {
+      document.querySelectorAll('.code-line').forEach((el, idx) => {
+        if (idx === targetIdx) {
+          el.className = 'code-line error-line flex items-center gap-2.5 px-3 py-1.5 transition-colors';
+          el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else if (idx < targetIdx) {
+          el.className = 'code-line passed-line flex items-center gap-2.5 px-3 py-1.5 transition-colors';
+        } else {
+          el.className = 'code-line flex items-center gap-2.5 px-3 py-1.5 transition-colors';
+        }
+      });
+    }
+
+    function playErrorBuzzer() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const now = ctx.currentTime;
+
+        const o1 = ctx.createOscillator();
+        const g1 = ctx.createGain();
+        o1.type = 'sawtooth';
+        o1.frequency.setValueAtTime(220, now);
+        o1.frequency.exponentialRampToValueAtTime(140, now + 0.35);
+        g1.gain.setValueAtTime(0.2, now);
+        g1.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        o1.connect(g1);
+        g1.connect(ctx.destination);
+        o1.start(now);
+        o1.stop(now + 0.35);
+
+        const o2 = ctx.createOscillator();
+        const g2 = ctx.createGain();
+        o2.type = 'square';
+        o2.frequency.setValueAtTime(160, now + 0.05);
+        o2.frequency.exponentialRampToValueAtTime(110, now + 0.4);
+        g2.gain.setValueAtTime(0.15, now + 0.05);
+        g2.gain.exponentialRampToValueAtTime(0.001, now + 0.4);
+        o2.connect(g2);
+        g2.connect(ctx.destination);
+        o2.start(now + 0.05);
+        o2.stop(now + 0.4);
+      } catch (e) {}
+    }
+
+    function triggerSyntaxError(lineIdx, lineText, errorInfo, section = 'algoritma') {
+      isExecuting = false;
+
+      const lineNum = lineIdx + 1;
+      const isAlgo = section === 'algoritma';
+
+      if (isAlgo && lineIdx >= 0) {
+        highlightErrorLine(lineIdx);
+      } else {
+        const declBox = document.getElementById('editorProgDecl');
+        if (declBox) {
+          declBox.classList.add('border-rose-500', 'bg-rose-950/20');
+        }
+      }
+
+      const badge = document.getElementById('outputStatusBadge');
+      if (badge) {
+        badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse';
+        badge.textContent = '❌ Gagal (Syntax Error)';
+      }
+
+      playErrorBuzzer();
+
+      showExecutionBanner('error', `
+        <div class="flex items-start justify-between gap-3">
+          <div>
+            <div class="font-black text-rose-300 text-xs flex items-center gap-1.5">
+              <i class="fas fa-times-circle text-rose-400 text-sm"></i>
+              <span>EKSEKUSI GAGAL: SYNTAX ERROR ${isAlgo ? `PADA BARIS ${lineNum}` : 'PADA DEKLARASI'}!</span>
+            </div>
+            <div class="text-[11px] text-slate-300 mt-1 font-sans leading-relaxed">
+              ${errorInfo.message}
+            </div>
+            <div class="text-[11px] text-rose-200 mt-1.5 font-sans bg-rose-950/50 p-2 rounded-lg border border-rose-800/40">
+              ${errorInfo.pedagogy}
+            </div>
+          </div>
+          <span class="px-2.5 py-1 rounded-lg bg-rose-500/20 text-rose-300 border border-rose-500/40 font-black text-[10px] tracking-wide shrink-0">
+            SYNTAX ERROR
+          </span>
+        </div>
+      `);
+
+      showToastNotification(
+        '❌ ' + errorInfo.title,
+        `${isAlgo ? `Baris ${lineNum}: ` : ''}Variabel "${errorInfo.varName}" melanggar aturan penamaan!`,
+        'error'
+      );
+
+      appendOutputLog(`
+        <div class="p-3 bg-rose-950/80 border border-rose-600/70 rounded-xl space-y-2 text-rose-200 font-sans shadow-md">
+          <div class="flex items-center gap-2 font-black text-rose-300 text-xs">
+            <i class="fas fa-times-circle text-rose-400 text-base"></i>
+            <span>❌ [SYNTAX ERROR - PENAMAAN VARIABEL TIDAK SAH]</span>
+          </div>
+          <div class="font-mono text-xs text-white bg-slate-950/80 px-2.5 py-1.5 rounded-lg border border-rose-900/50 flex items-center gap-2">
+            <span class="text-rose-400 font-bold">${isAlgo ? `Baris ${lineNum}:` : 'Deklarasi:'}</span>
+            <span class="text-slate-200">${escapeHtml(lineText)}</span>
+          </div>
+          <div class="text-xs text-rose-100 font-medium leading-relaxed">
+            ${errorInfo.message}
+          </div>
+          <div class="text-[11px] text-amber-200 bg-amber-950/40 p-2 rounded-lg border border-amber-800/40 leading-relaxed">
+            ${errorInfo.pedagogy}
+          </div>
+          <div class="text-[11px] text-slate-400 pt-1 border-t border-rose-900/40">
+            🛑 <i>Interpreter menghentikan eksekusi program demi menjaga integritas logika komputasi.</i>
+          </div>
+        </div>
+      `, 'error');
+
+      const summary = document.getElementById('outputSummaryCard');
+      const totalPoinEl = document.getElementById('summaryTotalPoinDisplay');
+      const branchEl = document.getElementById('summaryBranchDisplay');
+      const statusBadge = document.getElementById('summaryStatusBadge');
+      const iconWrap = document.getElementById('summaryIconWrap');
+
+      if (totalPoinEl) totalPoinEl.innerHTML = '<span class="text-rose-400">0 Poin (Gagal)</span>';
+      if (branchEl) branchEl.innerHTML = `<span class="text-rose-400 font-bold">${isAlgo ? `Terhenti di Baris ${lineNum}` : 'Gagal di Deklarasi'}</span>`;
+      if (statusBadge) {
+        statusBadge.className = 'px-2.5 py-0.5 rounded-full bg-rose-500/20 text-rose-400 font-bold text-[10px] border border-rose-500/30';
+        statusBadge.innerHTML = '❌ Syntax Error';
+      }
+      if (iconWrap) {
+        iconWrap.className = 'w-9 h-9 rounded-xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-base';
+        iconWrap.innerHTML = '<i class="fas fa-times-circle"></i>';
+      }
+      if (summary) summary.classList.remove('hidden');
+
+      openResultModal('error', {
+        lineIdx,
+        lineNum,
+        lineText,
+        varName: errorInfo.varName,
+        title: errorInfo.title,
+        message: errorInfo.message,
+        pedagogy: errorInfo.pedagogy,
+        errorType: errorInfo.errorType
+      });
+
+      const screen = document.getElementById('outputDisplayScreen');
+      if (screen) screen.scrollTop = screen.scrollHeight;
     }
 
     function closeResultModal() {
@@ -1038,6 +1366,8 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
         item.className += ' bg-amber-950/50 text-amber-300 border border-amber-800/50';
       } else if (type === 'calc') {
         item.className += ' bg-indigo-950/50 text-indigo-300 border border-indigo-800/50';
+      } else if (type === 'error') {
+        item.className += ' bg-rose-950/80 text-rose-300 border border-rose-700/70 shadow-xs';
       } else {
         item.className += ' bg-slate-900/80 text-slate-300 border border-slate-800';
       }
@@ -1063,6 +1393,23 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
       bersihkanLayarOutput();
       isExecuting = true;
 
+      // 1. Validasi Bagian Deklarasi Variabel
+      const declText = currentCode.decl || '';
+      const invalidDeclTokens = findInvalidIdentifiersStartingWithDigit(declText);
+      if (invalidDeclTokens.length > 0) {
+        const badVar = invalidDeclTokens[0];
+        const check = {
+          valid: false,
+          varName: badVar,
+          errorType: 'STARTS_WITH_NUMBER',
+          title: 'Nama Variabel Diawali Angka pada Deklarasi',
+          message: `Nama variabel <code>"${escapeHtml(badVar)}"</code> pada <b>Bagian Deklarasi</b> tidak valid karena diawali angka (${badVar.charAt(0)}).`,
+          pedagogy: `Sesuai aturan penamaan variabel yang dipelajari pada Aktivitas 1, nama variabel <b>TIDAK BOLEH</b> diawali dengan angka. Angka hanya sah diletakkan di tengah atau di belakang variabel (contoh yang sah: <code>${escapeHtml(badVar.replace(/^[0-9]+/, ''))}2</code>).`
+        };
+        triggerSyntaxError(-1, declText, check, 'deklarasi');
+        return;
+      }
+
       const badge = document.getElementById('outputStatusBadge');
       if (badge) {
         badge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 animate-pulse';
@@ -1073,14 +1420,9 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
       showExecutionBanner('running', '<b>Sedang Menjalankan Program...</b> Mengevaluasi alur instruksi logika pseudocode baris demi baris.');
       showToastNotification('▶️ Menjalankan Program', `Menguji ${escapeHtml(currentCode.name)} dengan input ${inputJenisVal} (${inputBeratVal} kg)...`, 'info');
 
-      // Initialize Memory with Declared and Input Values
+      // Initialize Memory bersih (hanya variabel sistem dasar; nilai masukan diisi saat baris INPUT yang valid dieksekusi)
       memory = {
-        'nama_kelas': { value: 'Informatika - X E7', type: 'STRING' },
-        'jenis_sampah': { value: inputJenisVal, type: 'STRING' },
-        'jenis_sampah2': { value: inputJenisVal, type: 'STRING' },
-        'berat_kg': { value: inputBeratVal, type: 'REAL' },
-        'tarif_poin': { value: 0, type: 'REAL' },
-        'total_poin': { value: 0, type: 'REAL' }
+        'nama_kelas': { value: 'Informatika - X E7', type: 'STRING' }
       };
 
       appendOutputLog(`▶️ <b>Memulai Eksekusi:</b> <code>${escapeHtml(currentCode.name)}</code>`, 'info');
@@ -1100,25 +1442,50 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
           continue;
         }
 
+        // 0. DETEKSI IDENTIFIER ILEGAL DIAWALI ANGKA DI SELURUH BARIS APAPUN
+        const badStartWithDigit = findInvalidIdentifiersStartingWithDigit(line);
+        if (badStartWithDigit.length > 0) {
+          const badVar = badStartWithDigit[0];
+          const check = {
+            valid: false,
+            varName: badVar,
+            errorType: 'STARTS_WITH_NUMBER',
+            title: 'Nama Variabel Diawali Angka',
+            message: `Nama variabel <code>"${escapeHtml(badVar)}"</code> pada Baris ${lineNum} <b>tidak valid karena diawali dengan angka (${badVar.charAt(0)})</b>.`,
+            pedagogy: `Sesuai aturan penamaan variabel yang dipelajari pada Aktivitas 1 (dan dialog presentasi Kelompok 1 &amp; 8), nama variabel <b>TIDAK BOLEH</b> diawali dengan angka. Angka hanya sah diletakkan di tengah atau di belakang variabel (contoh yang sah: <code>${escapeHtml(badVar.replace(/^[0-9]+/, ''))}2</code>).`
+          };
+          triggerSyntaxError(i, rawLine, check, 'algoritma');
+          return;
+        }
+
         // 1. INPUT STATEMENT
         if (/^(?:INPUT|READ)\b/i.test(line)) {
           const originalVar = line.replace(/^(?:INPUT|READ)\s+/i, '').trim();
-          const varPartLower = originalVar.toLowerCase();
+          const varTokens = originalVar.split(',').map(s => s.trim()).filter(Boolean);
 
-          if (varPartLower.includes('kelas')) {
-            memory[varPartLower] = { value: 'Informatika - X E7', type: 'STRING' };
-            appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(originalVar)}</code> = <span class="text-white font-bold">"Informatika - X E7"</span>`, 'input');
-          } else if (varPartLower.includes('jenis')) {
-            memory[varPartLower] = { value: inputJenisVal, type: 'STRING' };
-            memory['jenis_sampah'] = { value: inputJenisVal, type: 'STRING' };
-            memory['jenis_sampah2'] = { value: inputJenisVal, type: 'STRING' };
-            appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(originalVar)}</code> = <span class="text-white font-bold">"${escapeHtml(inputJenisVal)}"</span>`, 'input');
-          } else if (varPartLower.includes('berat')) {
-            memory[varPartLower] = { value: inputBeratVal, type: 'REAL' };
-            memory['berat_kg'] = { value: inputBeratVal, type: 'REAL' };
-            appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(originalVar)}</code> = <span class="text-white font-bold">${inputBeratVal} kg</span>`, 'input');
-          } else {
-            appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(originalVar)}</code>`, 'input');
+          for (const vToken of varTokens) {
+            const check = validateVariableName(vToken);
+            if (!check.valid) {
+              triggerSyntaxError(i, rawLine, check, 'algoritma');
+              return;
+            }
+          }
+
+          for (const vToken of varTokens) {
+            const vLower = vToken.toLowerCase();
+            if (vLower.includes('kelas')) {
+              memory[vLower] = { value: 'Informatika - X E7', type: 'STRING' };
+              appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(vToken)}</code> = <span class="text-white font-bold">"Informatika - X E7"</span>`, 'input');
+            } else if (vLower.includes('jenis')) {
+              memory[vLower] = { value: inputJenisVal, type: 'STRING' };
+              appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(vToken)}</code> = <span class="text-white font-bold">"${escapeHtml(inputJenisVal)}"</span>`, 'input');
+            } else if (vLower.includes('berat')) {
+              memory[vLower] = { value: inputBeratVal, type: 'REAL' };
+              appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(vToken)}</code> = <span class="text-white font-bold">${inputBeratVal} kg</span>`, 'input');
+            } else {
+              memory[vLower] = { value: inputBeratVal, type: 'REAL' };
+              appendOutputLog(`📥 <b>[INPUT DITERIMA]</b> <code>${escapeHtml(vToken)}</code>`, 'input');
+            }
           }
           await delay(200);
           continue;
@@ -1157,11 +1524,31 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
         // 5. ASSIGNMENT: var <- expr
         if (line.includes('<-') || line.includes(':=') || (line.includes('=') && !line.startsWith('IF'))) {
           const parts = line.split(/<-|:=|=/);
-          const targetVar = parts[0].trim().toLowerCase();
+          const targetVar = parts[0].trim();
+          const targetCheck = validateVariableName(targetVar);
+          if (!targetCheck.valid) {
+            triggerSyntaxError(i, rawLine, targetCheck, 'algoritma');
+            return;
+          }
+
           const expr = parts.slice(1).join('=').trim();
+          const badExprVar = findInvalidIdentifiersStartingWithDigit(expr);
+          if (badExprVar.length > 0) {
+            const badVar = badExprVar[0];
+            const check = {
+              valid: false,
+              varName: badVar,
+              errorType: 'STARTS_WITH_NUMBER',
+              title: 'Nama Variabel Diawali Angka pada Rumus',
+              message: `Nama variabel <code>"${escapeHtml(badVar)}"</code> pada rumus tidak valid karena <b>diawali dengan angka (${badVar.charAt(0)})</b>.`,
+              pedagogy: `Sesuai aturan penamaan variabel yang dipelajari pada Aktivitas 1, nama variabel <b>TIDAK BOLEH</b> diawali dengan angka. Angka hanya sah diletakkan di tengah atau di belakang (contoh yang sah: <code>${escapeHtml(badVar.replace(/^[0-9]+/, ''))}2</code>).`
+            };
+            triggerSyntaxError(i, rawLine, check, 'algoritma');
+            return;
+          }
 
           const calcVal = evaluateExpression(expr);
-          memory[targetVar] = { value: calcVal, type: 'REAL' };
+          memory[targetVar.toLowerCase()] = { value: calcVal, type: 'REAL' };
 
           appendOutputLog(`⚙️ <b>[PERHITUNGAN]</b> <code>${targetVar} &lt;- ${escapeHtml(expr)}</code> &rarr; <b class="text-white">${targetVar} = ${calcVal}</b>`, 'calc');
           await delay(200);
@@ -1171,6 +1558,21 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
         // 6. OUTPUT STATEMENT
         if (/^(?:OUTPUT|PRINT|WRITE)\b/i.test(line)) {
           let content = line.replace(/^(?:OUTPUT|PRINT|WRITE)\s*\(?/i, '').replace(/\)?\s*$/i, '');
+          const badOutVar = findInvalidIdentifiersStartingWithDigit(content);
+          if (badOutVar.length > 0) {
+            const badVar = badOutVar[0];
+            const check = {
+              valid: false,
+              varName: badVar,
+              errorType: 'STARTS_WITH_NUMBER',
+              title: 'Nama Variabel Diawali Angka pada OUTPUT',
+              message: `Nama variabel <code>"${escapeHtml(badVar)}"</code> pada perintah OUTPUT tidak valid karena <b>diawali angka (${badVar.charAt(0)})</b>.`,
+              pedagogy: `Sesuai aturan penamaan variabel yang dipelajari pada Aktivitas 1, nama variabel <b>TIDAK BOLEH</b> diawali dengan angka. Angka hanya sah diletakkan di tengah atau di belakang variabel (contoh yang sah: <code>${escapeHtml(badVar.replace(/^[0-9]+/, ''))}2</code>).`
+            };
+            triggerSyntaxError(i, rawLine, check, 'algoritma');
+            return;
+          }
+
           const outText = parseOutputContent(content);
           const isPureNum = !isNaN(Number(outText)) && String(outText).trim() !== '';
           const displayText = isPureNum ? `Total Poin: ${outText}` : outText;
@@ -1196,7 +1598,7 @@ berat_kg, tarif_poin, total_poin : REAL</textarea>
       const statusBadge = document.getElementById('summaryStatusBadge');
       const iconWrap = document.getElementById('summaryIconWrap');
 
-      const finalPoin = memory['total_poin'] !== undefined ? memory['total_poin'].value : (inputJenisVal.toLowerCase().includes('botol') ? inputBeratVal * 10 : inputBeratVal * 20);
+      const finalPoin = memory['total_poin'] !== undefined ? memory['total_poin'].value : 0;
 
       if (totalPoinEl) totalPoinEl.textContent = `${finalPoin} Poin`;
       if (branchEl) branchEl.textContent = executedBranch;

@@ -1083,6 +1083,40 @@
                 }
             }
 
+            // 2.5 VALIDASI ATURAN PENAMAAN VARIABEL (TIDAK BOLEH DIAWALI ANGKA - AKTIVITAS 1)
+            // Cek pada variabel yang didaftarkan di Deklarasi
+            for (const dVar of declaredVars) {
+                if (/^[0-9]+[a-zA-Z_]/.test(dVar)) {
+                    boxDecl.classList.add('row-error');
+                    return triggerError(
+                        progDeclInput, boxDecl,
+                        `Nama Variabel '${dVar}' Diawali Angka!`,
+                        `Nama variabel <code>${dVar}</code> pada Bagian Deklarasi tidak sah karena <b>diawali dengan angka (${dVar.charAt(0)})</b>.<br>Sesuai aturan penamaan variabel yang dipelajari pada Aktivitas 1, nama variabel <b>TIDAK BOLEH</b> diawali dengan angka.`,
+                        `Ubah nama variabel agar diawali huruf atau letakkan angka di akhir (contoh sah: <code>${dVar.replace(/^[0-9]+/, '')}2</code>).`,
+                        'Bagian 2 (Deklarasi)'
+                    );
+                }
+            }
+
+            // Cek pada setiap baris instruksi logika Algoritma
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const lNum = i + 1;
+                const cleanWithoutQuotes = line.replace(/["'“‘].*?["'”’]/g, ' ');
+                const badTokens = cleanWithoutQuotes.match(/\b[0-9]+[a-zA-Z_][a-zA-Z0-9_]*\b/g);
+                if (badTokens && badTokens.length > 0) {
+                    const badVar = badTokens[0];
+                    return triggerError(
+                        document.getElementById('line-' + lNum),
+                        document.getElementById('row-line-' + lNum),
+                        `Nama Variabel '${badVar}' Diawali Angka!`,
+                        `Variabel <code>${badVar}</code> pada Baris ${lNum} melanggar kaidah penamaan variabel karena <b>diawali angka (${badVar.charAt(0)})</b>.<br>Sesuai materi Aktivitas 1, nama variabel <b>TIDAK BOLEH</b> diawali dengan angka.`,
+                        `Ubah nama variabel menjadi diawali huruf (contoh yang sah: <code>${badVar.replace(/^[0-9]+/, '')}2</code>).`,
+                        `Baris ${lNum}`
+                    );
+                }
+            }
+
             // 3. VALIDASI KECOCOKAN VARIABEL: Setiap variabel yang dipakai di algoritma HARUS ada di Deklarasi!
             for (let i = 0; i < lines.length; i++) {
                 const line = lines[i];
