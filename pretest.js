@@ -662,6 +662,7 @@
     // Tombol Ulang Pretest
     const btnReset = document.getElementById('btnResetPretest');
     if (btnReset) btnReset.onclick = resetPretest;
+    window.resetPretestForTeacher = resetPretest;
 
     // Toggle Review Discussion
     const btnToggleReview = document.getElementById('btnToggleReview');

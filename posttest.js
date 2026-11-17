@@ -699,6 +699,7 @@
     // Tombol Ulang Posttest
     const btnReset = document.getElementById('btnResetPosttest');
     if (btnReset) btnReset.onclick = resetPosttest;
+    window.resetPosttestForTeacher = resetPosttest;
 
     // Toggle Review Discussion
     const btnToggleReview = document.getElementById('btnToggleReview');

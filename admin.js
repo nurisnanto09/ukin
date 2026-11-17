@@ -1065,9 +1065,14 @@
             '<td class="py-2.5 px-3 text-center font-bold font-mono text-xs ' + (gainDisplay.startsWith('+') ? 'text-emerald-700' : gainDisplay.startsWith('-') && gainDisplay !== '-' ? 'text-rose-600' : 'text-slate-400') + '">' + gainDisplay + '</td>' +
             '<td class="py-2.5 px-3 text-center">' + tindakLanjutBadge + '</td>' +
             '<td class="py-2.5 px-3 text-center">' +
-              '<button type="button" onclick="openStudentInSimulator(' + r.absen + ')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition inline-flex items-center gap-1 shadow-2xs" title="Uji Pseudocode Murid Ini di Simulator">' +
-                '<span>💻</span><span>Uji Kode</span>' +
-              '</button>' +
+              '<div class="flex items-center justify-center gap-1.5">' +
+                '<button type="button" onclick="openStudentInSimulator(' + r.absen + ')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 transition inline-flex items-center gap-1 shadow-2xs cursor-pointer" title="Uji Pseudocode Murid Ini di Simulator">' +
+                  '<span>💻</span><span>Uji Kode</span>' +
+                '</button>' +
+                '<button type="button" onclick="openResetStudentModal(' + r.absen + ')" class="px-2 py-1 rounded-lg text-[10px] font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition inline-flex items-center gap-1 shadow-2xs cursor-pointer" title="Reset Nilai Kuis Murid Ini">' +
+                  '<span>🗑️</span><span>Reset</span>' +
+                '</button>' +
+              '</div>' +
             '</td>';
 
           tbody.appendChild(tr);
@@ -1460,16 +1465,119 @@
       });
     }
 
+    // Modal Reset Data Pretest & Posttest Guru
+    let studentAbsenToReset = null;
+
+    window.openResetModal = function () {
+      const modal = document.getElementById('resetScoresModal');
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.closeResetModal = function () {
+      const modal = document.getElementById('resetScoresModal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.executeResetScores = function (type) {
+      if (!teacherRecords || !teacherRecords.length) return;
+
+      if (type === 'ALL') {
+        teacherRecords.forEach(function (r) {
+          delete r.pretestScore;
+          delete r.posttestScore;
+          delete r.pretestBloomCorrect;
+          delete r.pretestBloomTotal;
+          delete r.posttestBloomCorrect;
+          delete r.posttestBloomTotal;
+          delete r.checkin;
+          delete r.checkout;
+          delete r.nGain;
+        });
+        try {
+          localStorage.removeItem(STORAGE_KEY_SESSION);
+        } catch (e) {}
+        saveRecords();
+        renderAllAdminViews();
+        window.closeResetModal();
+        showToast('Seluruh nilai Pretest & Posttest (36 murid) berhasil di-reset ke status awal!', 'success');
+      } else if (type === 'PRETEST') {
+        teacherRecords.forEach(function (r) {
+          delete r.pretestScore;
+          delete r.pretestBloomCorrect;
+          delete r.pretestBloomTotal;
+        });
+        saveRecords();
+        renderAllAdminViews();
+        window.closeResetModal();
+        showToast('Nilai Pretest seluruh murid berhasil di-reset!', 'info');
+      } else if (type === 'POSTTEST') {
+        teacherRecords.forEach(function (r) {
+          delete r.posttestScore;
+          delete r.posttestBloomCorrect;
+          delete r.posttestBloomTotal;
+          delete r.checkout;
+          delete r.nGain;
+        });
+        saveRecords();
+        renderAllAdminViews();
+        window.closeResetModal();
+        showToast('Nilai Posttest seluruh murid berhasil di-reset (Pengayaan & Remedial kembali 0)!', 'info');
+      }
+    };
+
+    window.openResetStudentModal = function (absen) {
+      studentAbsenToReset = Number(absen);
+      const rec = teacherRecords.find(function (r) { return Number(r.absen) === studentAbsenToReset; });
+      const nameEl = document.getElementById('resetSingleStudentName');
+      if (nameEl && rec) {
+        nameEl.textContent = '#' + rec.absen + ' - ' + rec.nama;
+      }
+      const modal = document.getElementById('resetSingleStudentModal');
+      if (modal) modal.classList.remove('hidden');
+    };
+
+    window.closeResetSingleStudentModal = function () {
+      studentAbsenToReset = null;
+      const modal = document.getElementById('resetSingleStudentModal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    window.confirmResetSingleStudent = function (type) {
+      if (!studentAbsenToReset) return;
+      const rec = teacherRecords.find(function (r) { return Number(r.absen) === studentAbsenToReset; });
+      if (!rec) return;
+
+      if (type === 'ALL') {
+        delete rec.pretestScore;
+        delete rec.posttestScore;
+        delete rec.pretestBloomCorrect;
+        delete rec.posttestBloomCorrect;
+        delete rec.checkin;
+        delete rec.checkout;
+        delete rec.nGain;
+        showToast('Nilai Pretest & Posttest untuk ' + rec.nama + ' berhasil di-reset!', 'info');
+      } else if (type === 'PRETEST') {
+        delete rec.pretestScore;
+        delete rec.pretestBloomCorrect;
+        showToast('Nilai Pretest untuk ' + rec.nama + ' berhasil di-reset!', 'info');
+      } else if (type === 'POSTTEST') {
+        delete rec.posttestScore;
+        delete rec.posttestBloomCorrect;
+        delete rec.checkout;
+        delete rec.nGain;
+        showToast('Nilai Posttest untuk ' + rec.nama + ' berhasil di-reset!', 'info');
+      }
+
+      saveRecords();
+      renderAllAdminViews();
+      window.closeResetSingleStudentModal();
+    };
+
     // Tombol Kosongkan Rekap Nilai Lokal
     const clearLocalRecordsBtn = document.getElementById('clearLocalRecordsBtn');
     if (clearLocalRecordsBtn) {
       clearLocalRecordsBtn.addEventListener('click', function () {
-        if (confirm('Yakin ingin mereset seluruh rekap nilai kuis pada browser ini ke 36 murid awal? (Catatan: Baris di Google Spreadsheet tidak ikut terhapus).')) {
-          teacherRecords = mergeRosterWithGasRecords(roster, []);
-          saveRecords();
-          renderAllAdminViews();
-          showToast('Rekap nilai lokal guru telah di-reset ke 36 murid (nilai kuis kosong).', 'info');
-        }
+        window.openResetModal();
       });
     }
 

@@ -325,6 +325,10 @@
               <span>🔄</span>
               <span>Tarik Data GAS</span>
             </button>
+            <button id="btnOpenResetModal" type="button" onclick="openResetModal()" class="px-3.5 py-1.5 rounded-xl border border-rose-300 bg-rose-50 hover:bg-rose-100 text-rose-700 active:bg-rose-200 text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-xs" title="Reset Nilai Pretest &amp; Posttest Guru">
+              <span>🗑️</span>
+              <span>Reset Data Kuis</span>
+            </button>
             <span id="gasLiveStatusBadge" class="text-[11px] font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
               ⚪ Menghubungkan GAS...
             </span>
@@ -468,6 +472,115 @@
         </button>
         <button id="saveGasModalBtn" type="button" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold transition cursor-pointer">
           Simpan &amp; Tarik Data
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Reset Nilai Pretest & Posttest Guru -->
+  <div id="resetScoresModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border border-slate-200">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2.5">
+          <span class="w-9 h-9 rounded-2xl bg-rose-100 text-rose-700 flex items-center justify-center font-black text-base shadow-xs">🗑️</span>
+          <div>
+            <h3 class="text-sm font-black text-slate-900">Reset Data Pretest &amp; Posttest Guru</h3>
+            <p class="text-[11px] text-slate-500">Pilih opsi pengosongan data nilai kuis siswa</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeResetModal()" class="text-slate-400 hover:text-slate-600 text-xl font-bold cursor-pointer">&times;</button>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed">
+        Fitur ini berguna untuk mengosongkan nilai kuis yang tersimpan pada dasbor guru sehingga siap digunakan untuk sesi pengujian baru atau latihan di kelas.
+      </p>
+
+      <div class="space-y-2.5">
+        <!-- Opsi 1: Reset Semua -->
+        <button type="button" onclick="executeResetScores('ALL')" class="w-full text-left p-3.5 rounded-2xl border-2 border-rose-200 bg-rose-50/50 hover:bg-rose-100/70 transition flex items-start gap-3 cursor-pointer group shadow-2xs">
+          <span class="w-8 h-8 rounded-xl bg-rose-600 text-white flex items-center justify-center text-sm font-black shrink-0 mt-0.5 group-hover:scale-105 transition shadow-xs">
+            💥
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-black text-rose-950 flex items-center justify-between">
+              <span>1. Reset Semua Nilai (Pretest &amp; Posttest)</span>
+              <span class="text-[10px] font-bold text-rose-700 bg-rose-200/80 px-2 py-0.5 rounded-full">36 Murid</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
+              Mengosongkan skor Pretest dan Posttest seluruh 36 siswa kembali ke status <b>⏳ Belum Kuis</b> (jumlah Pengayaan &amp; Remedial menjadi 0).
+            </p>
+          </div>
+        </button>
+
+        <!-- Opsi 2: Reset Pretest Saja -->
+        <button type="button" onclick="executeResetScores('PRETEST')" class="w-full text-left p-3.5 rounded-2xl border-2 border-blue-200 bg-blue-50/50 hover:bg-blue-100/70 transition flex items-start gap-3 cursor-pointer group shadow-2xs">
+          <span class="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center text-sm font-black shrink-0 mt-0.5 group-hover:scale-105 transition shadow-xs">
+            📝
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-black text-blue-950 flex items-center justify-between">
+              <span>2. Reset Nilai Pretest Saja</span>
+              <span class="text-[10px] font-bold text-blue-700 bg-blue-200/80 px-2 py-0.5 rounded-full">Diagnostik Awal</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
+              Hanya mengosongkan nilai Pretest seluruh siswa. Nilai Posttest (jika ada) tetap dipertahankan.
+            </p>
+          </div>
+        </button>
+
+        <!-- Opsi 3: Reset Posttest Saja -->
+        <button type="button" onclick="executeResetScores('POSTTEST')" class="w-full text-left p-3.5 rounded-2xl border-2 border-teal-200 bg-teal-50/50 hover:bg-teal-100/70 transition flex items-start gap-3 cursor-pointer group shadow-2xs">
+          <span class="w-8 h-8 rounded-xl bg-teal-600 text-white flex items-center justify-center text-sm font-black shrink-0 mt-0.5 group-hover:scale-105 transition shadow-xs">
+            🎯
+          </span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-black text-teal-950 flex items-center justify-between">
+              <span>3. Reset Nilai Posttest Saja</span>
+              <span class="text-[10px] font-bold text-teal-800 bg-teal-200/80 px-2 py-0.5 rounded-full">Formatif Akhir</span>
+            </div>
+            <p class="text-[11px] text-slate-600 mt-0.5 leading-relaxed">
+              Hanya mengosongkan nilai Posttest. Mengembalikan status seluruh murid dari Pengayaan/Remedial ke kondisi sebelum posttest.
+            </p>
+          </div>
+        </button>
+      </div>
+
+      <!-- Footer / Note -->
+      <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-[11px] text-slate-500 leading-relaxed">
+        💡 <b>Catatan Guru:</b> Reset ini mengosongkan tampilan rekap lokal di browser. Jika ingin memuat ulang nilai nyata dari Spreadsheet, klik tombol <b>🔄 Tarik Data GAS</b> kapan saja.
+      </div>
+
+      <div class="flex items-center justify-end pt-1">
+        <button type="button" onclick="closeResetModal()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition cursor-pointer">
+          Batal / Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Reset Murid Tertentu -->
+  <div id="resetSingleStudentModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-sm w-full p-5 space-y-4 shadow-2xl border border-slate-200 text-center">
+      <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-700 mx-auto flex items-center justify-center text-2xl font-black shadow-xs">
+        👤
+      </div>
+      <div>
+        <h3 class="text-sm font-black text-slate-900">Reset Nilai Siswa Ini?</h3>
+        <p id="resetSingleStudentName" class="text-xs font-bold text-indigo-700 mt-1">#1 - Aditya Allay</p>
+        <p class="text-[11px] text-slate-500 mt-0.5">Pilih nilai mana yang ingin dikosongkan untuk siswa ini:</p>
+      </div>
+      <div class="grid grid-cols-1 gap-2 pt-1 text-xs">
+        <button type="button" onclick="confirmResetSingleStudent('ALL')" class="py-2.5 px-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold transition cursor-pointer shadow-xs">
+          Reset Pretest &amp; Posttest
+        </button>
+        <button type="button" onclick="confirmResetSingleStudent('PRETEST')" class="py-2 px-3 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold border border-blue-200 transition cursor-pointer">
+          Reset Pretest Saja
+        </button>
+        <button type="button" onclick="confirmResetSingleStudent('POSTTEST')" class="py-2 px-3 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-800 font-bold border border-teal-200 transition cursor-pointer">
+          Reset Posttest Saja
+        </button>
+        <button type="button" onclick="closeResetSingleStudentModal()" class="py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold transition cursor-pointer">
+          Batal
         </button>
       </div>
     </div>
